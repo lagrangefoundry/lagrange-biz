@@ -5,12 +5,13 @@ type: doc
 title: XGD Business & Marketing Plan — Initial Context
 created_by: xgd
 created_at: '2026-06-28T22:19:53.328638+00:00'
-updated_at: '2026-06-28T22:19:53.328638+00:00'
+updated_at: '2026-06-28T23:15:26.368563+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: audience
 status: draft
 fields:
   doc_kind: project_context
+  audience: internal
 ---
 
 # XGD Business & Marketing Plan — Initial Context
