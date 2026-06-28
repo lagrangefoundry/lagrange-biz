@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-06-28T23:30:21.438806+00:00'
+updated_at: '2026-06-28T23:47:29.820388+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -708,5 +708,15 @@ The pattern that jumps out: **Wave 0–1 is parallelizable and Claude-heavy; Wav
 ---
 
 Want me to **capture this as a "Dependencies & Sequencing" section in DOC-7**? Once it's recorded and you've reacted to the wave ordering and the scope sizing, *that's* the frame we hang aspirational dates on — and I'd suggest we date it backward from the only real anchor (quality-done → beta), since everything keys off that.
+
+<!-- xgd-turn id="54f0dda5-12fc-4dff-afcc-548d2bf23e0d-user" -->
+
+<!-- xgd-chat role="user" ts="2026-06-28T23:46:23.578Z" -->
+#### You
+Yes - I need to drive Website design btw that's med-high. Lets be REALLY clear about (1) required for Beta launch (2) required shortly after Beta launch (may not be anything) (3) required for paid launch (4) required shortly after paid launch (5) Anything else
+
+My consulting contacts will be initial Beta customers - but ensuring that we get sufficient people in the beta is important. I think we need a whole separate conversation about the beta and the work required to run it and maintain the product during it. How long should it be? How many customers? My goal is to build some ticket automation to help with triage, deduping of bugs with luck I could get to a point where all that was needed was a quick review and fixes could be automatically built tested and (optimistically) deployed.
+
+Closed beta was very powerful for Cursor they succeeded in generating a lot of interests and leads because everyone wanted in on the beta...not sure how to get that flywheel going but its worth a separate conversation.
 
 <!-- xgd-chat-end -->
