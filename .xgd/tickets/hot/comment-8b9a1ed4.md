@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-06-28T23:11:01.402947+00:00'
+updated_at: '2026-06-28T23:15:01.987621+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -534,5 +534,11 @@ That's exactly why you were right to do positioning first.
 2. **DOC-9 scope.** The skeleton we agreed (core message → three-act spine → category → compiler analogy → who it's for/not → what the human owns → registers → proof → the Artificer) is squarely internal-positioning content. Shall I write it as **DOC-9** now?
 
 If you say go, I'll write DOC-9 and add the `audience` tags across the doc set in the same pass (if you want them).
+
+<!-- xgd-turn id="5d541ed4-269a-4b70-9687-1bf597e4f2a9-user" -->
+
+<!-- xgd-chat role="user" ts="2026-06-28T23:14:56.129Z" -->
+#### You
+Are you able to just add a field? If so, go ahead, if not create an xgendev-main REQ-ticket for the change and I'll et it implemented
 
 <!-- xgd-chat-end -->
