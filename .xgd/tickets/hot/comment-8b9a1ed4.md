@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-06-28T22:20:01.708589+00:00'
+updated_at: '2026-06-28T22:30:53.212655+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -165,5 +165,11 @@ This is now the canonical reference we'll build on. I'll keep it updated as deci
 When you're ready, the natural next move is **timelines** — anchored to a two-person team and an undated, quality-gated beta. The way I'd approach it: sequence backward from the only hard dependency (beta = quality done), figure out what runs in parallel *before* beta vs. what must wait, and be realistic about two people's bandwidth across six workstreams.
 
 Want to go there next, or would you rather drill into **positioning** first (since you flagged it as the live design surface, and it's the input that shapes all of cluster A's content)?
+
+<!-- xgd-turn id="d995d4e4-686b-492e-96f2-047920542569-user" -->
+
+<!-- xgd-chat role="user" ts="2026-06-28T22:30:08.755Z" -->
+#### You
+Yes, let's start with positioning. Because I think everything else follows from the correct positioning. We need to find an initial user group. We also need to identify what the core problems are and be able to incredibly claim to fix something they care about deeply. This is a Chasm Crossing problem... Although we probably shouldn't get ahead of ourselves we are not at the chasm we are actually looking for our earlier adopters. But we need to think ahead to where the chasm should be as far as we can,
 
 <!-- xgd-chat-end -->
