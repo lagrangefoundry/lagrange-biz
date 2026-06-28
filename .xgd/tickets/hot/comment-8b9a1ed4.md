@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-06-28T23:15:01.987621+00:00'
+updated_at: '2026-06-28T23:15:35.525905+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -540,5 +540,33 @@ If you say go, I'll write DOC-9 and add the `audience` tags across the doc set i
 <!-- xgd-chat role="user" ts="2026-06-28T23:14:56.129Z" -->
 #### You
 Are you able to just add a field? If so, go ahead, if not create an xgendev-main REQ-ticket for the change and I'll et it implemented
+
+<!-- xgd-turn id="5d541ed4-269a-4b70-9687-1bf597e4f2a9-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-06-28T23:15:35.495Z" -->
+#### Claude
+Let me check whether the ticket API lets me set an arbitrary field on existing tickets.
+
+Yes — `--fields` takes arbitrary JSON. Let me test it on one doc to confirm a custom `audience` field persists (it may be schema-validated).
+
+It works — the custom field persists. Let me tag the rest of the doc set accordingly: DOC-5/DOC-8 public, DOC-7 internal. (Leaving DOC-6 untagged pending your archive/keep decision, and DOC-9 will get `internal` when I create it.)
+
+Done — no REQ ticket needed. The `--fields` API accepts arbitrary keys, so I tagged the set directly:
+
+| Doc | audience | Role |
+|---|---|---|
+| DOC-4 | **public** | Frame the problem (whitepaper) |
+| DOC-5 | **public** | XGD as solution (whitepaper) |
+| DOC-8 | **public** | Accountability & safety (whitepaper stub) |
+| DOC-7 | **internal** | Business & Marketing Plan |
+| DOC-6 | *(none)* | Licensing architecture — awaiting your archive/keep call |
+
+Now you can query the split, e.g. `xgd ticket list --type doc` filtered on `fields.audience`.
+
+Two things still open from the last turn:
+1. **DOC-6** — archive it, or keep it parked for the licensing/packaging work?
+2. **DOC-9 (Positioning)** — shall I write it now with the agreed skeleton, tagged `audience: internal`?
+
+Say go and I'll write DOC-9 (and apply your DOC-6 decision in the same pass).
 
 <!-- xgd-chat-end -->
