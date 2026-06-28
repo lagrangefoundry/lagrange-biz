@@ -5,9 +5,9 @@ type: doc
 title: XGD Positioning
 created_by: xgd
 created_at: '2026-06-28T23:20:25.351081+00:00'
-updated_at: '2026-06-28T23:20:25.351081+00:00'
+updated_at: '2026-06-28T23:29:41.428745+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: body
 status: draft
 fields:
   doc_kind: project_context
@@ -43,6 +43,9 @@ agentic engineering (credible) — without being either. Drawn from the four-wav
 
 > Vibe coding removed the reviewer and lost the guarantees. Agentic engineering restored the
 > guarantees by restoring the reviewer. **XGD gives you the guarantees without the reviewer.**
+
+_(Internal explanatory line only — NOT a public tagline. It has the right semantics but does not
+sell. The public founder-facing tagline is still open; see Open / next.)_
 
 ## 3. The category
 
@@ -162,6 +165,9 @@ low-status "vibe coder" label while still relating to it.)
 
 ## Open / next
 
-- The founder-facing tagline is not yet final. Leading candidate: *"the guarantees without the
-  reviewer."* Supporting beats: speed ("team of one"), trust ("never afraid to change it").
+- **The founder-facing tagline is OPEN and needs a dedicated generation pass.** "The guarantees
+  without the reviewer" was rejected as a tagline — vague and boring (right semantics, no punch).
+  It survives only as an internal explanatory line (§2). When we tackle this, do real divergent
+  work: many candidates, tested against the hooks — speed ("team of one"), trust ("never afraid to
+  change your own code"), the wall, and "human safely out of the coding loop."
 - Channel/voice guide and SEM messaging will inherit from this doc when those workstreams start.
