@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-06-28T23:00:21.994177+00:00'
+updated_at: '2026-06-28T23:09:59.742363+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -468,5 +468,17 @@ Here's the skeleton I'd write — react before I commit it:
 9. **The Software Artificer** — defined as the human out of the code loop
 
 Shall I write it as DOC-8?
+
+<!-- xgd-turn id="8f022f67-b9bb-462c-8102-9436f1b8f39d-user" -->
+
+<!-- xgd-chat role="user" ts="2026-06-28T23:09:47.039Z" -->
+#### You
+Let's talk for a second about what documents we want and what they are for. You missed one of the docs I was hoping you would pick up DOC-978 (you got DOC-6 instead which I did not intend). Please get it now.
+
+DOC-4 and DOC-5 are drafts of (1)Framing the problem and (2) Presenting XGD as the solution (DOC-978) is a sort of supplemental statement about accountability and safety.
+
+4 and 5 are intended to ultimately become public whitepapers that present our perspective.
+
+In addition we may need internal positioning documents that will help with defining target markets, language, dos and don't etc. I think that is what DOC-8 woudl be. Do you agree?
 
 <!-- xgd-chat-end -->
