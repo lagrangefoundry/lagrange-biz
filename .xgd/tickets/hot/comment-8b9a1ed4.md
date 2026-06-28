@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-06-28T23:09:59.742363+00:00'
+updated_at: '2026-06-28T23:11:01.402947+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -480,5 +480,59 @@ DOC-4 and DOC-5 are drafts of (1)Framing the problem and (2) Presenting XGD as t
 4 and 5 are intended to ultimately become public whitepapers that present our perspective.
 
 In addition we may need internal positioning documents that will help with defining target markets, language, dos and don't etc. I think that is what DOC-8 woudl be. Do you agree?
+
+<!-- xgd-turn id="8f022f67-b9bb-462c-8102-9436f1b8f39d-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-06-28T23:11:01.371Z" -->
+#### Claude
+Let me grab DOC-978 first.
+
+Now let me import DOC-978 into xgd-biz.
+
+Got it — **DOC-978 is now imported as DOC-8** ("Accountability as a First Principle…", a stub with the key arguments outlined). One consequence: since the accountability paper took the DOC-8 slot, **the positioning doc will be DOC-9**, not DOC-8. Same plan, new number.
+
+Two housekeeping notes before the taxonomy:
+- **DOC-6** (the Distribution/Identity/Licensing Architecture you didn't mean to pull) is sitting in the project. Licensing/packaging *is* a real outstanding item you flagged for DOC-7, so it's not useless — but it's off-topic for positioning. Want me to **archive it**, or **keep it parked** as a reference for the licensing work later? Your call; I won't touch it without a yes.
+
+## Yes — and the key split is external vs. internal
+
+I agree completely, and I'd make the organizing principle explicit: **every doc is either something we publish or something we operate from.** That's the cleanest taxonomy, and it maps exactly onto the "two registers" we settled on.
+
+### Class A — External / public (the *category narrative* register)
+These are "our perspective," authored for the world, lifecycle = draft → polish → publish. This is your cluster-A "finish the draft docs" work.
+
+| Doc | Role | State |
+|---|---|---|
+| **DOC-4** — Beyond the Scaling Wall | (1) Frame the problem | Draft |
+| **DOC-5** — The XGD Experiment | (2) Present XGD as the solution | Draft |
+| **DOC-8** — Accountability as a First Principle | (3) Supplemental: accountability & safety | Stub |
+
+They're a *trilogy*: problem → solution → the safety/accountability case that backs the autonomy claim. DOC-8 being a stub is fine — it's the one that defends "human out of the loop" against the safety objection, so it matters more once the autonomy message goes public.
+
+### Class B — Internal / operating (the *working* register)
+For us (you + me). Never published. They govern how we execute and keep us consistent.
+
+| Doc | Role | State |
+|---|---|---|
+| **DOC-7** — Business & Marketing Plan | Phases, segments, workstreams, timelines | Draft |
+| **DOC-9** — Positioning *(to write)* | Target markets, core message, language, dos & don'ts, proof points | — |
+
+So **yes**, the positioning doc is internal, and it's distinct from DOC-7. DOC-7 is the *plan* (what we'll do and when); positioning is the *messaging foundation* (what we say and to whom). Different jobs.
+
+## The relationship that matters
+
+Positioning is the **keystone**, and the arrows point outward from it:
+
+- **DOC-9 (Positioning)** → feeds the public whitepapers (they're the published *expression* of the category narrative) **and** feeds DOC-7 (which is the *execution* of the positioning).
+- Get positioning right and the whitepapers and the plan both inherit consistency. Get it wrong and every downstream doc drifts.
+
+That's exactly why you were right to do positioning first.
+
+## Two small decisions
+
+1. **Audience tagging.** Want me to mark the external/internal split *in the system* so it's queryable later — e.g. add `fields.audience: public | internal` to each doc? Cheap now, useful when there are 20 docs. Or just rely on clear titles.
+2. **DOC-9 scope.** The skeleton we agreed (core message → three-act spine → category → compiler analogy → who it's for/not → what the human owns → registers → proof → the Artificer) is squarely internal-positioning content. Shall I write it as **DOC-9** now?
+
+If you say go, I'll write DOC-9 and add the `audience` tags across the doc set in the same pass (if you want them).
 
 <!-- xgd-chat-end -->
