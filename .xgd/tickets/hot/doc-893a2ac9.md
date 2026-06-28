@@ -5,12 +5,13 @@ type: doc
 title: 'Beyond the Scaling Wall: Behavioral Identity for Generative Development'
 created_by: xgd
 created_at: '2026-06-28T21:42:57.734252+00:00'
-updated_at: '2026-06-28T21:42:57.734252+00:00'
+updated_at: '2026-06-28T23:15:13.156501+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: audience
 status: draft
 fields:
   doc_kind: project_context
+  audience: public
 ---
 
 # Beyond the Scaling Wall: Behavioral Identity for Generative Development
