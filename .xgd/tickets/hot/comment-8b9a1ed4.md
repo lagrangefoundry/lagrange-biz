@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-06-28T23:19:40.980057+00:00'
+updated_at: '2026-06-28T23:20:42.425092+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -574,5 +574,35 @@ Say go and I'll write DOC-9 (and apply your DOC-6 decision in the same pass).
 <!-- xgd-chat role="user" ts="2026-06-28T23:19:28.434Z" -->
 #### You
 Yeah please archive DOC-6 its noise and create DOC-9
+
+<!-- xgd-turn id="9c244905-b08a-4b90-9667-3f02373cf2ec-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-06-28T23:20:42.395Z" -->
+#### Claude
+Now let me write the Positioning doc body and archive DOC-6.
+
+Done. Let me confirm the final doc set is clean.
+
+Both done. **DOC-6 archived**, **DOC-9 "XGD Positioning" created** (`doc-d27f58f5`, `audience: internal`).
+
+The document set is now clean and organized into the two classes we agreed on:
+
+**External / public (whitepaper trilogy):**
+- DOC-4 — Frame the problem
+- DOC-5 — XGD as the solution
+- DOC-8 — Accountability & safety (stub)
+
+**Internal / operating:**
+- DOC-7 — Business & Marketing Plan
+- DOC-9 — Positioning *(the keystone — captures the full spine: core message, three-act narrative, governor category, compiler analogy, who-it's-for/not, the two registers, the build-with-itself proof, the Artificer, and a dos & don'ts quick reference)*
+
+(DOC-1/2/3 are the pre-existing policy docs — separate from our work here.)
+
+DOC-9 closes with the one genuinely open item: the **founder-facing tagline isn't final** — leading candidate is *"the guarantees without the reviewer,"* with speed and trust as supporting beats.
+
+Where to next? Options:
+1. **Nail the tagline** — finish the one open thread in positioning.
+2. **Link DOC-7 → DOC-9** — add a pointer so the plan references the positioning keystone (quick housekeeping).
+3. **Move to timelines** — now that positioning is locked, sequence the workstreams against a two-person team and the undated, quality-gated beta.
 
 <!-- xgd-chat-end -->
