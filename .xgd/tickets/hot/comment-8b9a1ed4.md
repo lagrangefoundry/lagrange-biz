@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-06-28T23:20:42.425092+00:00'
+updated_at: '2026-06-28T23:29:19.077051+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -604,5 +604,11 @@ Where to next? Options:
 1. **Nail the tagline** — finish the one open thread in positioning.
 2. **Link DOC-7 → DOC-9** — add a pointer so the plan references the positioning keystone (quick housekeeping).
 3. **Move to timelines** — now that positioning is locked, sequence the workstreams against a two-person team and the undated, quality-gated beta.
+
+<!-- xgd-turn id="bdfa0001-3611-41b6-bd42-31959008e2ff-user" -->
+
+<!-- xgd-chat role="user" ts="2026-06-28T23:27:40.316Z" -->
+#### You
+I'm sorry that is an awful tagline it is vague and boring. It might have the right semantics but we need to do better. Go ahead and add the link to the docs. In terms of timelines I don't think I want to work with actual dates yet I think we need to understand the dependencies and the ordering of the work and then some idea of the scope of the work. Then we can pin aspirational dates around that frame
 
 <!-- xgd-chat-end -->
