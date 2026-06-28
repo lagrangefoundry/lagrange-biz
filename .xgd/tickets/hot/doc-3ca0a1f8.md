@@ -5,7 +5,7 @@ type: doc
 title: XGD Business & Marketing Plan — Initial Context
 created_by: xgd
 created_at: '2026-06-28T22:19:53.328638+00:00'
-updated_at: '2026-06-28T23:29:40.761774+00:00'
+updated_at: '2026-06-28T23:48:14.543897+00:00'
 completed_at: null
 last_field_updated: body
 status: draft
@@ -129,7 +129,90 @@ The 11 anticipated activities, grouped into 6 clusters:
 | **Business phase** | Launch | Post-launch | Later |
 | **Lead workstreams** | A, B, C, E | D, F (consulting) | F (enterprise) |
 
+## Dependencies, Sequencing & Launch Gates
+
+### Three insights that drive the whole sequence
+
+1. **There is exactly one hard gate: Quality → Beta.** Everything customer-facing waits on it;
+   a large amount of asset-building does not. Strategy: front-load every non-gated thing now, so
+   the instant quality clears, beta opens into a warm audience with assets ready.
+2. **The binding constraint is Martin-hours, not the calendar.** Claude can draft content/code/
+   structure in parallel; only Martin can do quality work, talks, on-camera, architecture, and
+   relationships. Ordering must avoid stacking Martin-heavy activities concurrently.
+3. **Beta is a reference factory, not just product validation.** Pragmatist customers buy on
+   references from people like them; references only come from beta. Beta's *output*
+   (testimonials, case studies, the showcase) is a dependency for everything downstream.
+
+### Launch-gate buckets (the operative view)
+
+**(1) Required FOR beta launch** — doors can't open without these:
+- **[GATE] Quality**: reconciliation backlog cleared + bug tail acceptable. (The one hard prereq.)
+- **Beta cohort secured**: enough committed participants. Consulting contacts are the seed;
+  "sufficient participation" is the risk → needs a waitlist + invite mechanism.
+- **Minimal beta landing/signup page** (Martin-driven; subset of the full website).
+- **Minimal onboarding / getting-started docs (D1-min)**: enough to install, run, and understand
+  the loop. Activation is load-bearing → genuinely required.
+- **Minimal bug intake + triage process**: must exist; need not be automated yet.
+- **Beta ToS / agreement**: lightweight usage terms. (NOT the paid licensing — see bucket 3.)
+
+**(2) Required shortly AFTER beta launch** — can lag the opening (light bucket):
+- **Ticket automation**: triage, bug dedup, optimistically auto build/test/deploy of fixes with a
+  quick review. Build during beta; it makes the beta sustainable for two people.
+- Onboarding iteration from first-user friction.
+- Reference/case-study capture once users have wins.
+
+**(3) Required FOR paid launch:**
+- **[GATE] Beta validated** (works + references).
+- **Licensing / packaging** (the real one): public-free vs private-paid, enforced. (Martin-heavy.)
+- **Billing + customer portal (website v2).**
+- **Full public website** (Martin-driven): blog, published whitepapers, lead capture, pricing.
+- **Whitepaper trilogy published.**
+- **Matured support capability** (bucket-2 automation grown up).
+
+**(4) Required shortly AFTER paid launch:**
+- SEM live (post-launch). Sustained content push. Field presence / talks land (if CFPs submitted
+  in Wave 0). Full education program (D2) + first tutorials. Formal State of GenDev survey.
+
+**(5) Anything else / later:**
+- Train-the-trainers. Consulting arm formalized (people are already the beta cohort; the
+  commercial channel is later). Enterprise-ready XGD (legacy CM gaps, demand proof, enterprise CEO).
+
+### Scope sizing (relative; bottleneck = Martin-hours)
+
+| Workstream | Bucket | Size | Martin-intensity | Notes |
+|---|---|---|---|---|
+| Whitepapers (×3) | 0→3 | M | Med | DOC-8 is a stub → most work |
+| Website — beta signup page | 1 | S | **Med–High** | Martin drives design |
+| Website — full public + portal | 3 | L | **Med–High** | Martin drives design; needs billing + licensing |
+| Showcase project | 1→2 | XL | High | Build + video + blog; longest pole |
+| Mailing list / survey seed | 1 | S | Low | Slow-burn asset |
+| Conference CFPs | 1 | S | Med | Cheap, long lead — don't delay |
+| Onboarding docs (D1) | 1 | M | Med | Gates beta activation |
+| Bug intake + triage | 1 | S | Med | Manual is fine at first |
+| Ticket automation | 2 | L | Med | Makes beta sustainable |
+| Licensing / packaging | 3 | M–L | High | Hidden Launch gate |
+| SEM | 4 | M | Low | Post-launch |
+| Field presence | 4→5 | L | **Very high** | Martin only — serialize |
+| Full education (D2) | 4 | L | Med | Inherits from D1 |
+| Consulting arm | 5 | M | Very high | Relationship-bound |
+| Enterprise-ready XGD | 5 | XL | Very high | Furthest out |
+
+Pattern: **buckets 1–2 are parallelizable and Claude-heavy; buckets 3–5 are Martin-bound and
+serialize.** Cram as much as possible into the pre-beta window while quality is the focus.
+
+## Open threads — dedicated conversations to schedule
+
+- **Beta operations & product maintenance** — duration, number of customers, the triage/dedup/
+  auto-fix automation, sustaining the product during beta with two people.
+- **Beta demand flywheel** — Cursor-style "everyone wants in" scarcity/FOMO to generate interest
+  and leads.
+- **The link between them:** closed beta resolves the tension — the *waitlist* is the marketing
+  asset (big → leads + FOMO) while the *admitted cohort* stays small (→ supportable). Same
+  mechanism, tuned from opposite ends.
+- **Founder-facing tagline** — dedicated generation pass (see [[DOC-9]] §Open).
+
 ## Open / next
 
-- Layer **timelines** onto these workstreams (next conversation), anchored to a two-person team
-  and a quality-gated (undated) beta.
+- With the dependency frame and launch-gate buckets recorded, **aspirational dates** can be hung
+  on this scaffold — dated backward from the only real anchor (quality-done → beta), since
+  everything keys off that. Defer until the beta-operations conversation pins beta scope/duration.
