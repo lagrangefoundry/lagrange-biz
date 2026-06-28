@@ -5,12 +5,13 @@ type: doc
 title: 'Extreme Generative Development: An Experiment in AI Software Development'
 created_by: xgd
 created_at: '2026-06-28T21:43:04.157835+00:00'
-updated_at: '2026-06-28T21:43:04.157835+00:00'
+updated_at: '2026-06-28T23:15:24.961532+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: audience
 status: draft
 fields:
   doc_kind: project_context
+  audience: public
 ---
 
 # Extreme Generative Development (XGD): An Experiment in AI Software Development
