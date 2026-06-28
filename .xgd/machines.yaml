@@ -1,0 +1,6 @@
+machines:
+  fb6d241a:
+    hostname: nyx
+    ip: 10.168.168.3
+    registered_at: '2026-06-28T21:35:45Z'
+    remote_branch: xgd-working-fb6d241a
