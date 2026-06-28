@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-06-28T22:43:28.931498+00:00'
+updated_at: '2026-06-28T22:48:12.038739+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -323,5 +323,11 @@ Two things to decide:
 2. **The founder value tagline** — react to *"feels like vibe coding, behaves like engineering"* and *"never be afraid to change your own code."* Which emotional hook lands harder for you: the **speed** ("be a team of one"), the **trust** ("never afraid to change it"), or the **wall** ("don't hit the wall")?
 
 Once you pick the hook, I'll fold the resolved positioning into DOC-7 (and we can spin a dedicated Positioning doc if you'd like it to stand alone).
+
+<!-- xgd-turn id="16d0d7a1-8b96-4374-8040-7cb226b2fcb8-user" -->
+
+<!-- xgd-chat role="user" ts="2026-06-28T22:47:09.326Z" -->
+#### You
+I completely agree with the vibecoding concern which is why I invented the term generative development and the software artificer role. We need to related to vibecoding though because that is something people understand. Another direction to take care which is what we tried to do in the paper was to claim that we were kind of automating agentic coding. I'm not sure how clearly "agentic coding" is defined and whether this is entirely true. I think we are grasping for the same kinds of things I just think automation has allowed me to take things a lot further. And the key went here is that we get the human out of the coding loop. Our aesthetic is that no line of code requires human review
 
 <!-- xgd-chat-end -->
