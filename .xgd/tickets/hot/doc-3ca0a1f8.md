@@ -5,9 +5,9 @@ type: doc
 title: XGD Business & Marketing Plan — Initial Context
 created_by: xgd
 created_at: '2026-06-28T22:19:53.328638+00:00'
-updated_at: '2026-06-28T23:15:26.368563+00:00'
+updated_at: '2026-06-28T23:29:40.761774+00:00'
 completed_at: null
-last_field_updated: audience
+last_field_updated: body
 status: draft
 fields:
   doc_kind: project_context
@@ -17,9 +17,12 @@ fields:
 # XGD Business & Marketing Plan — Initial Context
 
 _Working planning document. Captures the current state, positioning, phases, and marketing
-workstreams for taking XGD to market. Companion to the foundation docs: [[DOC-4]] (the scaling
-wall / behavioral identity argument), [[DOC-5]] (the XGD self-build experiment), and [[DOC-6]]
-(distribution, identity & licensing architecture)._
+workstreams for taking XGD to market._
+
+**Related docs:**
+- **Positioning keystone:** [[DOC-9]] — the source of truth for messaging; this plan executes it.
+- **Public whitepapers:** [[DOC-4]] (frame the problem), [[DOC-5]] (XGD as the solution),
+  [[DOC-8]] (accountability & safety).
 
 ## Scope of this project
 
@@ -39,7 +42,9 @@ and sold.
 - **Not beta-ready yet** — blocked on quality, not features.
 - Concretely: a **reconciliation backlog estimated at 1–2 weeks**, plus an expected tail of
   bug fixes still to come.
-- Outstanding **licensing / packaging** work exists (DOC-6 territory) but is parked for now.
+- Outstanding **licensing / packaging** work exists but is parked for now. (Note: this is a
+  hidden dependency for *Launch* — you cannot charge for private repos without it — even though
+  it is not needed for *Beta*.)
 - The core value offering is understood today; even so, articulating it is a useful exercise.
 
 ## Product positioning (core thesis)
