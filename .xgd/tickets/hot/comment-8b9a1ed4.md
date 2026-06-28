@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-06-28T23:15:35.525905+00:00'
+updated_at: '2026-06-28T23:19:40.980057+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -568,5 +568,11 @@ Two things still open from the last turn:
 2. **DOC-9 (Positioning)** — shall I write it now with the agreed skeleton, tagged `audience: internal`?
 
 Say go and I'll write DOC-9 (and apply your DOC-6 decision in the same pass).
+
+<!-- xgd-turn id="9c244905-b08a-4b90-9667-3f02373cf2ec-user" -->
+
+<!-- xgd-chat role="user" ts="2026-06-28T23:19:28.434Z" -->
+#### You
+Yeah please archive DOC-6 its noise and create DOC-9
 
 <!-- xgd-chat-end -->
