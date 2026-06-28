@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-06-28T22:31:23.231446+00:00'
+updated_at: '2026-06-28T22:42:59.521902+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -243,5 +243,13 @@ Moore's template, my best first cut:
 3. **How much do you want to lean on "vibe coding"?** It's the most *recognizable* hook in the market right now, but it's also the riskiest anchor. Hook-but-pivot, or avoid?
 
 Where do you want to push first — the category question (product vs. practice), or nailing the beachhead segment?
+
+<!-- xgd-turn id="92f9ad3c-69ec-4f6b-9ff4-60b6f1c26fec-user" -->
+
+<!-- xgd-chat role="user" ts="2026-06-28T22:42:06.371Z" -->
+#### You
+I think there are a few things to say on product or practice. XGD began as a development methodology and then grew into a tool-supported methodology, at this point it's more than a tool it is a governor in the control theoretic sense, an operating system like Kubernetes. The operator expresses intent and the system delivers outcomes – it doesn't just run to completion. At this point it is impossible to distinguish practice from system they are one, the practice cannot be followed without the system and the system cannot follow any other practice. The good news is that from a user experience point of view what I have been able to deliver is fairly close to vibecoding. The process itself is almost entirely autonomous,. It is, at this point in the tools sophistication, important that the user understands what the system is doing and how it works but strictly speaking the system should be able to do the important process itself. The users job is just to tell it what needs to be created and then validate that what they asked for was delivered in a form that they expected.
+
+In terms of earlier adopters I don't think we need to change the features of the tool for either group it is more a matter of positioning the marketing. I think the marketing is probably best focused on Greenfield projects and targeted on founders. The tool is not expensive, a solo founder can afford $25 per month for what it can give them (they do need to pay for Claud code on top of this of course). But I don't think the cost is likely to be a barrier to any users. Particularly since we offer it for free to anyone building open source. So what I'm hoping for is we target the founder community but the open source community finds it and uses it because it's free and useful.
 
 <!-- xgd-chat-end -->
