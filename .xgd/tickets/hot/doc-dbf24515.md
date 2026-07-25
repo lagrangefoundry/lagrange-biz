@@ -5,9 +5,9 @@ type: doc
 title: 'Extreme Generative Development: An Experiment in AI Software Development'
 created_by: xgd
 created_at: '2026-06-28T21:43:04.157835+00:00'
-updated_at: '2026-06-28T23:15:24.961532+00:00'
+updated_at: '2026-07-25T22:27:27.617733+00:00'
 completed_at: null
-last_field_updated: audience
+last_field_updated: title
 status: draft
 fields:
   doc_kind: project_context
@@ -48,7 +48,9 @@ This paper describes Extreme Generative Development XGD, a governed generative d
 
 The scaling wall is produced by a specific structural absence: no explicit, maintained record of what the software is supposed to do. When code and tests are both changing continuously under AI-driven development, the question "was this a regression or an intentional change?" has no reliable answer unless intended behavior was recorded explicitly. Without that record, behavioral integrity erodes silently. With it, regression detection is mechanically grounded.
 
-The requirement is specific: a behavioral specification that reflects current intended behavior (not just historical decisions), is continuously verified against the running system through executable tests, and exists as a human-readable artifact independent of any model session. The challenge is maintaining that record at scale, under continuous change, without creating a bottleneck.
+The same absence creates a second problem, which becomes visible only at scale: trustworthiness can only be asserted, never demonstrated. In conventional software development, the team's shared understanding of intended behavior is what makes code review possible — a reviewer can evaluate whether a change is correct because there is an understood standard to measure against. In AI-driven development, where no human reviews every line of code, that standard has to be externalized. It must exist as an artifact that is independent of any model session, open to inspection, and continuously verified against the running system. Without it, the honest answer to "how do we know this system does what it claims?" is "we believe it does." With it, the answer is evidence.
+
+The requirement is therefore specific: a behavioral specification that reflects current intended behavior — not just historical decisions — is continuously verified against the running system through executable tests, and exists as a human-readable artifact independent of any model session. The challenge is maintaining that record at scale, under continuous change, without creating a bottleneck.
 
 ## 2. XGD: Three Contributions
 
@@ -62,9 +64,7 @@ Every governor requires three things: a target state it is trying to reach, a co
 
 XGD implements behavioral identity as the Capability Matrix: a persistent, managed artifact that is the authoritative record of what the software is supposed to do.
 
-The Capability Matrix is organized around familiar objects. Behaviors are grouped into _capabilities_ — logical areas of functionality that reflect how users and developers think about the system. Each capability contains _stories_ that describe specific behaviors from a user perspective. Each story has _acceptance criteria_ that make the behavioral expectations explicit and testable. Each acceptance criterion has an associated _user acceptance test_ that runs against the actual code.
-
-This structure — capabilities, stories, acceptance criteria, tests — is one every practitioner already knows. The Capability Matrix does not introduce new concepts. It maintains existing ones rigorously, automatically, and in correspondence with the running system.
+The Capability Matrix is organized around concepts every practitioner already knows: _capabilities_ group behaviors into logical areas of functionality; each capability contains _stories_ that describe specific behaviors from a user perspective; each story has _acceptance criteria_ that make the behavioral expectations explicit and testable; each acceptance criterion has an associated _user acceptance test_ that runs against the actual code. The Capability Matrix enforces this structure rigorously, automatically, and in continuous correspondence with the running system.
 
 The critical distinction is between what the Capability Matrix records and what the code records. Code tells you _how_ each component works — its structure, its logic, its dependencies. The Capability Matrix records _what_ each capability is supposed to do. When a behavior changes, the code alone cannot tell you whether that change was intentional. The Capability Matrix can — because it records the intended behavior explicitly, and the user acceptance tests verify that the code currently satisfies it.
 
