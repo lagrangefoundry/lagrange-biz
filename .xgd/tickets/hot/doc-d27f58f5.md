@@ -5,7 +5,7 @@ type: doc
 title: XGD Positioning
 created_by: xgd
 created_at: '2026-06-28T23:20:25.351081+00:00'
-updated_at: '2026-07-30T21:17:49.797674+00:00'
+updated_at: '2026-07-30T23:01:57.889891+00:00'
 completed_at: null
 last_field_updated: body
 status: draft
@@ -52,7 +52,7 @@ The narrative that relates to two anchors people already know — vibe coding (r
 agentic engineering (credible) — without being either. Drawn from the four-waves argument in
 [[DOC-4]].
 
-- **Vibe coding** got the human *out of the loop* and lost control. But note *why* people keep
+- **Vibe coding** got the human *out of the coding loop* and lost control. But note *why* people keep
   going back to it: the loop is short. You see the consequence of a change in minutes, and short
   loops are how you learn — about the architecture and about what the product should be.
 - **Agentic engineering** restored control by putting the human *back in the loop*, reviewing every
@@ -169,16 +169,21 @@ them adjacent to any cadence claim.
 
 ## 6. What the human still owns
 
-The human is **out of the code-review loop** and, in free coding, very much **in the development
-loop** — steering interactively, at conversational cadence. Those are different loops, and
-conflating them is the most common way to misstate the position. "Out of the loop" alone is now
-imprecise; say which loop.
+**Never say "out of the loop" unqualified. It is the _coding_ loop, and only that one.**
 
-Even with no line of code reviewed, the Artificer owns:
+This is the single most damaging imprecision available to us. Unqualified, "out of the loop" says
+the human has left the project — which is both untrue and precisely the magic-wand reading §5
+exists to prevent. The human is out of the **coding** loop: not writing code, not reading it, not
+reviewing diffs. They remain fully in **product design**, **architecture**, and **QA** — and in
+free coding they are in the development loop continuously, steering at conversational cadence.
+
+Even with no line of code written or reviewed, the Artificer owns:
 - **Intent** — saying what to build.
 - **Architecture** — system structure and its consequences.
 - **Technology & API choices** — and living with their trade-offs.
-- **Final quality** — confirming the delivered product is what was asked for, in the form expected.
+- **Final quality (QA)** — confirming the delivered product is what was asked for, in the form
+  expected. XGD verifies that the system matches the recorded intent; only the human judges whether
+  the intent was right.
 
 What XGD takes is not the direction — it is the bookkeeping that scales badly with human attention:
 maintaining the behavioral record, generating and running the tests that pin it, detecting
@@ -205,8 +210,8 @@ the AI of the design decisions made along the way. Over nine months: 130,000 lin
 code, 300,000 lines of test code, one Artificer, 30–50 tickets in a typical week.
 
 This one fact proves *both halves* of the position at once:
-- Human out of the code loop ✅ (zero lines reviewed)
-- Engineering judgment still required ✅ (the human holds the architecture and design decisions)
+- Human out of the coding loop ✅ (zero lines reviewed)
+- Engineering judgment still required ✅ (the human holds product design, architecture, and QA)
 
 > "I built a platform I've never read the source of — but I never stopped being its engineer."
 
@@ -234,8 +239,8 @@ public material — it should not stay that way.
 
 ## 9. The Software Artificer
 
-The role is *defined* by the position: the Artificer is the human who has stepped **out of the code
-loop** — declaring intent and validating outcomes, not reading diffs. "No line of code requires
+The role is *defined* by the position: the Artificer is the human who has stepped **out of the
+coding loop** — declaring intent and validating outcomes, not reading diffs. "No line of code requires
 human review" is not just an aesthetic; it is the boundary that separates an Artificer from a
 reviewer. (We coined "generative development" and "the Software Artificer" precisely to escape the
 low-status "vibe coder" label while still relating to it.)
@@ -250,9 +255,12 @@ low-status "vibe coder" label while still relating to it.)
 - Use "agentic engineering" (defined; in our own paper), not the fuzzy "agentic coding."
 - Target technical builders; speak their language.
 - Use the build-with-itself proof early and often — and the abandonment story (§8.3) alongside it.
-- Be precise about *which loop* the human is out of (§6).
+- Say **"out of the coding loop"** — always with the qualifier, and ideally paired with what the
+  human is still *in*: product design, architecture, QA (§6).
 
 **Don't**
+- Say "out of the loop" bare. It reads as "the human has left," which is untrue and hands the
+  magic-wand audience exactly the impression §5 exists to prevent.
 - Anchor the *category* to vibe coding — it is the experience benchmark and the contrast, not what
   we are. Lead on cadence rather than on the phrase itself (§5).
 - Describe XGD as a specification-in, code-out pipeline. That is the secondary mode and it was
