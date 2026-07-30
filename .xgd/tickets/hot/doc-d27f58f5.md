@@ -5,7 +5,7 @@ type: doc
 title: XGD Positioning
 created_by: xgd
 created_at: '2026-06-28T23:20:25.351081+00:00'
-updated_at: '2026-07-30T23:01:57.889891+00:00'
+updated_at: '2026-07-30T23:02:09.824356+00:00'
 completed_at: null
 last_field_updated: body
 status: draft
@@ -38,8 +38,8 @@ draw from. If this drifts, every downstream doc drifts. Get this right first._
 
 Two clauses, both load-bearing, and they answer two different competitors:
 
-- **_Safe_** separates XGD from vibe coding, which got the human out of the loop and lost the
-  guarantees.
+- **_Safe_** separates XGD from vibe coding, which got the human out of the coding loop and lost
+  the guarantees.
 - **_Without making it slow_** separates XGD from every attempt to fix vibe coding by putting
   process in front of the developer — specs first, review every diff, wait for the cycle. This is
   the newer and less contested claim, and it is the one competitors are not making.
@@ -195,7 +195,7 @@ regressions, and repairing them.
 |---|---|---|
 | Audience | Visionaries, press, the whitepapers, "why this is different" | The buyer, the landing page, the ad |
 | Register | Sophisticated, defensible | Emotional, simple |
-| Example | "A governor that reconciles software to declared behavior — asynchronously, while you keep working; it takes the human out of the code loop the way the compiler did with assembly." | "Work at the speed you already like. XGD catches what breaks behind you — and fixes it." |
+| Example | "A governor that reconciles software to declared behavior — asynchronously, while you keep working; it takes the human out of the coding loop the way the compiler did with assembly." | "Work at the speed you already like. XGD catches what breaks behind you — and fixes it." |
 
 Use vibe coding as the **experience benchmark and contrast**, never as the category: *"feels like
 vibe coding, behaves like engineering."* Hook with the feeling, pivot to the guarantee.
