@@ -130,3 +130,6 @@ Cargo.lock  # Remove this line if project is a binary/application
 *.log
 *.tmp
 *.bak*
+
+# REQ-722: main is the canonical ticket store; xgd-working no longer tracks tickets locally
+.xgd/tickets/
