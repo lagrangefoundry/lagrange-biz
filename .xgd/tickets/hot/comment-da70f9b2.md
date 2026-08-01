@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-7
 created_by: xgd
 created_at: '2026-08-01T21:46:35.740762+00:00'
-updated_at: '2026-08-01T21:46:35.813747+00:00'
+updated_at: '2026-08-01T23:15:36.874868+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1527,5 +1527,33 @@ Also due to a bug this session does not appear to be getting captured in a ticke
 Found it. Let me verify the transcript source before proposing a fix:
 
 Diagnosis complete. Let me capture this session before anything else.
+
+<!-- xgd-turn id="b269012c-fb15-4a3c-ae1b-1d516019886b-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-01T23:12:09.942976+00:00" -->
+#### You
+OK so we've done the migration hopefully this is now working on the new ticket base everything else is shut down except a few stragglers on xgd just ensuring that everything has moved over correctly. 
+
+Something bizarre is happening on XGD - the main worktree keeps getting recreated at the new brand. I have a Claude kill it it goes and then it comes back again. We have two main work trees. This should not be possible can you take a look at what's going on there ultimately obviously we want to move to the new brand location but I was expecting them to do that as a specific operation not for it to just pop up?
+
+<!-- xgd-turn id="b269012c-fb15-4a3c-ae1b-1d516019886b-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-01T23:12:36.066864+00:00" -->
+#### Claude
+I'll look at the actual state before theorising.
+
+The first pass already shows something important. Let me pin it down.
+
+<!-- xgd-turn id="013a7ba0-1c8e-4884-b6b6-3f2c80686e97-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-01T23:13:03.891947+00:00" -->
+#### You
+Please continue
+
+<!-- xgd-turn id="350ea043-3ff5-4d95-829f-9f361fbaed31-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-01T23:15:36.803722+00:00" -->
+#### You
+Please continue
 
 <!-- xgd-chat-end -->
