@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-7
 created_by: xgd
 created_at: '2026-08-01T21:46:35.740762+00:00'
-updated_at: '2026-08-03T17:14:27.982282+00:00'
+updated_at: '2026-08-03T17:17:18.432225+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1613,5 +1613,22 @@ done
 **Token hygiene after this lands.** Once all seven are live, create a per-project token for each and delete the account-scoped one — nothing on the machine should then be able to publish arbitrary new packages under your name.
 
 I haven't published anything; building is local and reversible, publishing isn't, and it needs your token regardless.
+
+<!-- xgd-turn id="e192fbed-aba9-4485-88c7-a89c23865031-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-03T17:17:18.346823+00:00" -->
+#### You
+```
+martin@nyx lagrangefoundry-plugin-sdk % cd /tmp/lagrange-reserve/lagrangefoundry-ticketing-simple && uv publish                            
+Publishing 2 files to https://upload.pypi.org/legacy/
+Hashing lagrangefoundry_ticketing_simple-0.0.0-py3-none-any.whl (1.3KiB)
+Uploading lagrangefoundry_ticketing_simple-0.0.0-py3-none-any.whl (1.3KiB)
+Hashing lagrangefoundry_ticketing_simple-0.0.0.tar.gz (982.0B)
+Uploading lagrangefoundry_ticketing_simple-0.0.0.tar.gz (982.0B)
+martin@nyx lagrangefoundry-ticketing-simple % curl -s -o /dev/null -w '%{http_code}\n' https://pypi.org/pypi/lagrangefoundry-ticketing-simple/json
+404
+martin@nyx lagrangefoundry-ticketing-simple %
+
+```
 
 <!-- xgd-chat-end -->
