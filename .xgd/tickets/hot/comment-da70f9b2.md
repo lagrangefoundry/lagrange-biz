@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-7
 created_by: xgd
 created_at: '2026-08-01T21:46:35.740762+00:00'
-updated_at: '2026-08-03T17:13:37.298148+00:00'
+updated_at: '2026-08-03T17:14:27.982282+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1561,5 +1561,57 @@ Please continue
 <!-- xgd-chat role="user" ts="2026-08-03T17:13:37.161908+00:00" -->
 #### You
 I'm picking up the ball here on the missing namespace reservations, can you recreate /tmp/lagrange-reserve?
+
+<!-- xgd-turn id="6d82a27b-1af7-49e1-b727-df9bd5f51dd6-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-03T17:14:27.896815+00:00" -->
+#### Claude
+I'll check what actually still exists and what's still missing on PyPI before rebuilding anything.
+
+Both copies are gone. Same three names still unreserved — rebuilding those.
+
+Rebuilt at `/tmp/lagrange-reserve/` — three packages, wheel + sdist each. The four that landed on Aug 1 aren't included; they're live and `0.0.0` can't be re-uploaded anyway.
+
+## Publish
+
+The 429 was a **daily** new-project cap and it's been two days, so you should have full quota. Still worth going one at a time and verifying between — if you trip it again, you want to know which one got through.
+
+```bash
+export UV_PUBLISH_TOKEN="$(cat ~/.pypi-token)"
+
+cd /tmp/lagrange-reserve/lagrangefoundry-plugin-sdk && uv publish
+curl -s -o /dev/null -w '%{http_code}\n' https://pypi.org/pypi/lagrangefoundry-plugin-sdk/json
+```
+
+`200` → next one:
+
+```bash
+cd /tmp/lagrange-reserve/lagrangefoundry-ticketing-simple && uv publish
+curl -s -o /dev/null -w '%{http_code}\n' https://pypi.org/pypi/lagrangefoundry-ticketing-simple/json
+```
+
+then:
+
+```bash
+cd /tmp/lagrange-reserve/lagrangefoundry && uv publish
+```
+
+Full verification sweep at the end:
+
+```bash
+for n in lagrangefoundry lagrangefoundry-ai lagrangefoundry-ai-knowledge \
+         lagrangefoundry-ai-ticketing lagrangefoundry-knowledge \
+         lagrangefoundry-ticketing-simple lagrangefoundry-plugin-sdk; do
+  echo "$n -> $(curl -s -o /dev/null -w '%{http_code}' https://pypi.org/pypi/$n/json)"
+done
+```
+
+## Two things to check
+
+**The token may be dead.** `~/.pypi-token` was written 13:56 on Aug 1 — I can't tell whether that's the fresh token or the account-scoped one that leaked into the transcript and I told you to revoke. If `uv publish` returns **403**, that's the answer: mint a new one at https://pypi.org/manage/account/token/. It still needs **"Entire account"** scope, since these three projects don't exist yet.
+
+**Token hygiene after this lands.** Once all seven are live, create a per-project token for each and delete the account-scoped one — nothing on the machine should then be able to publish arbitrary new packages under your name.
+
+I haven't published anything; building is local and reversible, publishing isn't, and it needs your token regardless.
 
 <!-- xgd-chat-end -->
