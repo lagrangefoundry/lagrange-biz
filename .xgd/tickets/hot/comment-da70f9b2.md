@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-7
 created_by: xgd
 created_at: '2026-08-01T21:46:35.740762+00:00'
-updated_at: '2026-08-03T17:17:18.432225+00:00'
+updated_at: '2026-08-03T17:17:46.780347+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1630,5 +1630,33 @@ martin@nyx lagrangefoundry-ticketing-simple % curl -s -o /dev/null -w '%{http_co
 martin@nyx lagrangefoundry-ticketing-simple %
 
 ```
+
+<!-- xgd-turn id="e192fbed-aba9-4485-88c7-a89c23865031-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-03T17:17:46.695592+00:00" -->
+#### Claude
+Upload succeeded — no error, no 429. The 404 is likely just the JSON API lagging behind the upload. Let me re-check.
+
+Both are reserved. The `ticketing-simple` JSON 404 is a stale cache entry, not a failed upload — project page and simple index both return 200:
+
+Both files present. The name is reserved — the JSON endpoint is serving a cached 404, almost certainly from my own pre-flight sweep a few minutes ago: I curled that exact URL while it genuinely was 404, which populated a negative cache entry that hasn't aged out. `plugin-sdk` already cleared. It'll self-correct within the hour; nothing to do.
+
+Worth noting for the last one: **don't treat a JSON 404 as a failed upload.** `uv publish` exiting silently is the real success signal — a duplicate or rejected upload produces a loud `400`. Re-running on a false 404 would just fail with "file already exists."
+
+Six of seven. Last one:
+
+```bash
+cd /tmp/lagrange-reserve/lagrangefoundry && uv publish
+```
+
+Then verify with the project page rather than the JSON API, since that endpoint has been the unreliable one:
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' https://pypi.org/project/lagrangefoundry/
+```
+
+This is the one that matters most — the bare top-level name, and the most attractive to a squatter. No 429 on either upload, so quota isn't a concern.
+
+Once it's live, the token cleanup is the remaining loose end: swap the account-scoped token for seven per-project tokens and delete it. That token can currently create arbitrary new packages under your name, and given it may be the one that appeared in a transcript, it's the piece of this I'd least want left outstanding.
 
 <!-- xgd-chat-end -->
