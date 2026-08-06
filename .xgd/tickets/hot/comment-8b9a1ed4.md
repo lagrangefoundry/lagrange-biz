@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-08-06T21:31:17.380009+00:00'
+updated_at: '2026-08-06T21:32:32.049262+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1112,5 +1112,13 @@ I also didn't touch DOC-7 — it still describes the editor showcase as the demo
 <!-- xgd-chat role="user" ts="2026-08-06T21:31:17.245531+00:00" -->
 #### You
 No marketing brainstorm is a feature of the tool. It is basically the productization of what we are doing here. We are using xgd for this which works but its not ideal. In that project it will be the incorporation of a goals tab with the right prompts...basically. As we carry out this exercise we will learn what more the goals tab needs (eg a calendar view, recurring requirements etc)
+
+<!-- xgd-turn id="c9cd69b4-2689-4ed3-9db5-6d9cc1dfa279-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-06T21:32:31.678339+00:00" -->
+#### You
+No marketing brainstorm is a feature of the tool. It is basically the productization of what we are doing here. We are using xgd for this which works but its not ideal. In that project it will be the incorporation of a goals tab with the right prompts...basically. As we carry out this exercise we will learn what more the goals tab needs (eg a calendar view, recurring requirements etc)
+
+Can you create a bug in LF to fix the roll up issue, please?
 
 <!-- xgd-chat-end -->
