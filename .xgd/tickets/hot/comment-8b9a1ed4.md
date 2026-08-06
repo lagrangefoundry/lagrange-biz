@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-08-06T20:41:23.044701+00:00'
+updated_at: '2026-08-06T20:58:54.127656+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -871,5 +871,20 @@ I'd also seed the decision log immediately, while the reasoning is still recover
 4. **Is XGD beta still the goal**, or has the real strategy become "build products with XGD, use them as proof, beta later"? Either is defensible — but they produce very different goal maps, and only one of them should be written down.
 
 Answer those and I'll create the root goals here, wire the cross-project `depends_on` edges into 1c and xgd, backfill the decision log, and update DOC-7 to point at the goal map as the live plan (leaving DOC-7 as the narrative rationale).
+
+<!-- xgd-turn id="e0034dd7-40eb-48c8-921f-884ff70cff5f-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-06T20:58:54.005253+00:00" -->
+#### You
+I was not intending to opensource LF...that's worth thinking about. I still want my editor but maybe the timeline has changed...and 1c (a product) is a better demonstration.
+
+1. I think its an important opportunity - I need to take it
+2. Lets postpone rather than retire
+3. Recreate - its not a big deal
+4. xgd beta is still the goal, but rushing to it too hard could be a mistake, I think there is real value in using it to build products to learn - I think its important to realize that we are not past our quality issues we are passed the worst absolute blocking issues. Anyway I think using the product is valuable. That said, getting to the point where others could use it too would speed up the learning.
+
+One important goal that needs to be on here: I need to spend time with the capability matrix - ensure that it is working as intended etc 
+
+Can you lay out the goals in this chat and align with me before creating the tickets, please?
 
 <!-- xgd-chat-end -->
