@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-08-06T21:32:32.049262+00:00'
+updated_at: '2026-08-06T21:34:39.324241+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1120,5 +1120,37 @@ No marketing brainstorm is a feature of the tool. It is basically the productiza
 No marketing brainstorm is a feature of the tool. It is basically the productization of what we are doing here. We are using xgd for this which works but its not ideal. In that project it will be the incorporation of a goals tab with the right prompts...basically. As we carry out this exercise we will learn what more the goals tab needs (eg a calendar view, recurring requirements etc)
 
 Can you create a bug in LF to fix the roll up issue, please?
+
+<!-- xgd-turn id="c9cd69b4-2689-4ed3-9db5-6d9cc1dfa279-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-06T21:34:39.192418+00:00" -->
+#### Claude
+Understood — GOAL-6 stays in 1c then. That's the productization of this exact session, which makes this conversation live requirements-gathering for it.
+
+Let me check LF's bug conventions before filing.
+
+Confirmed and it's slightly broader than I first described — three call sites, not one. Filing it.
+
+Filed as **BUG-8** in lagrange-framework.
+
+Since GOAL-6 is the productization of this session, let me capture what this exercise has already surfaced — otherwise it evaporates, which is the exact failure DOC-19 exists to prevent.
+
+**BUG-8** filed in lagrange-framework. It turned out to be three call sites in `rollup.js`, not one:
+
+| Line | Effect of a `state: null` stub |
+|---|---|
+| 40–44 `deriveState` | Survives the `abandoned` filter → `realized` unreachable; `STATE_RANK[null] ?? 0` → derived state collapses to `concept` |
+| 76 `openChildren` | Stub counts as open, inflating the count |
+| 110 `sumLeafPoints` | Stub renders as a leaf worth 0 → understated points → false `pointsDisagree` |
+
+The expected behaviour I wrote up mirrors how `abandoned` is already handled, for the same stated reason — a stub is *unknown*, not *uncommitted*, so it should be excluded from derivation rather than ranked, with `unresolvedChildren` surfaced so the UI can tell "derived from complete information" from "derived from what resolved". Noted that the vendored copies under `xgd_source/dashboard/static/vendor/` need the same fix.
+
+I corrected my GOAL-6 read and left it in 1c, then added a note comment (COMMENT-734) capturing what this session already surfaced for the goals tab. Two of those are worth repeating here:
+
+**Expiring opportunities are a distinct date semantic.** Both the class window and your son's summer break are bounded by *expiry*, not target — miss them and the goal is void, not late. `target_date` can't express that, and it's telling that two instances showed up in a single session. It should probably drive frontier urgency much harder than a target date does.
+
+**Cross-project goal migration should be one operation.** Today's move cost 2 reparents, 11 archives, and 11 hand-written "moved here from GOAL-23" lines — with traceability surviving only because I wrote it by hand, in one direction. That's a direct consequence of the placement rule, so it'll recur every time the rule meets existing goals.
+
+The other four: evidence-derived decision dates (all five were recovered from git and doc timestamps, no recall needed), a ready frontier that spans projects (today's is 3 + 2 + 3 across the three repos, so any per-project view misleads), your calendar/recurring examples, and the observation that the session *loop* is the thing to productize, not the schema.
 
 <!-- xgd-chat-end -->
