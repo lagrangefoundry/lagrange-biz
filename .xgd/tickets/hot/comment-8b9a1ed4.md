@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-08-06T21:01:28.036564+00:00'
+updated_at: '2026-08-06T21:09:11.573193+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1030,5 +1030,11 @@ That last row is the honest record of the beta slip — and per DOC-19 §2.1 it 
 4. **Any root missing?** Revenue is folded into R5, and delivery/ops has no node at all — deliberate, but flag it if that's wrong.
 
 Confirm and I'll create the biz tree, move the four 1c goals, wire the foreign edges, seed the xgd goals, and write the five decisions.
+
+<!-- xgd-turn id="73c51ac1-6ac3-461c-9639-9b7dd95c9306-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-06T21:09:11.458108+00:00" -->
+#### You
+There's one other opportunity. My son is on summer break right now. In the next week or two I would like to show him xgd and get him started on a project. This is a very friendly user situation BUT it does require (1) a stable release - regression has actually not run to completion for a while (my quality focus has been entirely on reconciliation and resync) (2) basic packaging with an update path. I think those are probably the key short term xgd goals and then the rest of my attention goes on 1c
 
 <!-- xgd-chat-end -->
