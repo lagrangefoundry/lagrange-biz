@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-08-06T21:25:03.998537+00:00'
+updated_at: '2026-08-06T21:31:17.380009+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1106,5 +1106,11 @@ It's latent right now because the locator is installed and everything resolves. 
 1c GOAL-6 "Marketing brainstorm" is marketing by your rule and should probably come here, but I hadn't proposed a home for it and didn't want to invent one. Tell me where it goes, or I'll fold it into GOAL-26 (audience and content engine).
 
 I also didn't touch DOC-7 — it still describes the editor showcase as the demo and beta as quality-gated, both now superseded by DECISION-5. Worth a revision pass, but that's a document change and a separate move.
+
+<!-- xgd-turn id="6e81f9b9-e831-416d-823e-0993332c1ac5-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-06T21:31:17.245531+00:00" -->
+#### You
+No marketing brainstorm is a feature of the tool. It is basically the productization of what we are doing here. We are using xgd for this which works but its not ideal. In that project it will be the incorporation of a goals tab with the right prompts...basically. As we carry out this exercise we will learn what more the goals tab needs (eg a calendar view, recurring requirements etc)
 
 <!-- xgd-chat-end -->
