@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-4
 created_by: xgd
 created_at: '2026-06-28T21:42:01.681753+00:00'
-updated_at: '2026-08-06T21:14:08.792803+00:00'
+updated_at: '2026-08-06T21:25:03.998537+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1047,5 +1047,64 @@ There's one other opportunity. My son is on summer break right now. In the next 
    2. No those are xgd goals please create them in xgd - also note that you should be able to make remote tickets children of local ones - that is the way I expect federation to work primarily - I expect this project to have the major goals (product launch) with prod/.tech goals as children in the projects
    3. White paper 3 exists in draft form but it doesn't gate anything it is just an opportunity for content when we need it.
    4. Revenue is important - 1c and xgd can both generate revenue
+
+<!-- xgd-turn id="472aa031-9bc0-4101-9b75-9394f36c6e4c-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-06T21:25:03.896417+00:00" -->
+#### Claude
+Two things I want to verify before building on them — foreign `children` and whether roll-up handles them.
+
+`xgd-stable` last moved **2026-04-12** — nearly four months ago. There is no recent stable release to hand him; that's the real blocker, and it now has a date attached to it. Creating the xgd goals first since they're the urgent ones.
+
+`batch-create` is sprint/task-only, so individual creates it is.
+
+Now the biz tree — leaves first, then parents referencing them.
+
+Federation resolves end-to-end. Now the 1c cleanup — reparent first, then archive the moved goals.
+
+Now the decision log — dates from git and ticket evidence, not memory.
+
+Done — the map is built across all three projects. Everything auto-committed; the one dirty file in 1c (`storage/sites/gigabytealchemy/draft/pages/home.json`) is pre-existing work of yours, untouched.
+
+## What exists now
+
+**xgd** — 4 goals, seeded because it had none and every dependency that matters pointed into an empty project:
+
+| | | |
+|---|---|---|
+| GOAL-1 | Stable release: regression green end-to-end | `planned` → 2026-08-20 |
+| GOAL-2 | Packaging with an update path | `planned` → 2026-08-20 |
+| GOAL-3 | Capability matrix verified working as intended | `aspiration` |
+| GOAL-4 | Licensing enforcement | `concept` |
+
+**lagrange-biz** — 36 goals in 7 roots, plus 5 decisions. Federation is by `children` as you specified, and it resolves: I verified `ticket://lagrangefoundry/1stcontact/GOAL-16` → "Web editor", `in_progress`, live from the local checkout.
+
+**1stcontact** — GOAL-7 reparented to keep only Phase 1, Phase 1 reparented to keep only the two realized R&D milestones (draft site, served from Cloudflare). Eleven moved goals archived, not abandoned — archiving is reversible and doesn't lie about what happened; abandoning would have read as "we dropped the XGD site launch."
+
+## The ready frontier, which is unusually clear
+
+```
+xgd  GOAL-1  regression green      ⟶ 2026-08-20   ← hardest blocker
+xgd  GOAL-2  packaging + update    ⟶ 2026-08-20
+biz  GOAL-8  first external user   ⟶ 2026-08-20
+biz  GOAL-7  class cohort          ⟶ 2026-08-31
+1c   GOAL-16/17/20  editor · chat · deployment
+```
+
+Two tracks, no overlap: the son runs on the xgd track, the class runs on the 1c track. Your split holds cleanly.
+
+## Two findings
+
+**`xgd-stable` last advanced 2026-04-12** — nearly four months. Per the branch topology it only fast-forwards on regression success, so the staleness *is* the regression gap, and it means there is currently nothing to hand your son. That's now GOAL-1 and it's the top of the frontier.
+
+**A latent bug in the goal map's roll-up, and this topology walks straight into it.** `stub_goal()` returns `state: None` for an unresolved foreign ref. In `rollup.js`, `deriveState` filters only `abandoned`, so a `None` child stays in the live set — `live.every(s => s === 'realized')` can never be true, and `STATE_RANK[null] ?? 0` ranks it at `concept`. So **any root with an unresolvable foreign child derives as `concept` and can never derive `realized`.**
+
+It's latent right now because the locator is installed and everything resolves. But the module's own docstring lists "cross-project resolution is not installed on this machine" as a stub reason — so on any machine without it, every biz root would show a false disagreement. Given DOC-19 §3.8 sells that disagreement as the *staleness detector*, a permanently-crying detector defeats the feature it was built for. The fix shape is to exclude unresolved stubs from derivation and mark the result partial. It's `lagrange-framework/components/webui/goal-map/js/src/rollup.js` — say the word and I'll file it there.
+
+## One thing I left alone
+
+1c GOAL-6 "Marketing brainstorm" is marketing by your rule and should probably come here, but I hadn't proposed a home for it and didn't want to invent one. Tell me where it goes, or I'll fold it into GOAL-26 (audience and content engine).
+
+I also didn't touch DOC-7 — it still describes the editor showcase as the demo and beta as quality-gated, both now superseded by DECISION-5. Worth a revision pass, but that's a document change and a separate move.
 
 <!-- xgd-chat-end -->
