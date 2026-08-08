@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-08T01:17:04.355157+00:00'
+updated_at: '2026-08-08T16:20:22.526597+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -94,5 +94,11 @@ I'd want to know which of the first two has actual work behind it before proposi
 One thing I'll flag rather than act on: **81% of goals carry `planned` provenance**, but that's a backfill artifact — the map was seeded in one sitting from work already in flight, so almost everything got the default. Going forward the split will only mean something if provenance gets set at creation time. Worth watching over the next week or two.
 
 What would you like to pick up?
+
+<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
+#### You
+I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
 <!-- xgd-chat-end -->
