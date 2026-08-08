@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-08T22:56:07.800596+00:00'
+updated_at: '2026-08-08T23:09:11.756692+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -503,5 +503,49 @@ One thing to flag before you do: **this splits across two repos.** The framework
 > **Rationale:** measured against the map on 2026-08-08, the current frontier returns 17 items of which 2 are actionable; immediate-parent grouping alone returns ~16 groups and ~70 leaves. Full spec in lagrange-biz `goal-98f48e17`.
 
 Want me to draft the companion xgd REQ too?
+
+<!-- xgd-chat role="user" ts="2026-08-08T23:07:35.285398+00:00" -->
+#### You
+**I can't file it** — really? We need to fix that. Are you sure?
+
+<!-- xgd-chat role="assistant" ts="2026-08-08T23:09:11.299104+00:00" -->
+#### Claude
+Fair challenge — let me actually check rather than take my instructions at face value.
+
+Checked it properly. Yes — but it's a **session config, not an architectural limit**, which means it's fixable.
+
+The probe:
+
+```
+create --in '{"type":"request",...}'
+→ {"error": "creating type 'request' is not enabled for this session"}
+```
+
+"Not enabled for this session" is the operative phrase. The goal tool has `create` enabled; it's the *type allowlist* that's scoped to `[decision, goal]`. Widen the allowlist to include `request` and `bug` and I can file directly.
+
+The irony is that the cross-project machinery you need for this landed yesterday: **xgd REQ-750** (`xgd ticket create --project`) and **framework REQ-67** (`xgd-cli` access kind: implement `create()` for cross-project filing), both `free_coded`. The plumbing exists. Only the allowlist is closed.
+
+I couldn't read DOC-13 (Toolbox API) to confirm where the allowlist is declared — it isn't in the biz store and doesn't resolve in xgd. It's probably framework. That's where the change goes.
+
+One thing worth deciding deliberately rather than by default: scoping to `request` and `bug` is meaningfully different from opening all types. A goal-map assistant that can file REQs and BUGs into any of three stores has a real blast radius, and `capability`, `story` and `report` are machine-owned in ways that filing by hand could corrupt. I'd widen to those two types only.
+
+Also noticed while probing: **xgd is at 0.15.135 now, up from 0.15.123** when this session started — your restarts and deploys have been landing.
+
+## Two drafts to file
+
+Framework REQ is in my previous message. Here's the companion:
+
+> **Title:** Goal map host: resolve cross-project refs, compute leaves, add workstream field
+>
+> Host-side support for the On deck / Progress split (see lagrange-framework REQ for the component).
+>
+> 1. **Resolve cross-project children.** The host adapter passes `ticket://` children through as bare uids. Resolve each by uid — this works today across store boundaries; only `list`/`query`/`search` fail. Supply title and state so leaves render and roll-up can count them.
+> 2. **Roll-up must count resolved cross-project children.** Currently derivation follows only locally-resolvable goals, so any goal whose content lives in another project under-derives permanently. Three of the four standing disagreements on the biz map are this artifact, not real drift. Two `realized` 1stcontact goals wired under `XGD site live` on 2026-08-08 did not move its derived state at all.
+> 3. **Add a boolean workstream field to goals.** Expected population 5–8. On deck shows marked workstreams only, with their live leaves beneath. Design it so an external source (open intent tabs) can later override the manual flag.
+> 4. **Leaf computation.** Under a marked workstream: descendants with no live children, state `planned` or `in_progress`, all `depends_on` resolving to `realized`.
+>
+> **Rationale:** the current frontier returns 17 items of which 2 are actionable. Immediate-parent grouping alone returns ~16 groups / ~70 leaves — measured against the map on 2026-08-08. Full spec in lagrange-biz `goal-98f48e17`.
+
+And a third worth filing while you're there, in xgd: **widen the goal-tool type allowlist to `request` and `bug`** so this doesn't recur. That's squarely a friction-removal item — it belongs under `XGD Remove friction`, and it's the reason you're pasting two tickets by hand right now.
 
 <!-- xgd-chat-end -->
