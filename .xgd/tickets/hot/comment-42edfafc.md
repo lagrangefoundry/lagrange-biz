@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-08T17:35:41.819235+00:00'
+updated_at: '2026-08-08T17:41:23.929409+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -202,5 +202,46 @@ Marking it "ongoing" exposed a real gap, and it's bigger than one goal: **the st
 **3. Morning routine — saved to memory,** with the reasoning attached (BUG-943's stale dispatcher, BUG-933 closed `wont_fix` as a stale install). From tomorrow I'll open by checking the xgd store for overnight tickets myself rather than asking. I also saved how to read the sibling stores at all — only `get` by uid works across the boundary, so enumeration means probing ID ranges, and that took a while to work out yesterday.
 
 One thing your routine will hit today: **no overnight bugs were filed.** Ceiling is still BUG-971 from 18:07 last night. So step 2 of the routine has nothing to register — which either means the runs were clean, or they failed without producing a ticket. Given REQ-750 (file a bug from a process log) is `free_coded` and untested, checking the run logs is both the routine step and the way to exercise the new feature.
+
+<!-- xgd-chat role="user" ts="2026-08-08T17:37:56.111689+00:00" -->
+#### You
+Is yesterday afternoon worth a decision record? Eight requests in ~90 minutes turning toward operator ergonomics and packaging, while two dated commitments run. That matches a real signature — work starting on something not on the frontier. I'd rather ask than pollute the log with six entries that don't matter. Why is this polution - I want to know what I spent my time on - this is gold
+
+Transcript storage and this interface's remaining tweaks have no tickets. REQ-750 now makes filing cheap. Want me to draft them?<-- actually I added some REQ/BUGs in framework, but by all means add goals
+
+My thinking on the frontier is that it is dominated by root and branch goals that are non-actionable. I need to be able to see what is in fromt of me right now.
+
+I'm struggling a little with this UX - lets get the tweaks deployed and we can discuss more how this view can better help with "what are the objectives I should be looking at now"
+
+
+<!-- xgd-chat role="assistant" ts="2026-08-08T17:41:23.478033+00:00" -->
+#### Claude
+You're right and I'll drop the objection — it's your log. The guide's "keep it rare" rule is about protecting the *why-did-the-date-move* spine from being buried, but that's a findability problem with a findability fix (the log is filterable), not a reason to lose the record. And this one clears the bar on its own: work started on something that wasn't on the frontier, while two dated commitments run. Filing it.
+
+Framework store is reachable. Let me find the tickets you filed there so the goals can point at them.
+
+Found it — you already filed the transcript one this morning: **framework REQ-72** *"Chat sessions: durable store review, multi-writer streaming, stop, and mid-turn prompts"* (draft, 10:13 local). So I'll point goals at what exists rather than draft duplicates.
+
+Done. Summary of what's now on the map:
+
+**Decision filed** — `decision-c9de87f9`, *"Spend an afternoon on operator ergonomics and packaging, twelve days out from n=1"*, dated 2026-08-07, `caused: [XGD Remove friction]`. Body carries the situation, the three alternatives, what tipped it, and the cost. It notes it was filed at your request against a sparse-log default — not as a hedge, but so a reader in six months knows the log's density is deliberate.
+
+On the findability worry: it's real but small, and the fix is a filter, not restraint. Worth deciding later whether the log wants a "consequential / routine" distinction so the six that moved the launch date stay separable from the day-level record. Not today.
+
+**Two goals added under XGD quality:**
+
+`Goal map usable as a daily driver` (`goal-98f48e17`, `user_feedback`) — points at framework REQ-65, 67, 68, 69, 70, BUG-5, BUG-10. Its body records your frontier diagnosis, because you're right and it's more specific than "the frontier is noisy":
+
+The frontier returns 17 items and **two are actionable** — the two whitepapers. Everything else is a root or branch. Two changes are needed together:
+- **Exclude goals with live children.** The work is in the children; a parent is never the thing you sit down and do.
+- **Count cross-project children even when they don't resolve.** Right now they don't, so Reconcile bugs, Remove friction, First external user and 1stcontact-as-proof all *masquerade as leaves* and flood the frontier. This is the same root cause as the roll-up defect — fixing one fixes both.
+
+Also recorded there: the standing-goal gap, and the roll-up limitation that manufactures three of your four "disagreements".
+
+`Chat transcript storage is durable` (`goal-39ddc03c`, `aspiration`) — points at framework REQ-72, which you filed at 10:13 this morning. `aspiration` not `in_progress`: filed and wanted, no work started.
+
+**None of the three UX defects has a ticket.** The frontier one is the highest-value of the three and it's a change to the readiness rule, not a rendering fix — so it's xgd, not framework. Say the word and I'll draft it, or you file it now that REQ-750 makes that cheap.
+
+When you're back from deploying, the frontier question is the one I'd most like to work through with you — specifically whether "actionable right now" should be leaves-only, or leaves plus anything with a target date inside some horizon.
 
 <!-- xgd-chat-end -->
