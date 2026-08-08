@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-08T19:54:06.029460+00:00'
+updated_at: '2026-08-08T22:55:32.299722+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -345,5 +345,102 @@ You said perfect efficiency isn't possible — you wait for the AI and pick up s
 Create the five workstream goals to match your list — including a real **Site builder** goal under Class cohort carrying the 08-31 date, and widening the chat goal from "transcript storage" to the chat stack. Then the frontier rule has something to bite on, and we can look at the actual output rather than arguing about it in the abstract.
 
 Want me to make those, and then we look at what the frontier would return?
+
+<!-- xgd-chat role="user" ts="2026-08-08T22:53:00.363544+00:00" -->
+#### You
+On debugging vs dev - dev takes a lot of time too, but for different reasons (1) there are a lot of architectural decisions to be made - getting these right reduces the number of bugs and (2) there is a significant aspect of product discovery. (what we are doing now ) There's nothing predictable about how long it will take us to make this PM tab useful
+
+Nowhere coherent — three drafts under Remove friction, plus `xgd/GOAL-2 ` <-- this is a gap from our planning exercise. It is critical that I create an install tool so that I can walk through the install with my son we talked about this it's the other piece of the project that has a short-term deadline.
+
+So a leaves-based frontier bottoms out in references it can't read the state of. <-- that doesn't make any sense if you have the reference you can get the ticket what are you trying to say?
+
+One note here all our projects are listed as full path names which is a waste of a lot of space they're all Lagrange foundry. We should just use the project name "1stcontact" xgd etc.
+
+Sure lets make those changes. 
+
+Can we also discuss changes to ready frontier. It's a little disappointing right now I like your idea that what I should be looking at our leaves with the immediate parent and the date of that parent. That sounds correct. I like the idea of the Providence chart but I think we're trying to get this display to do too much right now and it feels very noisy. Perhaps we can split it in two the top part is the ready frontier which is what we just described and then the bottom part would be "Progress" we can leave the Providence display there for now as a placeholder and come back to defining what that looks like once we have the top part fixed. Also I don't like "ready frontier" can we call it "on deck" please
+
+<!-- xgd-chat role="user" ts="2026-08-08T22:54:05.614487+00:00" -->
+#### You
+On debugging vs dev - dev takes a lot of time too, but for different reasons (1) there are a lot of architectural decisions to be made - getting these right reduces the number of bugs and (2) there is a significant aspect of product discovery. (what we are doing now ) There's nothing predictable about how long it will take us to make this PM tab useful
+
+Nowhere coherent — three drafts under Remove friction, plus `xgd/GOAL-2 `<-- this is a gap from our planning exercise. It is critical that I create an install tool so that I can walk through the install with my son we talked about this it's the other piece of the project that has a short-term deadline.
+
+So a leaves-based frontier bottoms out in references it can't read the state of. <-- that doesn't make any sense if you have the reference you can get the ticket what are you trying to say?
+
+One note here all our projects are listed as full path names which is a waste of a lot of space they're all Lagrange foundry. We should just use the project name "1stcontact" xgd etc.
+
+Sure lets make those changes.
+
+Can we also discuss changes to ready frontier. It's a little disappointing right now I like your idea that what I should be looking at our leaves with the immediate parent and the date of that parent. That sounds correct. I like the idea of the Providence chart but I think we're trying to get this display to do too much right now and it feels very noisy. Perhaps we can split it in two the top part is the ready frontier which is what we just described and then the bottom part would be "Progress" we can leave the Providence display there for now as a placeholder and come back to defining what that looks like once we have the top part fixed. Also I don't like "ready frontier" can we call it "on deck" please
+
+Once we are aligned I would like you to create a ticket in lagrange-foundry to make the changes to the overview
+
+<!-- xgd-chat role="assistant" ts="2026-08-08T22:55:31.865831+00:00" -->
+#### Claude
+You're right on both counts, and one of them was my error.
+
+**Dev isn't the predictable one.** Architecture decisions and product discovery are exactly what we're doing right now, and there's no way to bound how long making this tab useful takes. Both modes are expensive; they're expensive for different reasons. The distinction that actually holds is that debugging's cost is *comprehension of something that already exists*, and development's is *deciding what should exist*.
+
+**On the leaves claim — I was wrong.** Resolution works fine; I've been doing it all session. What doesn't work is *enumeration* (`list`/`query`/`search` across the boundary). Since the map holds the refs explicitly as children, it can resolve every one. So the frontier can absolutely read leaf state — the gap is that the dashboard's roll-up code doesn't currently do the resolution, which is a fix, not a blocker. I overstated it.
+
+Making the structural changes now.
+
+Changes are in. Then the interesting part — I hand-computed what On Deck would actually return.
+
+## What changed
+
+- **`Site builder`** (`goal-1a5a8d2b`), target **2026-08-31**, holding `1stcontact/GOAL-16` (Web editor) and `GOAL-17` (Editor chat). Split out of Class cohort so the builder carries the date itself rather than sharing a parent with course material — those are real work but they're not what slips.
+- **`XGD packaging v1 - install tool`** (`goal-d5e96abe`), target **2026-08-20**, under First external user. Pulled together `xgd/GOAL-2` and REQ-754/755/756, and removed them from Remove friction — that goal is for ongoing ergonomics, not a dated deliverable.
+- **`Chat infrastructure is dependable`** — widened from transcript storage; now also holds `framework/BUG-5`, `xgd/BUG-967`, `xgd/BUG-933`.
+- On Deck design, the rename, and the path-stripping recorded in `goal-98f48e17`. Stripping the authority is explicitly sanctioned — the design permits splitting it off the front to group or badge by.
+
+Worth saying plainly: **nothing in the map was tracking that an install tool gated a dated commitment.** It was three drafts filed under an ergonomics goal. That gap is the kind of thing this map is for, and it took you saying it out loud to surface it — which is a mark against the map, not against you.
+
+The old frontier now returns **20 items**. Worse, because I added goals. Which is the argument.
+
+## What On Deck would return
+
+Resolving every cross-project ref by hand, and counting only leaves that need *you*:
+
+| Group | Date | Next actions |
+|---|---|---|
+| **XGD packaging v1 — install tool** | **2026-08-20** · 12d | `xgd/GOAL-2`, `REQ-754` update, `REQ-755` build, `REQ-756` deploy — all draft |
+| **Site builder** | **2026-08-31** · 23d | `1stcontact/GOAL-16` Web editor (in progress), `GOAL-17` Editor chat (concept) |
+| **Chat infrastructure** | — | `framework/REQ-72` (draft) |
+| **Goal map daily driver** | — | `framework/REQ-70` (draft) |
+| **XGD Remove friction** | — | `REQ-757` (untitled draft) |
+| **XGD bugs** (all six) | — | **nothing** |
+
+That's about ten items in six groups, and it fits on a screen.
+
+## The finding
+
+**The six bug goals collapse to empty**, and not because they're inactive — because every one of those 31 bugs is already `free_coded`, `ready_to_reconcile`, or `legacy_done`. They're *done and waiting on the machine*, not waiting on you.
+
+Two consequences:
+
+**The grouping-altitude question I raised mostly dissolves.** I worried six bug groups would crowd out your five workstreams. They won't, because they carry no actionable leaves. The rule doesn't need a workstream mark — nearest-committed-parent is enough. Let's not add a field.
+
+**The machine-blocked distinction isn't a refinement, it's the main filter.** It's doing more work than the leaves-only rule. So On Deck needs one thing specified: **which ticket statuses mean "needs me"?**
+
+- **Needs you** — `draft`, `open`, and goal states `concept` / `aspiration` / `planned`
+- **Machine-side, hide** — `free_coded`, `ready_to_reconcile`, `bundled`
+- **Done, exclude** — `legacy_done`, `fixed`, `abandoned`, `wont_fix`
+
+Get that mapping right and On Deck is the table above. Get it wrong and it's 40 rows of things you already finished.
+
+One caveat on the middle row: hiding `free_coded` assumes reconcile is healthy. If a bundle stalls — and four of them did in the last two days — work sits in that bucket invisibly. That's an argument for Progress showing a count of machine-side work, so it's out of your face but not out of sight.
+
+## To file
+
+Three tickets in xgd, none of which exist:
+1. On Deck — leaves only, grouped by immediate committed parent, parent's date on the header, status→actionable mapping above.
+2. Resolve cross-project refs in roll-up and frontier (fixes the fake-leaf flood *and* three of the four disagreements).
+3. Strip authority from displayed refs.
+
+And one in framework: standing goals — a way to say "this never completes", affecting Remove friction and the four bug goals.
+
+Want me to draft those, or file them yourself now that REQ-750 makes it cheap from a log?
 
 <!-- xgd-chat-end -->
