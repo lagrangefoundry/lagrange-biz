@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-08T22:55:32.299722+00:00'
+updated_at: '2026-08-08T22:56:07.800596+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -442,5 +442,66 @@ Three tickets in xgd, none of which exist:
 And one in framework: standing goals — a way to say "this never completes", affecting Remove friction and the four bug goals.
 
 Want me to draft those, or file them yourself now that REQ-750 makes it cheap from a log?
+
+<!-- xgd-chat role="assistant" ts="2026-08-08T22:56:07.363104+00:00" -->
+#### Claude
+Now rewiring so the new goals own their work.
+
+Before I write the spec, I ran the proposed rule against the map to see what it would actually return — and it doesn't solve your problem yet. Grouping every live leaf under its immediate parent yields **~16 groups and ~70 leaves**. That's the same noise with better indentation.
+
+The gap: "unblocked" isn't "on deck". Your five workstreams aren't the ones that qualify — they're the ones you *chose*. Nothing in the graph encodes that choice. Writing the spec around that.
+
+Structural changes are in. Summary:
+
+| Change | Result |
+|---|---|
+| **`Site builder`** created, target **2026-08-31** | Owns 1stcontact/GOAL-16 + GOAL-17; Class cohort now points at it |
+| **`XGD packaging v1 - install tool`** created, target **2026-08-20** | Owns xgd/GOAL-2 + REQ-754/755/756; now a child of First external user |
+| `XGD Remove friction` | Packaging trio removed — it's for ongoing ergonomics, not dated deliverables |
+| `Chat transcript storage` → **`Chat infrastructure is dependable`** | Widened to the stack: framework REQ-72, BUG-5, xgd BUG-967 |
+
+The packaging gap was the real find. Nothing in the map recorded that an install tool gates a dated commitment — it was three drafts filed under an ergonomics goal. It now sits under n=1 with **2026-08-20, 12 days**, which makes it the nearest deadline you have, closer than the site builder.
+
+## On Deck — the design
+
+Agreed on all of your points: two panes, `On deck` on top, `Progress` below with the provenance chart parked as a placeholder, and short project names.
+
+The one place I'd change your proposal: **workstreams should be marked, not derived.** Immediate-parent grouping gives 16 groups / 70 leaves — measured, not guessed. Your daily resolution is five. The distinguishing property of those five is that you picked them, and no graph rule recovers a choice.
+
+So: one new boolean field on goals, expected population 5–8, changes slowly. Everything below it derives.
+
+That also resolves the resolution mismatch you flagged: **XGD bugs is one item to you and six goals in the map.** Six is right for filing, one is right for the daily list. Marking lets you mark the parent and leave the six alone.
+
+Rules, in order: marked workstreams only → live leaves beneath them → resolve every `ticket://` ref for title and state → sort by date proximity, nearest first → strip the `lagrangefoundry/` prefix. DOC-19 §7 explicitly permits splitting the authority off for display, so that one's sanctioned, not a workaround.
+
+And the end state worth designing toward: **your open intent tabs already are this list.** You maintain them, you close them when done, and you've said you couldn't function without them. Sourcing the marks from open intents makes On deck self-maintaining at zero extra cost. That needs the intent tab to expose data, so it's not today — but the manual flag should be built so that source can override it later.
+
+Full spec is written into `Goal map usable as a daily driver` (`goal-98f48e17`).
+
+## On the ticket
+
+**I can't file it** — my ticket access is read-only for everything except goals and decisions, so REQs and BUGs have to come from you. Drafted below, ready to paste.
+
+One thing to flag before you do: **this splits across two repos.** The framework REQ covers the component — two-pane split, the rename, row rendering, authority stripping. But three pieces are host-side in xgd: resolving cross-project refs, computing leaves, and the new workstream field (a ticketing schema change). The component can't ship useful without them.
+
+**Draft — lagrange-framework REQ:**
+
+> **Title:** Goal map: split into On deck / Progress panes; workstream-grouped leaves with dates
+>
+> Replace the single ready-frontier list with two stacked panes.
+>
+> **On deck** (top) — for each goal marked as a workstream, a header row with its title and target date (plus days remaining), and beneath it the live leaves: descendants with no live children, state `planned` or `in_progress`, all `depends_on` realized. Sort workstreams by date proximity, nearest first; undated last.
+>
+> **Progress** (bottom) — the existing provenance chart, unchanged, as a placeholder. Its definition is deferred.
+>
+> Also: render cross-project refs as `1stcontact/GOAL-16`, stripping the `ticket://lagrangefoundry/` prefix (DOC-19 §7 permits splitting the authority for display). Resolve each ref for title and state rather than showing a bare uid.
+>
+> Rename "ready frontier" to "On deck" throughout.
+>
+> **Requires (xgd host side):** a boolean workstream field on goals; cross-project ref resolution in the host adapter; leaf computation. Component should degrade gracefully if refs don't resolve — badge them rather than dropping them.
+>
+> **Rationale:** measured against the map on 2026-08-08, the current frontier returns 17 items of which 2 are actionable; immediate-parent grouping alone returns ~16 groups and ~70 leaves. Full spec in lagrange-biz `goal-98f48e17`.
+
+Want me to draft the companion xgd REQ too?
 
 <!-- xgd-chat-end -->
