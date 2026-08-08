@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-08T16:20:32.242193+00:00'
+updated_at: '2026-08-08T16:23:16.117176+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -95,16 +95,22 @@ One thing I'll flag rather than act on: **81% of goals carry `planned` provenanc
 
 What would you like to pick up?
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
-
 <!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
 #### You
 I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-assistant" -->
-
 <!-- xgd-chat role="assistant" ts="2026-08-08T16:20:32.108550+00:00" -->
 #### Claude
 Acknowledged — this turn is here for the transcript. Restart the dashboard whenever you're ready and check whether both this exchange and the prior one survived.
+
+<!-- xgd-chat role="user" ts="2026-08-08T16:23:08.650205+00:00" -->
+#### You
+Again - I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
+
+<!-- xgd-chat role="assistant" ts="2026-08-08T16:23:15.606566+00:00" -->
+#### Claude
+Acknowledged — go ahead and restart the dashboard.
+
+For when you're back, here's where I am so you don't lose the thread: the evidence gathering is done (bugs BUG-933→967, requests REQ-749→757 from this afternoon, plus the 1stcontact and xgd goal stores), but I haven't created or modified anything on the map yet. Nothing is half-written. Once you confirm the transcript survived, I'll lay out the proposed structure and then make the changes, and we can talk through your three items for today.
 
 <!-- xgd-chat-end -->
