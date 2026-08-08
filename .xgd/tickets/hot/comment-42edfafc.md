@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-08T17:41:23.929409+00:00'
+updated_at: '2026-08-08T19:54:06.029460+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -213,7 +213,6 @@ My thinking on the frontier is that it is dominated by root and branch goals tha
 
 I'm struggling a little with this UX - lets get the tweaks deployed and we can discuss more how this view can better help with "what are the objectives I should be looking at now"
 
-
 <!-- xgd-chat role="assistant" ts="2026-08-08T17:41:23.478033+00:00" -->
 #### Claude
 You're right and I'll drop the objection — it's your log. The guide's "keep it rare" rule is about protecting the *why-did-the-date-move* spine from being buried, but that's a findability problem with a findability fix (the log is filterable), not a reason to lose the record. And this one clears the bar on its own: work started on something that wasn't on the frontier, while two dated commitments run. Filing it.
@@ -243,5 +242,108 @@ Also recorded there: the standing-goal gap, and the roll-up limitation that manu
 **None of the three UX defects has a ticket.** The frontier one is the highest-value of the three and it's a change to the readiness rule, not a rendering fix — so it's xgd, not framework. Say the word and I'll draft it, or you file it now that REQ-750 makes that cheap.
 
 When you're back from deploying, the frontier question is the one I'd most like to work through with you — specifically whether "actionable right now" should be leaves-only, or leaves plus anything with a target date inside some horizon.
+
+<!-- xgd-chat role="user" ts="2026-08-08T19:52:29.439571+00:00" -->
+#### You
+There are REQ tickets in lagrange-framework. 
+
+Lets take a moment to discuss the "Ready frontier" and what it should contain.
+
+Actually let's take a step back why don't you talk about how I work first. I am currently working on three projects XGD itself, first contact and Lagrange framework. The latter is components to support the first two so in a sense it's only really two projects that we are trying to take forward.
+
+So there are probably two kinds of work. The first is debugging and the second is development.
+
+I find bugs in the product all the time some of them are experiences that I have with the UI, others are long running process failures. It is critical for us to address these quality issues before releasing any products so many many of the bugs are critical path. I will usually create a bug have the AI investigate it without making changes, explain it and discuss it until I understand it and then fix it. This is actually enormously time-consuming because I really need to understand a lot of these bugs particularly the deep workflow bugs.
+
+The second kind of workflow is development. This typically starts with a chat session where I will discuss at a high-level a feature and we will talk about the product requirements and the architecture. I will then typically have the chat session write up a design document and create   REQ tickets which I will then free code.
+
+I think I want to track all the intents here so that I know how I am spending my time.
+
+I have in mind that my time can probably be counted in terms of the length of the prompts that I am writing (excluding pasted logs and other content). Also tracking the number of turns is significant, I believe.
+
+One thing about in mind is that perfect efficiency is not always possible. I have to wait for the AI to do the work. While I am doing that it may make sense for me to do other things.
+
+So the other aspects to how I work is that the intent tab in each project maintains intent tabs and so I leave these open while they are still being worked on at the point where I am ready to finish with the ticket I close the tab. This gives me a sort of crude workspace affordance that is critical. I would not be able to function without.
+
+The purpose of this tab is to go the next level up. The open tabs give me a sort of snapshot in time of the things that I have been focused on. But they do not help me with what I was working on yesterday or even really what I should work on tomorrow. And they absolutely don't help with the bigger picture questions of roadmap and deadlines.
+
+So trying to bring this back to a point whilst I would like you to track all the tickets that I have touched. Let's deal with the question of progress separately. And focus initially on the question of immediate objectives. This is the ready frontier.
+
+Right now it is a uselessly long list of roots and branches. I need it to help me focus. Let me try and reconstruct what I am working on right now.
+(1) there is a list of XGD bugs that need to be solved
+(2) we are building out the XGD packaging v1
+(3) we are working on the site builder
+(4) we are working on this experince
+(4a) we are working on the chat infrastructure for the framework - the chat that I am literally using here - because it is flaky (relates to 4)
+
+Each of these will have 1-5 REQ's that I am working through - in each area we need to understand what is the next thing I need to do. This list 1-4a is probably the resolution I want to look at this in on a daily basis. So the leaves are important because they answer "what do I do next" but some level of branch needs to exist so I remember "why"
+
+Having the site builder deadline clearly represented would also be helpful
+
+Your  thoughts?
+
+<!-- xgd-chat role="assistant" ts="2026-08-08T19:54:05.610407+00:00" -->
+#### Claude
+Thoughts, and one reframe that I think matters more than the filter rule.
+
+## What I take from how you work
+
+Three repos, two products — framework is a supplier, not a destination. That has a direct consequence for this map: framework goals should almost never appear as objectives in their own right. They're there because something in XGD or 1stcontact needs them. Your (4a) is the honest exception — the chat infrastructure is framework work you're pursuing *because you're using it right now*, which is a different reason than "1stcontact needs it".
+
+The two work modes have genuinely different shapes, and the map currently treats them the same:
+
+- **Debugging** — arrives unbidden, is critical path, and the expensive part isn't the fix, it's *you understanding it*. The investigate-explain-discuss loop before any code changes is the real cost, and nothing in the map or the tickets records that a bug took four hours of comprehension. This is the single biggest distortion in any time accounting you build later: a bug ticket and a REQ ticket look identical in the trail and cost wildly different amounts of you.
+- **Development** — chat → requirements/architecture → design doc → REQs → free code. Predictable, plannable, and the REQ tickets are a genuine work queue.
+
+And the thing I'd build around: **your open intent tabs are already a hand-maintained ready frontier.** You said you'd be unable to function without them. That's not a crude affordance, that's the real signal — it's operator-curated, it's live, and it costs you nothing extra because you're already doing it. If the frontier can read open intents, it inherits your judgement for free instead of trying to re-derive it.
+
+## The reframe
+
+The frontier isn't filtering wrong. **The map is missing the layer you actually think in.**
+
+Your 1–4a is that layer, and here's where each one currently lives:
+
+| Your item | In the map today |
+|---|---|
+| (1) XGD bugs | Split six ways — Reconcile/Resync/Development/Regression/Ticketing/Dashboard |
+| (2) XGD packaging v1 | Nowhere coherent — three drafts under Remove friction, plus `xgd/GOAL-2` |
+| (3) Site builder | **Doesn't exist as a goal** — two cross-project refs under Class cohort |
+| (4) This experience | `Goal map usable as a daily driver` ✓ |
+| (4a) Chat infrastructure | `Chat transcript storage is durable` — too narrow; it's the whole chat stack |
+
+So no filter rule can produce your list, because three of the five aren't in the map at the right shape. Fix the shape and the rule gets easy. That ordering matters — otherwise we tune a filter against a structure that was never going to yield the answer.
+
+Note the resolution mismatch too: you say "XGD bugs" as *one* thing. I created six because you asked for the separation, and I think both are right for different purposes — six is the right *filing* structure, one is the right *daily* structure. That's an argument for grouping being a display concern, not a tree concern.
+
+## The rule I'd propose
+
+**Frontier = live leaves only, grouped under their nearest committed ancestor, with that ancestor's target date shown.**
+
+- Leaves answer *what do I do next*.
+- The grouping ancestor answers *why*, and it's derived, not another thing to maintain.
+- The date comes along for free — the site builder leaves would sit under Class cohort and inherit **2026-08-31** visibly, which is exactly what you asked for.
+
+Two corrections needed alongside it, or it doesn't work:
+
+1. **Cross-project children must count as children.** Right now they don't resolve, so Reconcile bugs, Remove friction, First external user and 1stcontact-as-proof all masquerade as leaves. That's most of your 17.
+2. **A blocked dependency and an unresolvable one are both not-ready** — already the rule, but worth holding onto once refs start resolving.
+
+## The thing that blocks it
+
+Your actual next actions are REQ and BUG tickets in xgd, 1stcontact and framework. **This map can only reach those by uid** — no list, no query, no search across the store boundary. So a leaves-based frontier bottoms out in references it can't read the state of. It can show you the ref; it can't tell you the ticket is already `free_coded`.
+
+That makes cross-project resolution the prerequisite for the whole frontier idea, not a nice-to-have. Framework REQ-67 (`xgd-cli` access kind: implement `create()`) is the adjacent piece — read-side resolution is the sibling it needs.
+
+## One thing I'd add to the model
+
+You said perfect efficiency isn't possible — you wait for the AI and pick up something else. That's a design requirement, not an aside. It means the frontier's job isn't just *what's next*, it's **what's next given three threads are currently blocked on a machine**.
+
+`in_progress` currently means both "I am actively thinking about this" and "a dispatcher is chewing on this and I'm free". Those are opposite signals for a multi-threaded operator. Distinguishing them turns the frontier from a list into a dispatcher for your attention — and it's probably the highest-value single addition on the table.
+
+## What I'd do next, concretely
+
+Create the five workstream goals to match your list — including a real **Site builder** goal under Class cohort carrying the 08-31 date, and widening the chat goal from "transcript storage" to the chat stack. Then the frontier rule has something to bite on, and we can look at the actual output rather than arguing about it in the abstract.
+
+Want me to make those, and then we look at what the frontier would return?
 
 <!-- xgd-chat-end -->
