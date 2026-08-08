@@ -5,9 +5,9 @@ type: goal
 title: Reusable AI tooling object
 created_by: xgd
 created_at: '2026-08-08T23:48:08.445713+00:00'
-updated_at: '2026-08-08T23:48:08.445713+00:00'
+updated_at: '2026-08-08T23:48:46.660559+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: body
 status: in_progress
 fields:
   provenance: product_decision
@@ -30,4 +30,4 @@ The object carries projection, validation, policy gating, structural dispatch, p
 
 **A live instance of the cost of not having it.** On 2026-08-08 the goal-map assistant could not file a REQ because its type allowlist is fixed at [decision, goal] for the session: creating type request is not enabled for this session. The plumbing for cross-project filing already existed - xgd/REQ-750 (xgd ticket create --project) and lagrange-framework/REQ-67 (xgd-cli access kind: create() for cross-project filing), both free_coded on 2026-08-07. Only the policy gate was closed, and there was no principled place to open it. That gate is exactly what REQ-73 and REQ-74 are designing. Ensure request and bug are expressible in the policy frame rather than patched in afterwards.
 
-See decision-af75b21f for why this was built as a component rather than solved point-wise.
+See decision-46593d49 for why this was built as a component rather than solved point-wise.
