@@ -5,7 +5,7 @@ type: goal
 title: XGD site live
 created_by: xgd
 created_at: '2026-08-06T21:20:33.103959+00:00'
-updated_at: '2026-08-06T21:20:33.103959+00:00'
+updated_at: '2026-08-08T16:31:34.225048+00:00'
 completed_at: null
 last_field_updated: created_at
 status: in_progress
