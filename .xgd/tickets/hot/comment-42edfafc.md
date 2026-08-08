@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-08T23:09:11.756692+00:00'
+updated_at: '2026-08-08T23:49:03.177796+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -547,5 +547,46 @@ Framework REQ is in my previous message. Here's the companion:
 > **Rationale:** the current frontier returns 17 items of which 2 are actionable. Immediate-parent grouping alone returns ~16 groups / ~70 leaves — measured against the map on 2026-08-08. Full spec in lagrange-biz `goal-98f48e17`.
 
 And a third worth filing while you're there, in xgd: **widen the goal-tool type allowlist to `request` and `bug`** so this doesn't recur. That's squarely a friction-removal item — it belongs under `XGD Remove friction`, and it's the reason you're pasting two tickets by hand right now.
+
+<!-- xgd-chat role="user" ts="2026-08-08T23:46:50.784084+00:00" -->
+#### You
+OK, so a decision to record today is that I decided to do the "Tooling" for our AI system "right" meaning a reusable configurable component rather than a custom designed solution. This should make things faster and more secure in the future but it meant that most of the day was spent building the configuration reusable toolbox component.
+
+<!-- xgd-chat role="assistant" ts="2026-08-08T23:49:02.614581+00:00" -->
+#### Claude
+Good one — and it's the kind that explains a gap later. Let me pull the evidence before I draft it.
+
+Strong evidence trail — this is your development pattern exactly: design doc, then REQs, then free code.
+
+**Today in framework, 14:13–14:14 local, five REQs filed in about a minute:**
+
+- REQ-73 — Complete DOC-20, the tooling object design (declared API, config, call types, policy, security frame)
+- REQ-74 — Build the tooling object: projection, validation, policy gating, structural dispatch, provenance, audit
+- REQ-75 — Refactor `ai_ticketing` onto it (py + js) — first consumer, proves the design
+- REQ-76 — Refactor `ai_knowledge` onto it (py)
+- REQ-77 — Refactor the built-in filesystem toolset onto it (decision pending, sequenced last)
+
+Plus **DOC-13** (Toolbox API: host tool-registration contract, Python + JS) updated at 16:27, and DOC-20 being written.
+
+And it closes a loop from twenty minutes ago: the type allowlist that blocked me from filing tickets **lives in the registration contract you're rebuilding right now**. "Widen the allowlist" isn't a separate fix — REQ-73/74 subsume it. Worth making sure `request` and `bug` land in the policy frame as you design it, rather than as a patch afterward.
+
+Creating a goal for the work, then filing the decision against it.
+
+Recorded.
+
+**`decision-46593d49`** — *"Build AI tooling as a reusable configurable component, not a per-surface custom solution"*, dated 2026-08-08.
+`caused:` Reusable AI tooling object · `deferred:` Site builder, XGD packaging v1
+
+**`goal-9cdf5f09`** — *Reusable AI tooling object*, `in_progress`, provenance `product_decision`, under XGD quality. Holds REQ-73–77 and DOC-13. (Also dropped `xgd/GOAL-2` from XGD quality's children — it now lives under the packaging goal, so it was double-counted.)
+
+The decision body records the alternative you rejected, which is the part that won't be obvious later: patching the allowlist was a minutes-long fix that would have worked. What tipped it toward the component was security — tool gating decides what an AI may touch, four hand-rolled implementations means four places to get it wrong and nowhere to audit — and that argument is the same one both whitepapers make. Accountability being structural rather than promised is hard to claim while your own AI permissions are ad hoc per surface.
+
+Two things I put in the record that you should correct if I've read them wrong:
+
+**I marked both dated goals as `deferred`.** That's inference from where the day went, not a stated intent to postpone. If the sequencing was deliberate — tooling first *because* it makes the packaging work faster — that's a materially different record and worth fixing.
+
+**I noted a pattern rather than just an entry.** This is the second decision in two days where infrastructure won over a dated deliverable: yesterday an afternoon on operator ergonomics (`decision-c9de87f9`), today most of a day on the tooling object. Each is individually well-argued and I'd have made both calls. But the install tool is **12 days out** and hasn't started — all four of its tickets are `draft` or `planned` — and it's the thing standing between you and walking your son through an install. Two infrastructure days in a row is the kind of thing that's invisible at the time and obvious in September, which is precisely what this log is for.
+
+Not an argument to change course. Just making it visible while it's still cheap to act on.
 
 <!-- xgd-chat-end -->
