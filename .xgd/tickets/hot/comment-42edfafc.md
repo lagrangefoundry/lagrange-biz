@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-09T17:59:47.916363+00:00'
+updated_at: '2026-08-09T18:01:03.082903+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1301,5 +1301,57 @@ That error is worth noting — `lagrangefoundry.ai has no attribute 'TicketStore
 Probing the ceilings first.
 
 Time has moved — BUG-990 was filed this morning at 09:22 local. Let me fix the clock and the ceilings before I define "today".
+
+<!-- xgd-chat role="assistant" ts="2026-08-09T18:00:24.100503+00:00" -->
+#### Claude
+
+
+Sweep done. Wiring today's bugs in, then the report.
+
+Your error is already fixed. **`xgd/BUG-992` — "Dashboard: Goals chat resets to a blank session (TicketStore rename)"**, filed 09:59 this morning, already `free_coded`. `lagrangefoundry.ai has no attribute 'TicketStore'` is that rename. It needs a restart to pick up — which is step 1 of your own routine.
+
+## Since we last spoke — the evening of 08-08
+
+Everything we specified that afternoon was built the same night.
+
+| Ticket | Status | Landed |
+|---|---|---|
+| framework REQ-86 — On deck / Progress panes | `free_coded` | 17:33 — **19 minutes after I filed it** |
+| xgd REQ-764 — host: resolve refs, leaves, workstream field | `ready_to_reconcile` | 19:09 |
+| xgd BUG-982 — silent `store` routing fallback | `ready_to_reconcile` | 19:08 |
+| framework REQ-73 — complete DOC-20 | `legacy_done` | 17:10 |
+| framework REQ-74 — **build the Toolbox** | `free_coded` | 17:38 |
+| xgd REQ-765 — free-coding concurrency: version under lock, session lock | `ready_to_reconcile` | 17:45 |
+
+**On Deck exists.** Both halves — component and host — went from specification to code in under two hours. So the display we spent the afternoon arguing about is real and waiting on reconcile.
+
+**The Toolbox is built**, not just designed. REQ-74 is `free_coded`. The three refactors (REQ-75 `ai_ticketing`, REQ-76 `ai_knowledge`, REQ-77 filesystem) are still `draft` — that's the "all four tomorrow" you predicted, with the build already done ahead of it.
+
+Two things changed shape while you built it, worth confirming rather than assuming:
+
+- The name moved from "tooling object" to **Toolbox**, and "policy gating" became **"capability groups, scope gating"**.
+- **REQ-77 was resequenced from last to first** — now "Refactor the built-in filesystem toolset onto the Toolbox (FilesystemToolbox) — sequenced first". Its earlier title said "decision pending, sequenced last". A deliberate reordering with a pending decision resolved is a decision-record signature. Want one?
+
+## This morning — 08-09
+
+| Ticket | Status | Time |
+|---|---|---|
+| BUG-989 / BUG-990 — Reconcile process failed BUNDLE-109 8/8 19:41 | `draft` (duplicates) | 09:22 |
+| BUG-991 — Dashboard startup: chat sweeps block the port bind | `free_coded` | 09:37 |
+| BUG-992 — Goals chat resets to blank session (TicketStore rename) | `free_coded` | 09:59 |
+| BUG-993 — Ticket index: never-demoted tickets leak into cold tier; `hot_only` queries silently fall back to full-store loads, starving index locks | `in_progress` | 10:43 |
+| xgd REQ-754 — `xgd update` command | `ready_to_reconcile` | 10:05 |
+
+Your morning routine ran and worked — BUG-989/990 are the overnight BUNDLE-109 reconcile failure registered at 09:22, which is exactly step 2. They're filed twice; one should probably be closed as a duplicate.
+
+**Packaging is effectively done.** With `xgd update` landing this morning, the only remaining piece is REQ-763 (forced-update gate), still `draft`. Installer, build, deploy, Cloudflare serving and the update command are all through. That's the **2026-08-20** commitment, 11 days out, essentially complete.
+
+## Two things to flag
+
+**BUG-993 may be biting right now.** A `1stcontact/GOAL-16` read that worked earlier in this session returned nothing during this sweep. Index locks starving under full-store fallback would explain an intermittent cross-store read failure — and possibly the sweep tooling error you hit too. It's `in_progress`, so you're presumably on it.
+
+**Site builder — I genuinely can't tell you.** The read failed, so I won't assert either way. Given it's the goal with real uncertainty in front of it and the Toolbox it depends on just got built, it's worth a look once the index settles.
+
+Map updated: today's bugs w
 
 <!-- xgd-chat-end -->
