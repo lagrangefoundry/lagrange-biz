@@ -5,14 +5,17 @@ type: goal
 title: 1stcontact commercial launch
 created_by: xgd
 created_at: '2026-08-06T21:21:56.049578+00:00'
-updated_at: '2026-08-06T21:21:56.049578+00:00'
+updated_at: '2026-08-09T18:57:54.516964+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: children
 status: concept
 fields:
   provenance: planned
   children:
   - ticket://lagrangefoundry/1stcontact/GOAL-5
+  - ticket://lagrangefoundry/1stcontact/GOAL-4
+  - ticket://lagrangefoundry/1stcontact/GOAL-12
+  - ticket://lagrangefoundry/1stcontact/GOAL-3
 ---
 
 1c sold to small businesses at roughly $50/month (DOC-4).
