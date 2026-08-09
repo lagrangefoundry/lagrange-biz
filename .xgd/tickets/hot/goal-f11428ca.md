@@ -5,9 +5,9 @@ type: goal
 title: Reconcile bugs
 created_by: xgd
 created_at: '2026-08-08T16:30:10.737223+00:00'
-updated_at: '2026-08-09T18:00:28.609926+00:00'
+updated_at: '2026-08-09T18:58:15.832796+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: children
 status: in_progress
 fields:
   provenance: bug
@@ -22,6 +22,9 @@ fields:
   - ticket://lagrangefoundry/xgd/BUG-961
   - ticket://lagrangefoundry/xgd/BUG-963
   - ticket://lagrangefoundry/xgd/BUG-966
+  - ticket://lagrangefoundry/xgd/BUG-986
+  - ticket://lagrangefoundry/xgd/BUG-989
+  - ticket://lagrangefoundry/xgd/BUG-990
 ---
 
 Bugs in the reconcile workflow - promoting working bundles into main - worked on 2026-08-06 and 2026-08-07.
