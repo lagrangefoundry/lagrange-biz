@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-09T18:01:03.082903+00:00'
+updated_at: '2026-08-09T18:01:04.412801+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1304,8 +1304,6 @@ Time has moved — BUG-990 was filed this morning at 09:22 local. Let me fix the
 
 <!-- xgd-chat role="assistant" ts="2026-08-09T18:00:24.100503+00:00" -->
 #### Claude
-
-
 Sweep done. Wiring today's bugs in, then the report.
 
 Your error is already fixed. **`xgd/BUG-992` — "Dashboard: Goals chat resets to a blank session (TicketStore rename)"**, filed 09:59 this morning, already `free_coded`. `lagrangefoundry.ai has no attribute 'TicketStore'` is that rename. It needs a restart to pick up — which is step 1 of your own routine.
@@ -1353,5 +1351,9 @@ Your morning routine ran and worked — BUG-989/990 are the overnight BUNDLE-109
 **Site builder — I genuinely can't tell you.** The read failed, so I won't assert either way. Given it's the goal with real uncertainty in front of it and the Toolbox it depends on just got built, it's worth a look once the index settles.
 
 Map updated: today's bugs w
+
+<!-- xgd-chat role="assistant" ts="2026-08-09T18:01:03.045731+00:00" -->
+#### Claude
+ired into Reconcile (BUG-986/989/990), Dashboard (BUG-991/992) and Ticketing store (BUG-993, plus BUG-982).
 
 <!-- xgd-chat-end -->
