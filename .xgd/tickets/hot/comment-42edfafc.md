@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-09T19:05:53.723152+00:00'
+updated_at: '2026-08-09T23:13:42.289203+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1434,5 +1434,11 @@ The xgd tickets (BUG-982, 996, 997) stay as host-side counterparts and are cross
 All four are now children of `Goal map usable as a daily driver`, with the two framework ones first.
 
 One thing worth saying about the shape of today: **you shipped the Toolbox build (REQ-74) yesterday evening, and today produced two bugs that are textbook arguments for it.** BUG-20 is a validation defect in exactly the layer REQ-75 is about to replace. That's not a coincidence to note in passing — it's the leverage argument you made yesterday, demonstrating itself inside 24 hours.
+
+<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
+#### You
+I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
 <!-- xgd-chat-end -->
