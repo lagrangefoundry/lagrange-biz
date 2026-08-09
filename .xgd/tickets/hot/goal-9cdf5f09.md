@@ -5,7 +5,7 @@ type: goal
 title: Reusable AI tooling object
 created_by: xgd
 created_at: '2026-08-08T23:48:08.445713+00:00'
-updated_at: '2026-08-08T23:48:46.660559+00:00'
+updated_at: '2026-08-09T00:19:10.980208+00:00'
 completed_at: null
 last_field_updated: body
 status: in_progress
@@ -24,10 +24,16 @@ One configurable, declarative component that every AI toolset is built on - rath
 
 The object carries projection, validation, policy gating, structural dispatch, provenance and audit. Toolsets declare an API and a config; the object enforces what a caller may address and how.
 
-**Composition:** DOC-13 (Toolbox API: host tool-registration contract, Python + JS) and DOC-20 (the tooling object design: declared API, config, call types, policy, security frame) are the design; REQ-73 completes DOC-20; REQ-74 builds the object; REQ-75 refactors ai_ticketing onto it as the first consumer, which is what proves the design; REQ-76 refactors ai_knowledge; REQ-77 refactors the built-in filesystem toolset, sequenced last with a decision still pending.
+**Composition:** DOC-13 (Toolbox API: host tool-registration contract, Python + JS) and DOC-20 (the tooling object design: declared API, config, call types, policy, security frame) are the design; REQ-73 completes DOC-20; REQ-74 builds the object; REQ-75 refactors ai_ticketing onto it as the first consumer, which is what proves the design; REQ-76 refactors ai_knowledge; REQ-77 refactors the built-in filesystem toolset, sequenced last with a decision still pending. REQ-74 through REQ-77 are expected to be built in a single pass on 2026-08-09.
 
-**Framework work, but not for framework sake.** Framework supplies XGD and 1stcontact; it is not a destination. This is here because every AI surface the operator runs - the goal map, ai_ticketing, ai_knowledge, the filesystem toolset - currently re-implements gating by hand.
+## Who depends on this
 
-**A live instance of the cost of not having it.** On 2026-08-08 the goal-map assistant could not file a REQ because its type allowlist is fixed at [decision, goal] for the session: creating type request is not enabled for this session. The plumbing for cross-project filing already existed - xgd/REQ-750 (xgd ticket create --project) and lagrange-framework/REQ-67 (xgd-cli access kind: create() for cross-project filing), both free_coded on 2026-08-07. Only the policy gate was closed, and there was no principled place to open it. That gate is exactly what REQ-73 and REQ-74 are designing. Ensure request and bug are expressible in the policy frame rather than patched in afterwards.
+**The site builder (goal-1a5a8d2b, target 2026-08-31).** This is the glue the builder needs. The basic chat interfaces exist and much of the site framework exists; what was missing is the tooling that lets an AI actually drive site construction. Work on this object *is* site builder progress, even though no 1stcontact ticket moved on 2026-08-08.
+
+**The goal map (goal-98f48e17).** On 2026-08-08 this assistant could not file a REQ because its type allowlist was fixed at [decision, goal]: creating type request is not enabled for this session. The plumbing already existed - xgd/REQ-750 and lagrange-framework/REQ-67, both free_coded the day before. Only the policy gate was closed and there was nowhere principled to open it. xgd/REQ-762 opened it the same day; the tooling object is what makes that kind of change configuration rather than code. Ensure request and bug are expressible in the policy frame rather than patched in afterwards.
+
+**ai_ticketing, ai_knowledge and the filesystem toolset**, each of which currently re-implements gating by hand. xgd/BUG-982 (unrecognised routing key silently ignored, ticket lands in the wrong project) is precisely the class of defect uniform projection and validation should make impossible.
+
+**Framework work, but not for framework sake.** Framework supplies XGD and 1stcontact; it is not a destination.
 
 See decision-46593d49 for why this was built as a component rather than solved point-wise.
