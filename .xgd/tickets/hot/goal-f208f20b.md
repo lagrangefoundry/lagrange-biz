@@ -5,9 +5,9 @@ type: goal
 title: XGD site live
 created_by: xgd
 created_at: '2026-08-06T21:20:33.103959+00:00'
-updated_at: '2026-08-08T16:31:34.225048+00:00'
+updated_at: '2026-08-09T18:57:51.202169+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: children
 status: in_progress
 fields:
   provenance: planned
@@ -18,6 +18,8 @@ fields:
   - goal-4f90cc40
   - ticket://lagrangefoundry/1stcontact/GOAL-7
   - ticket://lagrangefoundry/1stcontact/GOAL-20
+  - ticket://lagrangefoundry/1stcontact/GOAL-21
+  - ticket://lagrangefoundry/1stcontact/GOAL-22
 ---
 
 The XGD website as a **published marketing asset**.
