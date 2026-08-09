@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-09T18:01:04.412801+00:00'
+updated_at: '2026-08-09T19:01:52.534471+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1355,5 +1355,57 @@ Map updated: today's bugs w
 <!-- xgd-chat role="assistant" ts="2026-08-09T18:01:03.045731+00:00" -->
 #### Claude
 ired into Reconcile (BUG-986/989/990), Dashboard (BUG-991/992) and Ticketing store (BUG-993, plus BUG-982).
+
+<!-- xgd-chat role="user" ts="2026-08-09T18:54:55.082089+00:00" -->
+#### You
+ok so I nearly have packaging and deployment working.
+
+we are still wrestling with a few ticket bugs and chat issues.
+
+There's a TON of work going in the the matrix refactor on the regression run. I'm going to start a chat to make sure that its doing good things not bad
+
+On deck now shows 0 tickets...not quite what we were shooting for...
+
+<!-- xgd-chat role="assistant" ts="2026-08-09T18:55:11.663587+00:00" -->
+#### Claude
+On Deck showing 0 is my fault in the spec — I'll diagnose it properly rather than guess.
+
+Two findings, and one of them is a data problem.
+
+Found it, and it's worse than On Deck. Let me test a hypothesis first.
+
+Confirmed. **Patches must nest under `fields`** — top-level `children` and `depends_on` are silently ignored, exactly the same class of bug as BUG-982. `status`, `title` and `body` are top-level, which is why those stuck and the edges didn't.
+
+So every structural edit I made today was lost while reporting success. Re-applying all of them now.
+
+Structure restored — but `on_deck` is still `[]`, which confirms it's a *separate* bug. Filing both.
+
+On Deck returning 0 turned out to be the smaller of two problems.
+
+## The bigger one: I lost a day of graph edits
+
+**`ai_goal_cli update` silently discards top-level patch keys.** `status`, `title` and `body` are top-level and patch fine. `children` and `depends_on` live under `fields`, and a patch naming them at the top level is dropped — while returning `{"uid": "..."}`, indistinguishable from success.
+
+So roughly a dozen structural edits I reported as applied over the last two days **never persisted**. Class cohort never pointed at Site builder. Packaging never got REQ-759/761/763. XGD quality never gained the goal-map, chat or Toolbox children. The `depends_on` edge I made a point of yesterday was gone.
+
+Worse, it manufactured a false conclusion that reached a ticket. When I wired the two `realized` 1stcontact goals under XGD site live and its derived state didn't move, I diagnosed "roll-up ignores cross-project children" — and wrote that into REQ-764 as rationale. **The children were never written.** A silent write failure doesn't just lose data, it produces confident wrong conclusions that then get filed.
+
+All of it is re-applied and read back. Filed as **`xgd/BUG-996`** (high) — same class as BUG-982, two instances of one defect in two days, which argues for strict key validation across the API rather than per call site.
+
+## On Deck: a spec gap that's mine
+
+Cross-project refs *do* resolve now — `derived_points` is non-zero, so REQ-764's resolution work landed. What's missing is the **status→state mapping**. Every leaf is a ticket carrying a *ticket* status (`draft`, `free_coded`, `ready_to_reconcile`…). The leaf rule tests for `planned`/`in_progress`. Nothing matches, so On Deck is empty — and the same unmapped value floors every derivation at `concept`, which is where your 18 new disagreements come from.
+
+REQ-764 said "state `planned` or `in_progress`" and never defined the mapping. I had it in conversation and didn't put it in the ticket.
+
+**`xgd/BUG-997`** (high) carries the table: `draft`/`open` → show, needs you · `free_coded`/`ready_to_reconcile`/`bundled` → hide, machine-side · `legacy_done`/`fixed` → exclude · `abandoned`/`wont_fix` → exclude. Acceptance criterion is ~6 groups and ~10 items with packaging (08-20) and site builder (08-31) on top.
+
+## On the matrix refactor
+
+Starting a chat to check it's doing good things is the right instinct, and the map agrees more strongly than you might expect. `Regression bugs` is the one goal I created **empty** — nothing in three days of bug filing was attributable to the regression workflow, and I flagged then that I didn't think it meant healthy. `xgd/GOAL-3` says explicitly that a green end-to-end regression run is a *precondition* for trusting any capability-matrix audit.
+
+So there's an ordering question worth resolving in that chat: a big matrix refactor landing on a regression run whose health is unverified means if it goes wrong, you'll be debugging the refactor and the harness at once.
+
+Packaging is essentially done — only REQ-763 (forced-update gate) is still draft.
 
 <!-- xgd-chat-end -->
