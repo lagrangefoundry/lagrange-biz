@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-09T00:03:35.732602+00:00'
+updated_at: '2026-08-09T00:14:47.048949+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -661,5 +661,35 @@ Added a **leverage** section in your terms, so this doesn't get re-derived every
 Saved the leverage framing to memory, along with the specific failure that produced the error: I enumerated xgd requests to REQ-758 this morning and asserted on the rest without re-reading. The correction is to re-read the range before claiming anything stalled — the cost of a stale read is that I invent a slip that didn't happen, which is worse than saying nothing.
 
 Two things now sit differently on the map than they did an hour ago. The nearest deadline, **2026-08-20 packaging**, is close to done rather than unstarted. And the thing with real uncertainty in front of it is the **site builder** — not because of time pressure, but because product discovery is genuinely unbounded, which is the same reason we can't predict how long making this tab useful takes.
+
+<!-- xgd-chat role="user" ts="2026-08-09T00:13:10.972631+00:00" -->
+#### You
+Can you see if you can create those tickets now?
+
+<!-- xgd-chat role="assistant" ts="2026-08-09T00:14:46.520497+00:00" -->
+#### Claude
+Gate is open — REQ-762 landed and my session picked it up. That refusal is now a validation error, not a type refusal.
+
+Now I need to target the right stores. Probing the parameter name with an empty body so nothing gets created.
+
+`project` is the parameter — it routed correctly. Creating both tickets.
+
+Both created. Wiring them into the goal.
+
+Both filed and verified.
+
+**`lagrange-framework/REQ-86`** — *Goal map: split into On deck / Progress panes; workstream-grouped leaves with dates.* The component side: two-pane split, the rename, header-plus-leaves rows, date and days-remaining, sort by date proximity, authority prefix stripped, graceful degradation on unresolvable refs.
+
+**`xgd/REQ-764`** — *Goal map host: resolve cross-project refs, compute leaves, add workstream field.* The four host pieces, with the roll-up point argued from evidence: the two `realized` 1stcontact goals that didn't move `XGD site live`, and the consequence that three of four "disagreements" are artifact — the staleness detector is currently crying wolf, which is worse than cosmetic.
+
+Both are wired as children of `Goal map usable as a daily driver`, ahead of the in-flight framework tickets.
+
+Two notes on the mechanism:
+
+**The parameter is `project`, not `store`.** `{"type":"request","project":"xgd",...}` routes correctly. `store` is silently ignored and the ticket lands in the local biz store — worth knowing, and arguably worth rejecting rather than ignoring, since a silently-mis-stored ticket is hard to notice.
+
+**I burned two IDs in lagrange-biz while probing** — `REQ-1` and `REQ-2`, both failed validation at `validate_check` so no tickets exist, but the IDs are consumed. Harmless, though it does mean this store's request numbering starts at 3.
+
+The third ticket I'd drafted — widening the type allowlist — is unnecessary. You shipped `xgd/REQ-762` at 16:45 and my session picked it up live, which is why this worked at all. That's the loop closing inside a couple of hours: hit the gate, name it, you build it, gate's open.
 
 <!-- xgd-chat-end -->
