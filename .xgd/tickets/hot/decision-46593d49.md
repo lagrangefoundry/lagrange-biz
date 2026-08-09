@@ -6,7 +6,7 @@ title: Build AI tooling as a reusable configurable component, not a per-surface 
   solution
 created_by: xgd
 created_at: '2026-08-08T23:48:35.417064+00:00'
-updated_at: '2026-08-09T00:03:00.772865+00:00'
+updated_at: '2026-08-09T00:19:33.213958+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -41,21 +41,23 @@ Security, mostly. Tool gating decides what an AI may touch, and four hand-rolled
 
 The secondary argument was pace. The operator adds AI surfaces often. Configuration scales with that; bespoke integration does not.
 
-## Cost, and why it is not a trade
+## This is not a trade against the dated work
 
-Design work on 2026-08-08: DOC-13 and DOC-20 written, five REQs filed in framework at 14:13 local. REQ-73 completes the design; REQ-74, 75, 76 and 77 are the build and the three refactors, expected to be built in a single pass on 2026-08-09.
+Design work on 2026-08-08: DOC-13 and DOC-20 written, five REQs filed in framework at 14:13 local. REQ-73 completes the design; REQ-74, 75, 76 and 77 are the build and the three refactors, expected in a single pass on 2026-08-09.
 
-**No dates slipped and none were intended to.** An earlier version of this record marked XGD packaging v1 and Site builder as deferred. That was wrong on the evidence and is corrected here.
+**No dates slipped and none were intended to.** An earlier version of this record marked XGD packaging v1 and Site builder as deferred. Both were wrong and are corrected here.
 
-Packaging advanced substantially the same day: REQ-755 (./bin/build) and REQ-756 (./bin/deploy) both reached ready_to_reconcile, REQ-759 (install/install.sh bootstrap installer plus documented install command) reached ready_to_reconcile at 16:45, and REQ-761 (serve install.sh at xgd.dev/install/install.sh via Cloudflare) reached free_coded at 16:49. The install tool the n=1 onboarding depends on is nearly finished, not unstarted. Only REQ-754 (xgd update) remains draft.
+**Packaging advanced the same day.** REQ-755 (./bin/build) and REQ-756 (./bin/deploy) reached ready_to_reconcile; REQ-759 (install/install.sh bootstrap installer plus documented install command) reached ready_to_reconcile at 16:45; REQ-761 (serve install.sh at xgd.dev/install/install.sh via Cloudflare) reached free_coded at 16:49. The install tool the n=1 onboarding depends on is nearly finished. Only REQ-754 (xgd update) and REQ-763 (forced-update gate) remain.
 
-The site builder did not move on this day, but its long pole is product discovery rather than available time - a different thing from a date under pressure, and not attributable to this decision.
+**The site builder advanced too, through this decision rather than despite it.** No 1stcontact ticket moved, which is why an earlier reading called it stalled. But the builder needs tooling that lets an AI drive site construction: the chat interfaces exist and much of the site framework exists, and the missing piece was the glue. That glue is this object. The dependency is now recorded explicitly as goal-1a5a8d2b depends_on goal-9cdf5f09 - the first depends_on edge on the map, added precisely so this connection does not have to be re-explained.
+
+The builder long pole is product discovery, not available time. Distinct from a date under pressure.
 
 ## The leverage argument
 
 The framing of infrastructure winning over deliverables is the wrong shape, and it is worth stating why so it is not re-derived every time this pattern appears.
 
-The chat stack being fixed is simultaneously: the interface this planning conversation runs in, the operator constant tool for building everything else, and the primary interface of the web builder product itself. One repair lands in three places. The same holds for the tooling object - ai_ticketing, ai_knowledge, the goal-map tools and the filesystem toolset are all consumers.
+The chat stack being fixed is simultaneously: the interface this planning conversation runs in, the operator constant tool for building everything else, and the primary interface of the web builder product itself. One repair lands in three places. The same holds for the tooling object - ai_ticketing, ai_knowledge, the goal-map tools, the filesystem toolset and the site builder are all consumers.
 
 This is foundation, not detour. Framework work compounds across every surface, which is precisely why lagrange-framework was extracted (decision-52c22717). The honest accounting is leverage, not cost.
 
