@@ -5,9 +5,9 @@ type: goal
 title: Ticketing store bugs
 created_by: xgd
 created_at: '2026-08-08T16:30:48.190077+00:00'
-updated_at: '2026-08-09T18:00:32.806785+00:00'
+updated_at: '2026-08-09T18:58:20.831168+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: children
 status: in_progress
 fields:
   provenance: bug
@@ -15,6 +15,8 @@ fields:
   - ticket://lagrangefoundry/xgd/BUG-944
   - ticket://lagrangefoundry/xgd/BUG-959
   - ticket://lagrangefoundry/xgd/BUG-970
+  - ticket://lagrangefoundry/xgd/BUG-982
+  - ticket://lagrangefoundry/xgd/BUG-993
 ---
 
 Bugs in the ticket store itself - sparse checkout, cold/hot promotion, index bookkeeping - worked on 2026-08-06 and 2026-08-07.
