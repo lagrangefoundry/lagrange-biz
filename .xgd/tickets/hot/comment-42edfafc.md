@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-09T00:14:47.048949+00:00'
+updated_at: '2026-08-09T00:19:48.737525+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -691,5 +691,35 @@ Two notes on the mechanism:
 **I burned two IDs in lagrange-biz while probing** — `REQ-1` and `REQ-2`, both failed validation at `validate_check` so no tickets exist, but the IDs are consumed. Harmless, though it does mean this store's request numbering starts at 3.
 
 The third ticket I'd drafted — widening the type allowlist — is unnecessary. You shipped `xgd/REQ-762` at 16:45 and my session picked it up live, which is why this worked at all. That's the loop closing inside a couple of hours: hit the gate, name it, you build it, gate's open.
+
+<!-- xgd-chat role="user" ts="2026-08-09T00:18:03.747053+00:00" -->
+#### You
+**The parameter is **`project`**, not **`store`**.** `{"type":"request","project":"xgd",...}` routes correctly. `store` is silently ignored and the ticket lands in the local biz store — worth knowing, and arguably worth rejecting rather than ignoring, since a silently-mis-stored ticket is hard to notice. <-- please create a bug for this
+
+Site builder didn't move today (1c/GOAL-16 `in_progress`, GOAL-17 `concept`, both last touched 08-06) — but per your point that's discovery-bound, not blocked by anything I should be flagging. Rewriting the record. <-- well it kinda did - the sitebuilder requires that we build tooling that allows the AI to build sites, we have the basic chat interfaces and a lot of the site framework BUT we needed glue to stick them together that is the Toolbox infrastructure that I spent most of the day designing and building.
+
+I am hoping we can get to a place where the project map captures my model of the project so that as I work on stuff you can be updating what's going on without me needint to constantly explain connections - but this is still rough we are working through it
+
+<!-- xgd-chat role="assistant" ts="2026-08-09T00:19:48.166553+00:00" -->
+#### Claude
+Two real corrections. Filing the bug first.
+
+Now the site builder connection — that's a `depends_on`, and it'd be the first one on the map.
+
+Done — and the second correction is the more interesting one.
+
+**`xgd/BUG-982`** — *ai_goal_cli create: unrecognised routing key (store) is silently ignored, ticket lands in the local project.* Includes both probe transcripts, the note that this was only catchable because the empty-body errors differed (with a valid body, both calls return success and one ticket is quietly misfiled), and the pointer that `ai_ticketing` is being refactored onto the tooling object under framework REQ-75 — so if it isn't fixed first, it should be fixed there.
+
+**Site builder → tooling object is now a `depends_on` edge** — the first one on the map. That's the right edge kind: the tooling object isn't *part of* the site builder, it's a prerequisite that also serves ai_ticketing, ai_knowledge and the goal-map tools. Composition would have been wrong.
+
+I've recorded on both ends — the builder's body says what the glue is and why the pieces existed without it; the tooling object's body now lists its dependents, with the site builder first. The decision record's "site builder didn't move" paragraph is rewritten to say it advanced *through* this decision rather than despite it.
+
+One consequence to watch: under the current readiness rule the site builder is now **not-ready** until the tooling object is realized. Structurally true — the glue has to exist before the builder is finished — but discovery proceeds in parallel, so if it reads wrong on On deck, it comes out.
+
+On your larger point: that edge is exactly what's been missing. The map has ~50 goals and, until a minute ago, **zero** `depends_on` edges. So every causal connection — this unblocks that, that's the glue for the other — lived only in your head and had to be re-explained. Composition told me *what contains what* and nothing about *what enables what*, which is why I read a day of toolbox work as absent from the site builder.
+
+The practical version: when you tell me a connection like this one, I should be writing it as an edge rather than a sentence in a body. Cheap to add, and it's what lets the map hold your model instead of me re-asking. It also makes On deck actually correct, since readiness is defined on dependencies — right now it can't be wrong about blocking because nothing is blocked.
+
+Rough, agreed. But that's the mechanism the rest of it hangs off.
 
 <!-- xgd-chat-end -->
