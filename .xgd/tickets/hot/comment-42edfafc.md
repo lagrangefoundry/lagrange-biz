@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-09T00:19:48.737525+00:00'
+updated_at: '2026-08-09T16:24:25.051757+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -721,5 +721,11 @@ On your larger point: that edge is exactly what's been missing. The map has ~50 
 The practical version: when you tell me a connection like this one, I should be writing it as an edge rather than a sentence in a body. Cheap to add, and it's what lets the map hold your model instead of me re-asking. It also makes On deck actually correct, since readiness is defined on dependencies — right now it can't be wrong about blocking because nothing is blocked.
 
 Rough, agreed. But that's the mechanism the rest of it hangs off.
+
+<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
+#### You
+I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
 <!-- xgd-chat-end -->
