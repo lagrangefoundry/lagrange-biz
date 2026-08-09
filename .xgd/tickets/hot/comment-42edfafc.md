@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-09T19:01:52.534471+00:00'
+updated_at: '2026-08-09T19:05:53.723152+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1407,5 +1407,32 @@ Starting a chat to check it's doing good things is the right instinct, and the m
 So there's an ordering question worth resolving in that chat: a big matrix refactor landing on a regression run whose health is unverified means if it goes wrong, you'll be debugging the refactor and the harness at once.
 
 Packaging is essentially done — only REQ-763 (forced-update gate) is still draft.
+
+<!-- xgd-chat role="user" ts="2026-08-09T19:04:17.011722+00:00" -->
+#### You
+Can you create bug tickets in LF to fix the issues that you are seeing with the APIs and the On Deck display?
+
+<!-- xgd-chat role="assistant" ts="2026-08-09T19:04:36.610309+00:00" -->
+#### Claude
+"LF" = lagrange-framework. I filed those three in xgd, which was the wrong half for the root causes — the AI tool layer and the goal-map component both live in framework. Filing the framework-side bugs now, scoped to what framework actually owns rather than duplicating.
+
+Filed and verified (read back, given how this session has gone).
+
+**`lagrange-framework/BUG-20` — AI tool layer: unrecognised argument keys silently ignored on create and update.** Covers both instances as one defect rather than two patches: `store` vs `project` on create, and top-level vs `fields.*` on update. Argues the fix belongs in the Toolbox contract — REQ-74 built it with projection and validation as first-class concerns, REQ-75 refactors `ai_ticketing` onto it, and this is exactly what that object exists to make impossible.
+
+It also names why this class of bug is disproportionately bad for AI callers specifically: we guess plausible key names, don't see the stored result unless we explicitly read back, and confidently report success. That's not a general robustness argument — it's the actual failure that happened twice.
+
+**`lagrange-framework/BUG-21` — On deck renders 0 items.** Two defects:
+
+1. The status→state mapping, with the full table and the note that resolution itself works (`derived_points` is non-zero) so only the translation is missing.
+2. **The empty state explains nothing.** This took a live debugging session to diagnose precisely because "0 items" carried no information. It should say which stage produced nothing — no workstreams marked, none matched the leaf rule, or all leaves resolved machine-side with a count of what's hidden.
+
+Acceptance on both: ~6 groups and ~10 items, packaging and site builder on top by date, disagreements from 18 to near zero.
+
+The xgd tickets (BUG-982, 996, 997) stay as host-side counterparts and are cross-referenced both ways. If BUG-20 lands at the Toolbox level, 982 and 996 close as duplicates.
+
+All four are now children of `Goal map usable as a daily driver`, with the two framework ones first.
+
+One thing worth saying about the shape of today: **you shipped the Toolbox build (REQ-74) yesterday evening, and today produced two bugs that are textbook arguments for it.** BUG-20 is a validation defect in exactly the layer REQ-75 is about to replace. That's not a coincidence to note in passing — it's the leverage argument you made yesterday, demonstrating itself inside 24 hours.
 
 <!-- xgd-chat-end -->
