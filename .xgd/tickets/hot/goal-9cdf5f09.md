@@ -5,9 +5,9 @@ type: goal
 title: Reusable AI tooling object
 created_by: xgd
 created_at: '2026-08-08T23:48:08.445713+00:00'
-updated_at: '2026-08-09T00:19:10.980208+00:00'
+updated_at: '2026-08-09T18:58:22.897638+00:00'
 completed_at: null
-last_field_updated: body
+last_field_updated: children
 status: in_progress
 fields:
   provenance: product_decision
