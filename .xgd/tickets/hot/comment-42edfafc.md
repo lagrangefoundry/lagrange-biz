@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-09T16:24:25.420626+00:00'
+updated_at: '2026-08-09T17:59:47.916363+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -722,16 +722,584 @@ The practical version: when you tell me a connection like this one, I should be 
 
 Rough, agreed. But that's the mechanism the rest of it hangs off.
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
-
 <!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
 #### You
 I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-assistant" -->
-
 <!-- xgd-chat role="assistant" ts="2026-08-08T16:20:32.108550+00:00" -->
 #### Claude
 Acknowledged — this turn is here for the transcript. Restart the dashboard whenever you're ready and check whether both this exchange and the prior one survived.
+
+<!-- xgd-chat role="user" ts="2026-08-09T17:57:32.434816+00:00" -->
+#### You
+Huge chunk of transcript missing, I'm going to try to just paste it in here and see if you can take it this way:
+
+Again - I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
+
+Acknowledged — go ahead and restart the dashboard.
+
+For when you're back, here's where I am so you don't lose the thread: the evidence gathering is done (bugs BUG-933→967, requests REQ-749→757 from this afternoon, plus the 1stcontact and xgd goal stores), but I haven't created or modified anything on the map yet. Nothing is half-written. Once you confirm the transcript survived, I'll lay out the proposed structure and then make the changes, and we can talk through your three items for today.
+
+That's interesting - it sounds like you actually have access to turns that I don't see in this transcript.
+
+So we now morning of the next day - how I want this to work is that at the end of the day you consolidate all the data from what I worked on and then the next day we can talk about what is current that I should work on next.
+
+From yesterday you should have some quality changes, tickets to start on the packaging stuff, tickets to advice the site builder and some friction removal tickets. Oh we are also working on this interface which needs some tweaks still - and I am concerned about the transcript storage which is a bit flakey
+
+Worth correcting one thing, because it bears directly on your transcript concern: I don't have turns you can't see. What I have is the _tool output_ from yesterday's evidence sweep — dozens of `xgd ticket get` calls — plus two turns where you interrupted and I produced no visible text. So all the findings live in my context but were never written into the transcript or the map. If this session drops, that work is gone. That's an argument for consolidating into the map now rather than later.
+
+Let me pull fresh state first — the dispatchers ran overnight.
+
+Map is unchanged overnight — nothing was edited under me. One new ticket landed this morning: **REQ-758 "Dashboard CLI: restart rebinds to the previously running port"** (09:11 local, `free_coded`) — that's fallout from your dashboard restart. No overnight _workflow_ bugs were filed as tickets; the bug ceiling is still BUG-971 from last night.
+
+Now consolidating yesterday into the map. Structure I'm creating:
+
+**New root — **`XGD platform reliability` (`in_progress`, provenance `planned`), with seven children: Remove friction, plus five bug clusters and one for the dashboard. Rationale for a new root rather than hanging it under XGD closed beta: reliability underpins the beta _and_ paid launch _and_ the "built with itself" proof story — `children` is composition, and this isn't part of any one of them. I'd argue closed beta should `depends_on` it, but that would pull the beta off the ready frontier, so I'm flagging rather than doing it.
+
+Creating the seven children now.
+
+Now the root that composes them.
+
+Now wiring the 1stcontact work in. Two of these are finished goals the biz map wasn't showing at all.
+
+Consolidation is in the map. Here's yesterday, and then your three items.
+
+## Yesterday, from the trail
+
+**45 tickets across 2026-08-06 and 08-07** — 31 bugs (BUG-933→971) and 14 requests (REQ-743→758). Of the bugs: 10 reached `free_coded`, 11 `ready_to_reconcile`, 6 `legacy_done`, 2 abandoned as duplicates, 1 `wont_fix`, 1 still draft.
+
+New structure — root **XGD platform reliability** (`goal-5c39075c`) with seven children:
+
+Goal Contents XGD Remove friction REQ-749, 750, 752–758 Reconcile bugs 10 bugs — cherry-pick finalize failed 4 distinct ways in 36h Resync bugs 5 — index deadlock, lock contention, no conflict retry Development bugs 5 — dispatcher/worktree provisioning, fix-loop masking failures Ticketing store bugs 3 — all trace to the REQ-722 canonical-store move Dashboard and goal map bugs 7 bugs + 3 REQs — this interface Regression bugs **empty**
+
+Two things I'd flag from building it:
+
+**Regression is empty, and I don't think that means healthy.** Nothing in the two-day window was attributable to the regression workflow. Either it's clean or it wasn't exercised. `xgd/GOAL-1` (Stable release: regression green end-to-end) is what would settle it, and `xgd/GOAL-3` notes a green regression run is a precondition for trusting any capability-matrix audit.
+
+**Two finished 1stcontact goals were invisible to this map** — `Draft site` and `Draft site served from Cloudflare`, both `realized`. I wired them under XGD site live. They didn't fix its disagreement, and that turned out to be informative: **roll-up ignores cross-project children entirely.** Any goal whose real content lives in xgd or 1stcontact under-derives permanently. That accounts for three of the four standing disagreements — they're a tooling limitation, not staleness. That's a fix for this interface.
+
+## Your three items
+
+**1. Restart dispatchers and dashboards — do this first.** Your own evidence: BUG-943 was a 1stcontact dispatcher zombie, 2+ days stale, that recreated a duplicate bundle and _never loaded the BUG-936 fix_. BUG-933 was closed `wont_fix` because it was a stale install. Stale processes running old code is the failure mode that makes every other fix look broken. REQ-758 landed at 09:11 this morning — dashboard restart rebinds to the previously running port — so you've already hit friction here.
+
+**2. Overnight workflow bugs — none were filed.** Bug ceiling is still BUG-971 from 18:07 last night. So either the runs were clean or they failed silently without a ticket. Worth checking which before assuming the former. Usefully, REQ-750 (_file a bug in xgd straight from a process log_) is `free_coded` — the tool for exactly this is now available to try.
+
+Friction features ready to check out: **REQ-750, 752, 753, 758** (`free_coded`). Still drafts: REQ-754 (`xgd update`), 755 (`bin/build`), 756 (`bin/deploy`) — your packaging trio, unstarted. Note those three duplicate `xgd/GOAL-2` (Packaging with an update path, `planned`); I left them under Remove friction since that's where you opened them, but GOAL-2 is the better owner.
+
+**3. Site builder — this is the deadline-bearing one.** `1c/GOAL-16 Web editor` (`in_progress`) and `1c/GOAL-17 Editor chat` (`concept`), both under **Class cohort**, target **2026-08-31 — 23 days**. The other dated commitment, **First external user (n=1)**, is **2026-08-20 — 12 days**, and that one is closer.
+
+## Three things needing your call
+
+- **The ready frontier is now 17 items and useless.** There are still zero `depends_on` edges on the map, so "ready" means "anything in progress." Ordering is the fix — starting with whether closed beta and n=1 should `depends_on` platform reliability. I didn't add those edges; they'd pull the beta off the frontier and that's your call.
+
+- **Is yesterday afternoon worth a decision record?** Eight requests in ~90 minutes turning toward operator ergonomics and packaging, while two dated commitments run. That matches a real signature — work starting on something not on the frontier. I'd rather ask than pollute the log with six entries that don't matter.
+
+- **Transcript storage and this interface's remaining tweaks have no tickets.** REQ-750 now makes filing cheap. Want me to draft them?
+
+So yesterday (maybe lost) I asked you to create goals under the xgd quality goal to separate reconcile, resync, regression and develop. I also asked for an ongoing goal for xgd friction reduction My new routine is to start the day by restarting dashboards and dispatchers so everything is running the latest and then registering any bugs from overnight runs
+
+Two of those three are already done — I did them this morning, so they weren't lost. But one detail diverged and it's worth settling. Let me check whether an "xgd quality" goal actually exists before I assume.
+
+No "quality" goal exists anywhere — the xgd store tops out at GOAL-5 (Stable release, Packaging, Capability matrix, Licensing, Obfuscation). So what you asked for is what I built this morning under a different name. Renaming it to your term, since the label is what you'll scan for.
+
+All three are now in place. Two were already done this morning — not lost.
+
+**1. Workflow separation under a quality parent — done, now renamed.** The root is `XGD quality` (`goal-5c39075c`), with Reconcile / Resync / Development / Regression as four separate children, plus Ticketing store bugs and Dashboard-and-goal-map bugs. I'd originally called it "XGD platform reliability"; your term is better and it's what you'll scan for. There was no pre-existing quality goal to hang it under — the xgd store tops out at GOAL-5 (Stable release, Packaging, Capability matrix, Licensing, Obfuscation), none of them a quality container.
+
+**2. Friction reduction — created, now explicitly marked standing.** `XGD Remove friction` (`goal-973da915`) holds REQ-749, 750, 752–758.
+
+Marking it "ongoing" exposed a real gap, and it's bigger than one goal: **the state ladder assumes goals terminate.** A standing goal never reaches `realized`, so it never contributes to the accumulation register — the monotonic "what do I have now" axis — and it sits on the ready frontier permanently. That's not just Remove friction; it's true of all four workflow bug goals too. Five of the seven children I created yesterday are standing containers, and the model has no way to say so. That belongs high on the interface tweak list, because it means the register that's supposed to make progress feel real will silently ignore a whole root.
+
+**3. Morning routine — saved to memory,** with the reasoning attached (BUG-943's stale dispatcher, BUG-933 closed `wont_fix` as a stale install). From tomorrow I'll open by checking the xgd store for overnight tickets myself rather than asking. I also saved how to read the sibling stores at all — only `get` by uid works across the boundary, so enumeration means probing ID ranges, and that took a while to work out yesterday.
+
+One thing your routine will hit today: **no overnight bugs were filed.** Ceiling is still BUG-971 from 18:07 last night. So step 2 of the routine has nothing to register — which either means the runs were clean, or they failed without producing a ticket. Given REQ-750 (file a bug from a process log) is `free_coded` and untested, checking the run logs is both the routine step and the way to exercise the new feature.
+
+Is yesterday afternoon worth a decision record? Eight requests in ~90 minutes turning toward operator ergonomics and packaging, while two dated commitments run. That matches a real signature — work starting on something not on the frontier. I'd rather ask than pollute the log with six entries that don't matter. Why is this polution - I want to know what I spent my time on - this is gold
+
+Transcript storage and this interface's remaining tweaks have no tickets. REQ-750 now makes filing cheap. Want me to draft them?<-- actually I added some REQ/BUGs in framework, but by all means add goals
+
+My thinking on the frontier is that it is dominated by root and branch goals that are non-actionable. I need to be able to see what is in fromt of me right now.
+
+I'm struggling a little with this UX - lets get the tweaks deployed and we can discuss more how this view can better help with "what are the objectives I should be looking at now"
+
+You're right and I'll drop the objection — it's your log. The guide's "keep it rare" rule is about protecting the _why-did-the-date-move_ spine from being buried, but that's a findability problem with a findability fix (the log is filterable), not a reason to lose the record. And this one clears the bar on its own: work started on something that wasn't on the frontier, while two dated commitments run. Filing it.
+
+Framework store is reachable. Let me find the tickets you filed there so the goals can point at them.
+
+Found it — you already filed the transcript one this morning: **framework REQ-72** _"Chat sessions: durable store review, multi-writer streaming, stop, and mid-turn prompts"_ (draft, 10:13 local). So I'll point goals at what exists rather than draft duplicates.
+
+Done. Summary of what's now on the map:
+
+**Decision filed** — `decision-c9de87f9`, _"Spend an afternoon on operator ergonomics and packaging, twelve days out from n=1"_, dated 2026-08-07, `caused: [XGD Remove friction]`. Body carries the situation, the three alternatives, what tipped it, and the cost. It notes it was filed at your request against a sparse-log default — not as a hedge, but so a reader in six months knows the log's density is deliberate.
+
+On the findability worry: it's real but small, and the fix is a filter, not restraint. Worth deciding later whether the log wants a "consequential / routine" distinction so the six that moved the launch date stay separable from the day-level record. Not today.
+
+**Two goals added under XGD quality:**
+
+`Goal map usable as a daily driver` (`goal-98f48e17`, `user_feedback`) — points at framework REQ-65, 67, 68, 69, 70, BUG-5, BUG-10. Its body records your frontier diagnosis, because you're right and it's more specific than "the frontier is noisy":
+
+The frontier returns 17 items and **two are actionable** — the two whitepapers. Everything else is a root or branch. Two changes are needed together:
+
+- **Exclude goals with live children.** The work is in the children; a parent is never the thing you sit down and do.
+
+- **Count cross-project children even when they don't resolve.** Right now they don't, so Reconcile bugs, Remove friction, First external user and 1stcontact-as-proof all _masquerade as leaves_ and flood the frontier. This is the same root cause as the roll-up defect — fixing one fixes both.
+
+Also recorded there: the standing-goal gap, and the roll-up limitation that manufactures three of your four "disagreements".
+
+`Chat transcript storage is durable` (`goal-39ddc03c`, `aspiration`) — points at framework REQ-72, which you filed at 10:13 this morning. `aspiration` not `in_progress`: filed and wanted, no work started.
+
+**None of the three UX defects has a ticket.** The frontier one is the highest-value of the three and it's a change to the readiness rule, not a rendering fix — so it's xgd, not framework. Say the word and I'll draft it, or you file it now that REQ-750 makes that cheap.
+
+When you're back from deploying, the frontier question is the one I'd most like to work through with you — specifically whether "actionable right now" should be leaves-only, or leaves plus anything with a target date inside some horizon.
+
+There are REQ tickets in lagrange-framework.
+
+Lets take a moment to discuss the "Ready frontier" and what it should contain.
+
+Actually let's take a step back why don't you talk about how I work first. I am currently working on three projects XGD itself, first contact and Lagrange framework. The latter is components to support the first two so in a sense it's only really two projects that we are trying to take forward.
+
+So there are probably two kinds of work. The first is debugging and the second is development.
+
+I find bugs in the product all the time some of them are experiences that I have with the UI, others are long running process failures. It is critical for us to address these quality issues before releasing any products so many many of the bugs are critical path. I will usually create a bug have the AI investigate it without making changes, explain it and discuss it until I understand it and then fix it. This is actually enormously time-consuming because I really need to understand a lot of these bugs particularly the deep workflow bugs.
+
+The second kind of workflow is development. This typically starts with a chat session where I will discuss at a high-level a feature and we will talk about the product requirements and the architecture. I will then typically have the chat session write up a design document and create REQ tickets which I will then free code.
+
+I think I want to track all the intents here so that I know how I am spending my time.
+
+I have in mind that my time can probably be counted in terms of the length of the prompts that I am writing (excluding pasted logs and other content). Also tracking the number of turns is significant, I believe.
+
+One thing about in mind is that perfect efficiency is not always possible. I have to wait for the AI to do the work. While I am doing that it may make sense for me to do other things.
+
+So the other aspects to how I work is that the intent tab in each project maintains intent tabs and so I leave these open while they are still being worked on at the point where I am ready to finish with the ticket I close the tab. This gives me a sort of crude workspace affordance that is critical. I would not be able to function without.
+
+The purpose of this tab is to go the next level up. The open tabs give me a sort of snapshot in time of the things that I have been focused on. But they do not help me with what I was working on yesterday or even really what I should work on tomorrow. And they absolutely don't help with the bigger picture questions of roadmap and deadlines.
+
+So trying to bring this back to a point whilst I would like you to track all the tickets that I have touched. Let's deal with the question of progress separately. And focus initially on the question of immediate objectives. This is the ready frontier.
+
+Right now it is a uselessly long list of roots and branches. I need it to help me focus. Let me try and reconstruct what I am working on right now. (1) there is a list of XGD bugs that need to be solved (2) we are building out the XGD packaging v1 (3) we are working on the site builder (4) we are working on this experince (4a) we are working on the chat infrastructure for the framework - the chat that I am literally using here - because it is flaky (relates to 4)
+
+Each of these will have 1-5 REQ's that I am working through - in each area we need to understand what is the next thing I need to do. This list 1-4a is probably the resolution I want to look at this in on a daily basis. So the leaves are important because they answer "what do I do next" but some level of branch needs to exist so I remember "why"
+
+Having the site builder deadline clearly represented would also be helpful
+
+Your thoughts?
+
+Thoughts, and one reframe that I think matters more than the filter rule.
+
+## What I take from how you work
+
+Three repos, two products — framework is a supplier, not a destination. That has a direct consequence for this map: framework goals should almost never appear as objectives in their own right. They're there because something in XGD or 1stcontact needs them. Your (4a) is the honest exception — the chat infrastructure is framework work you're pursuing _because you're using it right now_, which is a different reason than "1stcontact needs it".
+
+The two work modes have genuinely different shapes, and the map currently treats them the same:
+
+- **Debugging** — arrives unbidden, is critical path, and the expensive part isn't the fix, it's _you understanding it_. The investigate-explain-discuss loop before any code changes is the real cost, and nothing in the map or the tickets records that a bug took four hours of comprehension. This is the single biggest distortion in any time accounting you build later: a bug ticket and a REQ ticket look identical in the trail and cost wildly different amounts of you.
+
+- **Development** — chat → requirements/architecture → design doc → REQs → free code. Predictable, plannable, and the REQ tickets are a genuine work queue.
+
+And the thing I'd build around: **your open intent tabs are already a hand-maintained ready frontier.** You said you'd be unable to function without them. That's not a crude affordance, that's the real signal — it's operator-curated, it's live, and it costs you nothing extra because you're already doing it. If the frontier can read open intents, it inherits your judgement for free instead of trying to re-derive it.
+
+## The reframe
+
+The frontier isn't filtering wrong. **The map is missing the layer you actually think in.**
+
+Your 1–4a is that layer, and here's where each one currently lives:
+
+Your item In the map today (1) XGD bugs Split six ways — Reconcile/Resync/Development/Regression/Ticketing/Dashboard (2) XGD packaging v1 Nowhere coherent — three drafts under Remove friction, plus `xgd/GOAL-2` (3) Site builder **Doesn't exist as a goal** — two cross-project refs under Class cohort (4) This experience `Goal map usable as a daily driver` ✓ (4a) Chat infrastructure `Chat transcript storage is durable` — too narrow; it's the whole chat stack
+
+So no filter rule can produce your list, because three of the five aren't in the map at the right shape. Fix the shape and the rule gets easy. That ordering matters — otherwise we tune a filter against a structure that was never going to yield the answer.
+
+Note the resolution mismatch too: you say "XGD bugs" as _one_ thing. I created six because you asked for the separation, and I think both are right for different purposes — six is the right _filing_ structure, one is the right _daily_ structure. That's an argument for grouping being a display concern, not a tree concern.
+
+## The rule I'd propose
+
+**Frontier = live leaves only, grouped under their nearest committed ancestor, with that ancestor's target date shown.**
+
+- Leaves answer _what do I do next_.
+
+- The grouping ancestor answers _why_, and it's derived, not another thing to maintain.
+
+- The date comes along for free — the site builder leaves would sit under Class cohort and inherit **2026-08-31** visibly, which is exactly what you asked for.
+
+Two corrections needed alongside it, or it doesn't work:
+
+1. **Cross-project children must count as children.** Right now they don't resolve, so Reconcile bugs, Remove friction, First external user and 1stcontact-as-proof all masquerade as leaves. That's most of your 17.
+
+2. **A blocked dependency and an unresolvable one are both not-ready** — already the rule, but worth holding onto once refs start resolving.
+
+## The thing that blocks it
+
+Your actual next actions are REQ and BUG tickets in xgd, 1stcontact and framework. **This map can only reach those by uid** — no list, no query, no search across the store boundary. So a leaves-based frontier bottoms out in references it can't read the state of. It can show you the ref; it can't tell you the ticket is already `free_coded`.
+
+That makes cross-project resolution the prerequisite for the whole frontier idea, not a nice-to-have. Framework REQ-67 (`xgd-cli` access kind: implement `create()`) is the adjacent piece — read-side resolution is the sibling it needs.
+
+## One thing I'd add to the model
+
+You said perfect efficiency isn't possible — you wait for the AI and pick up something else. That's a design requirement, not an aside. It means the frontier's job isn't just _what's next_, it's **what's next given three threads are currently blocked on a machine**.
+
+`in_progress` currently means both "I am actively thinking about this" and "a dispatcher is chewing on this and I'm free". Those are opposite signals for a multi-threaded operator. Distinguishing them turns the frontier from a list into a dispatcher for your attention — and it's probably the highest-value single addition on the table.
+
+## What I'd do next, concretely
+
+Create the five workstream goals to match your list — including a real **Site builder** goal under Class cohort carrying the 08-31 date, and widening the chat goal from "transcript storage" to the chat stack. Then the frontier rule has something to bite on, and we can look at the actual output rather than arguing about it in the abstract.
+
+Want me to make those, and then we look at what the frontier would return?
+
+On debugging vs dev - dev takes a lot of time too, but for different reasons (1) there are a lot of architectural decisions to be made - getting these right reduces the number of bugs and (2) there is a significant aspect of product discovery. (what we are doing now ) There's nothing predictable about how long it will take us to make this PM tab useful
+
+Nowhere coherent — three drafts under Remove friction, plus `xgd/GOAL-2 `<-- this is a gap from our planning exercise. It is critical that I create an install tool so that I can walk through the install with my son we talked about this it's the other piece of the project that has a short-term deadline.
+
+So a leaves-based frontier bottoms out in references it can't read the state of. <-- that doesn't make any sense if you have the reference you can get the ticket what are you trying to say?
+
+One note here all our projects are listed as full path names which is a waste of a lot of space they're all Lagrange foundry. We should just use the project name "1stcontact" xgd etc.
+
+Sure lets make those changes.
+
+Can we also discuss changes to ready frontier. It's a little disappointing right now I like your idea that what I should be looking at our leaves with the immediate parent and the date of that parent. That sounds correct. I like the idea of the Providence chart but I think we're trying to get this display to do too much right now and it feels very noisy. Perhaps we can split it in two the top part is the ready frontier which is what we just described and then the bottom part would be "Progress" we can leave the Providence display there for now as a placeholder and come back to defining what that looks like once we have the top part fixed. Also I don't like "ready frontier" can we call it "on deck" please
+
+On debugging vs dev - dev takes a lot of time too, but for different reasons (1) there are a lot of architectural decisions to be made - getting these right reduces the number of bugs and (2) there is a significant aspect of product discovery. (what we are doing now ) There's nothing predictable about how long it will take us to make this PM tab useful
+
+Nowhere coherent — three drafts under Remove friction, plus `xgd/GOAL-2 `<-- this is a gap from our planning exercise. It is critical that I create an install tool so that I can walk through the install with my son we talked about this it's the other piece of the project that has a short-term deadline.
+
+So a leaves-based frontier bottoms out in references it can't read the state of. <-- that doesn't make any sense if you have the reference you can get the ticket what are you trying to say?
+
+One note here all our projects are listed as full path names which is a waste of a lot of space they're all Lagrange foundry. We should just use the project name "1stcontact" xgd etc.
+
+Sure lets make those changes.
+
+Can we also discuss changes to ready frontier. It's a little disappointing right now I like your idea that what I should be looking at our leaves with the immediate parent and the date of that parent. That sounds correct. I like the idea of the Providence chart but I think we're trying to get this display to do too much right now and it feels very noisy. Perhaps we can split it in two the top part is the ready frontier which is what we just described and then the bottom part would be "Progress" we can leave the Providence display there for now as a placeholder and come back to defining what that looks like once we have the top part fixed. Also I don't like "ready frontier" can we call it "on deck" please
+
+Once we are aligned I would like you to create a ticket in lagrange-foundry to make the changes to the overview
+
+You're right on both counts, and one of them was my error.
+
+**Dev isn't the predictable one.** Architecture decisions and product discovery are exactly what we're doing right now, and there's no way to bound how long making this tab useful takes. Both modes are expensive; they're expensive for different reasons. The distinction that actually holds is that debugging's cost is _comprehension of something that already exists_, and development's is _deciding what should exist_.
+
+**On the leaves claim — I was wrong.** Resolution works fine; I've been doing it all session. What doesn't work is _enumeration_ (`list`/`query`/`search` across the boundary). Since the map holds the refs explicitly as children, it can resolve every one. So the frontier can absolutely read leaf state — the gap is that the dashboard's roll-up code doesn't currently do the resolution, which is a fix, not a blocker. I overstated it.
+
+Making the structural changes now.
+
+Changes are in. Then the interesting part — I hand-computed what On Deck would actually return.
+
+## What changed
+
+- `Site builder` (`goal-1a5a8d2b`), target **2026-08-31**, holding `1stcontact/GOAL-16` (Web editor) and `GOAL-17` (Editor chat). Split out of Class cohort so the builder carries the date itself rather than sharing a parent with course material — those are real work but they're not what slips.
+
+- `XGD packaging v1 - install tool` (`goal-d5e96abe`), target **2026-08-20**, under First external user. Pulled together `xgd/GOAL-2` and REQ-754/755/756, and removed them from Remove friction — that goal is for ongoing ergonomics, not a dated deliverable.
+
+- `Chat infrastructure is dependable` — widened from transcript storage; now also holds `framework/BUG-5`, `xgd/BUG-967`, `xgd/BUG-933`.
+
+- On Deck design, the rename, and the path-stripping recorded in `goal-98f48e17`. Stripping the authority is explicitly sanctioned — the design permits splitting it off the front to group or badge by.
+
+Worth saying plainly: **nothing in the map was tracking that an install tool gated a dated commitment.** It was three drafts filed under an ergonomics goal. That gap is the kind of thing this map is for, and it took you saying it out loud to surface it — which is a mark against the map, not against you.
+
+The old frontier now returns **20 items**. Worse, because I added goals. Which is the argument.
+
+## What On Deck would return
+
+Resolving every cross-project ref by hand, and counting only leaves that need _you_:
+
+Group Date Next actions **XGD packaging v1 — install tool** **2026-08-20** · 12d `xgd/GOAL-2`, `REQ-754` update, `REQ-755` build, `REQ-756` deploy — all draft **Site builder** **2026-08-31** · 23d `1stcontact/GOAL-16` Web editor (in progress), `GOAL-17` Editor chat (concept) **Chat infrastructure** — `framework/REQ-72` (draft) **Goal map daily driver** — `framework/REQ-70` (draft) **XGD Remove friction** — `REQ-757` (untitled draft) **XGD bugs** (all six) — **nothing**
+
+That's about ten items in six groups, and it fits on a screen.
+
+## The finding
+
+**The six bug goals collapse to empty**, and not because they're inactive — because every one of those 31 bugs is already `free_coded`, `ready_to_reconcile`, or `legacy_done`. They're _done and waiting on the machine_, not waiting on you.
+
+Two consequences:
+
+**The grouping-altitude question I raised mostly dissolves.** I worried six bug groups would crowd out your five workstreams. They won't, because they carry no actionable leaves. The rule doesn't need a workstream mark — nearest-committed-parent is enough. Let's not add a field.
+
+**The machine-blocked distinction isn't a refinement, it's the main filter.** It's doing more work than the leaves-only rule. So On Deck needs one thing specified: **which ticket statuses mean "needs me"?**
+
+- **Needs you** — `draft`, `open`, and goal states `concept` / `aspiration` / `planned`
+
+- **Machine-side, hide** — `free_coded`, `ready_to_reconcile`, `bundled`
+
+- **Done, exclude** — `legacy_done`, `fixed`, `abandoned`, `wont_fix`
+
+Get that mapping right and On Deck is the table above. Get it wrong and it's 40 rows of things you already finished.
+
+One caveat on the middle row: hiding `free_coded` assumes reconcile is healthy. If a bundle stalls — and four of them did in the last two days — work sits in that bucket invisibly. That's an argument for Progress showing a count of machine-side work, so it's out of your face but not out of sight.
+
+## To file
+
+Three tickets in xgd, none of which exist:
+
+1. On Deck — leaves only, grouped by immediate committed parent, parent's date on the header, status→actionable mapping above.
+
+2. Resolve cross-project refs in roll-up and frontier (fixes the fake-leaf flood _and_ three of the four disagreements).
+
+3. Strip authority from displayed refs.
+
+And one in framework: standing goals — a way to say "this never completes", affecting Remove friction and the four bug goals.
+
+Want me to draft those, or file them yourself now that REQ-750 makes it cheap from a log?
+
+Now rewiring so the new goals own their work.
+
+Before I write the spec, I ran the proposed rule against the map to see what it would actually return — and it doesn't solve your problem yet. Grouping every live leaf under its immediate parent yields **~16 groups and ~70 leaves**. That's the same noise with better indentation.
+
+The gap: "unblocked" isn't "on deck". Your five workstreams aren't the ones that qualify — they're the ones you _chose_. Nothing in the graph encodes that choice. Writing the spec around that.
+
+Structural changes are in. Summary:
+
+Change Result `Site builder` created, target **2026-08-31** Owns 1stcontact/GOAL-16 + GOAL-17; Class cohort now points at it `XGD packaging v1 - install tool` created, target **2026-08-20** Owns xgd/GOAL-2 + REQ-754/755/756; now a child of First external user `XGD Remove friction` Packaging trio removed — it's for ongoing ergonomics, not dated deliverables `Chat transcript storage` → `Chat infrastructure is dependable` Widened to the stack: framework REQ-72, BUG-5, xgd BUG-967
+
+The packaging gap was the real find. Nothing in the map recorded that an install tool gates a dated commitment — it was three drafts filed under an ergonomics goal. It now sits under n=1 with **2026-08-20, 12 days**, which makes it the nearest deadline you have, closer than the site builder.
+
+## On Deck — the design
+
+Agreed on all of your points: two panes, `On deck` on top, `Progress` below with the provenance chart parked as a placeholder, and short project names.
+
+The one place I'd change your proposal: **workstreams should be marked, not derived.** Immediate-parent grouping gives 16 groups / 70 leaves — measured, not guessed. Your daily resolution is five. The distinguishing property of those five is that you picked them, and no graph rule recovers a choice.
+
+So: one new boolean field on goals, expected population 5–8, changes slowly. Everything below it derives.
+
+That also resolves the resolution mismatch you flagged: **XGD bugs is one item to you and six goals in the map.** Six is right for filing, one is right for the daily list. Marking lets you mark the parent and leave the six alone.
+
+Rules, in order: marked workstreams only → live leaves beneath them → resolve every `ticket://` ref for title and state → sort by date proximity, nearest first → strip the `lagrangefoundry/` prefix. DOC-19 §7 explicitly permits splitting the authority off for display, so that one's sanctioned, not a workaround.
+
+And the end state worth designing toward: **your open intent tabs already are this list.** You maintain them, you close them when done, and you've said you couldn't function without them. Sourcing the marks from open intents makes On deck self-maintaining at zero extra cost. That needs the intent tab to expose data, so it's not today — but the manual flag should be built so that source can override it later.
+
+Full spec is written into `Goal map usable as a daily driver` (`goal-98f48e17`).
+
+## On the ticket
+
+**I can't file it** — my ticket access is read-only for everything except goals and decisions, so REQs and BUGs have to come from you. Drafted below, ready to paste.
+
+One thing to flag before you do: **this splits across two repos.** The framework REQ covers the component — two-pane split, the rename, row rendering, authority stripping. But three pieces are host-side in xgd: resolving cross-project refs, computing leaves, and the new workstream field (a ticketing schema change). The component can't ship useful without them.
+
+**Draft — lagrange-framework REQ:**
+
+> **Title:** Goal map: split into On deck / Progress panes; workstream-grouped leaves with dates
+
+Replace the single ready-frontier list with two stacked panes.
+
+**On deck** (top) — for each goal marked as a workstream, a header row with its title and target date (plus days remaining), and beneath it the live leaves: descendants with no live children, state `planned` or `in_progress`, all `depends_on` realized. Sort workstreams by date proximity, nearest first; undated last.
+
+**Progress** (bottom) — the existing provenance chart, unchanged, as a placeholder. Its definition is deferred.
+
+Also: render cross-project refs as `1stcontact/GOAL-16`, stripping the `ticket://lagrangefoundry/` prefix (DOC-19 §7 permits splitting the authority for display). Resolve each ref for title and state rather than showing a bare uid.
+
+Rename "ready frontier" to "On deck" throughout.
+
+**Requires (xgd host side):** a boolean workstream field on goals; cross-project ref resolution in the host adapter; leaf computation. Component should degrade gracefully if refs don't resolve — badge them rather than dropping them.
+
+**Rationale:** measured against the map on 2026-08-08, the current frontier returns 17 items of which 2 are actionable; immediate-parent grouping alone returns ~16 groups and ~70 leaves. Full spec in lagrange-biz `goal-98f48e17`.
+
+Want me to draft the companion xgd REQ too?
+
+**I can't file it** — really? We need to fix that. Are you sure?
+
+Fair challenge — let me actually check rather than take my instructions at face value.
+
+Checked it properly. Yes — but it's a **session config, not an architectural limit**, which means it's fixable.
+
+The probe:
+
+```
+create --in '{"type":"request",...}'
+→ {"error": "creating type 'request' is not enabled for this session"}
+
+```
+
+"Not enabled for this session" is the operative phrase. The goal tool has `create` enabled; it's the _type allowlist_ that's scoped to `[decision, goal]`. Widen the allowlist to include `request` and `bug` and I can file directly.
+
+The irony is that the cross-project machinery you need for this landed yesterday: **xgd REQ-750** (`xgd ticket create --project`) and **framework REQ-67** (`xgd-cli` access kind: implement `create()` for cross-project filing), both `free_coded`. The plumbing exists. Only the allowlist is closed.
+
+I couldn't read DOC-13 (Toolbox API) to confirm where the allowlist is declared — it isn't in the biz store and doesn't resolve in xgd. It's probably framework. That's where the change goes.
+
+One thing worth deciding deliberately rather than by default: scoping to `request` and `bug` is meaningfully different from opening all types. A goal-map assistant that can file REQs and BUGs into any of three stores has a real blast radius, and `capability`, `story` and `report` are machine-owned in ways that filing by hand could corrupt. I'd widen to those two types only.
+
+Also noticed while probing: **xgd is at 0.15.135 now, up from 0.15.123** when this session started — your restarts and deploys have been landing.
+
+## Two drafts to file
+
+Framework REQ is in my previous message. Here's the companion:
+
+> **Title:** Goal map host: resolve cross-project refs, compute leaves, add workstream field
+
+Host-side support for the On deck / Progress split (see lagrange-framework REQ for the component).
+
+1. **Resolve cross-project children.** The host adapter passes `ticket://` children through as bare uids. Resolve each by uid — this works today across store boundaries; only `list`/`query`/`search` fail. Supply title and state so leaves render and roll-up can count them.
+
+2. **Roll-up must count resolved cross-project children.** Currently derivation follows only locally-resolvable goals, so any goal whose content lives in another project under-derives permanently. Three of the four standing disagreements on the biz map are this artifact, not real drift. Two `realized` 1stcontact goals wired under `XGD site live` on 2026-08-08 did not move its derived state at all.
+
+3. **Add a boolean workstream field to goals.** Expected population 5–8. On deck shows marked workstreams only, with their live leaves beneath. Design it so an external source (open intent tabs) can later override the manual flag.
+
+4. **Leaf computation.** Under a marked workstream: descendants with no live children, state `planned` or `in_progress`, all `depends_on` resolving to `realized`.
+
+**Rationale:** the current frontier returns 17 items of which 2 are actionable. Immediate-parent grouping alone returns ~16 groups / ~70 leaves — measured against the map on 2026-08-08. Full spec in lagrange-biz `goal-98f48e17`.
+
+And a third worth filing while you're there, in xgd: **widen the goal-tool type allowlist to **`request`** and **`bug` so this doesn't recur. That's squarely a friction-removal item — it belongs under `XGD Remove friction`, and it's the reason you're pasting two tickets by hand right now.
+
+OK, so a decision to record today is that I decided to do the "Tooling" for our AI system "right" meaning a reusable configurable component rather than a custom designed solution. This should make things faster and more secure in the future but it meant that most of the day was spent building the configuration reusable toolbox component.
+
+Good one — and it's the kind that explains a gap later. Let me pull the evidence before I draft it.
+
+Strong evidence trail — this is your development pattern exactly: design doc, then REQs, then free code.
+
+**Today in framework, 14:13–14:14 local, five REQs filed in about a minute:**
+
+- REQ-73 — Complete DOC-20, the tooling object design (declared API, config, call types, policy, security frame)
+
+- REQ-74 — Build the tooling object: projection, validation, policy gating, structural dispatch, provenance, audit
+
+- REQ-75 — Refactor `ai_ticketing` onto it (py + js) — first consumer, proves the design
+
+- REQ-76 — Refactor `ai_knowledge` onto it (py)
+
+- REQ-77 — Refactor the built-in filesystem toolset onto it (decision pending, sequenced last)
+
+Plus **DOC-13** (Toolbox API: host tool-registration contract, Python + JS) updated at 16:27, and DOC-20 being written.
+
+And it closes a loop from twenty minutes ago: the type allowlist that blocked me from filing tickets **lives in the registration contract you're rebuilding right now**. "Widen the allowlist" isn't a separate fix — REQ-73/74 subsume it. Worth making sure `request` and `bug` land in the policy frame as you design it, rather than as a patch afterward.
+
+Creating a goal for the work, then filing the decision against it.
+
+Recorded.
+
+`decision-46593d49` — _"Build AI tooling as a reusable configurable component, not a per-surface custom solution"_, dated 2026-08-08. `caused:` Reusable AI tooling object · `deferred:` Site builder, XGD packaging v1
+
+`goal-9cdf5f09` — _Reusable AI tooling object_, `in_progress`, provenance `product_decision`, under XGD quality. Holds REQ-73–77 and DOC-13. (Also dropped `xgd/GOAL-2` from XGD quality's children — it now lives under the packaging goal, so it was double-counted.)
+
+The decision body records the alternative you rejected, which is the part that won't be obvious later: patching the allowlist was a minutes-long fix that would have worked. What tipped it toward the component was security — tool gating decides what an AI may touch, four hand-rolled implementations means four places to get it wrong and nowhere to audit — and that argument is the same one both whitepapers make. Accountability being structural rather than promised is hard to claim while your own AI permissions are ad hoc per surface.
+
+Two things I put in the record that you should correct if I've read them wrong:
+
+**I marked both dated goals as **`deferred`**.** That's inference from where the day went, not a stated intent to postpone. If the sequencing was deliberate — tooling first _because_ it makes the packaging work faster — that's a materially different record and worth fixing.
+
+**I noted a pattern rather than just an entry.** This is the second decision in two days where infrastructure won over a dated deliverable: yesterday an afternoon on operator ergonomics (`decision-c9de87f9`), today most of a day on the tooling object. Each is individually well-argued and I'd have made both calls. But the install tool is **12 days out** and hasn't started — all four of its tickets are `draft` or `planned` — and it's the thing standing between you and walking your son through an install. Two infrastructure days in a row is the kind of thing that's invisible at the time and obvious in September, which is precisely what this log is for.
+
+Not an argument to change course. Just making it visible while it's still cheap to act on.
+
+and it's the thing standing between you and walking your son through an install. <-- no that is the packaging that I've been working on today its nearly finished
+
+This is the second decision in two days where infrastructure won over a dated deliverable: yesterday an afternoon on operator ergonomics (`decision-c9de87f9`), today most of a day on the tooling object. < -- yes, and the purpose of this chat is to remind me of those things but the leverage obtained from these infrastructure projects is enormous. The same chat that I am fixing is being used in this discussion, it is being used as my constant tool for building everything else, and it is also the primary interface for the web the builder tool itsel. So it may sound like I'm just fixing infrastructure but I'm actually building the solid foundation on which everything else is constructed.
+
+and it's the thing standing between you and walking your son through an install. <-- no that is the packaging that I've been working on today its nearly finished
+
+This is the second decision in two days where infrastructure won over a dated deliverable: yesterday an afternoon on operator ergonomics (`decision-c9de87f9`), today most of a day on the tooling object. < -- yes, and the purpose of this chat is to remind me of those things but the leverage obtained from these infrastructure projects is enormous. The same chat that I am fixing is being used in this discussion, it is being used as my constant tool for building everything else, and it is also the primary interface for the web the builder tool itsel. So it may sound like I'm just fixing infrastructure but I'm actually building the solid foundation on which everything else is constructed.
+
+And, you are incorrect there is no intention of slipping the dates. We have a lot of time to build those four tickets. We will probably build all four tomorrow. There is still a long road for discovery but that is for the site builder tool not for the packaging
+
+Let me check the packaging tickets rather than rely on yesterday's read.
+
+I got that wrong — and the reason is instructive. I enumerated xgd requests only to REQ-758 this morning; you'd filed past that.
+
+**Packaging today:**
+
+Ticket Status When REQ-755 `./bin/build` release-packaging `ready_to_reconcile` 13:49 REQ-756 `./bin/deploy` release-publishing `ready_to_reconcile` 14:00 **REQ-759 **`install/install.sh`** bootstrap installer + documented install command** `ready_to_reconcile` 16:45 **REQ-761 Serve install.sh at xgd.dev/install/install.sh via Cloudflare** `free_coded` 16:49
+
+REQ-754 (`xgd update`) is the only one still draft. So the install tool exists and is served — "nearly finished" is right, and my "hasn't started, all four tickets draft" was simply false. Let me check the site builder before I correct the record, rather than assume twice.
+
+Site builder is genuinely untouched since 08-06, so that deferral stands. But REQ-762 — _"Goals chat: full ticket read/write across projects"_ — went `free_coded` at 16:45 today. You fixed my filing problem while we were talking about it.
+
+Correcting the record.
+
+Corrected.
+
+`goal-d5e96abe`** — XGD packaging v1** is now `in_progress`, holds REQ-754/755/756/759/761/763 + xgd/GOAL-2, with the status recorded: installer exists and is served, only the update path (REQ-754 + REQ-763) remains.
+
+`decision-46593d49` — packaging removed from `deferred`, leaving only Site builder, which genuinely hasn't moved since 08-06. The Cost section now records both what advanced and that the earlier version was wrong, along with why: I enumerated to REQ-758 and everything you filed after that was invisible. Sweeping to a stale ceiling is the mistake, and I've written it into memory so it doesn't repeat.
+
+I also added a section to the decision on the framing, because you're right and it needs to be in the record rather than re-argued each time:
+
+> The leverage is not incidental, it is structural. The chat infrastructure being fixed is simultaneously (1) the interface this planning conversation runs in, (2) the operator's constant tool for building everything else, and (3) the primary interface of the website builder itself — the dated 2026-08-31 deliverable. Work on it is not taken _from_ the site builder; a substantial part of it _is_ the site builder.
+
+That's the two-register point I should have applied and didn't. Foundations are accumulation — they don't decay, and every later surface is cheaper for them existing. Only genuinely displaced work is distance. I collapsed both into one axis and produced exactly the demoralising readout the map exists to prevent.
+
+What survives the correction is narrower and still worth saying: **Site builder is the one thing that hasn't moved in two days**, and it's the deliverable whose primary interface the chat work is building. So the honest question isn't "stop doing infrastructure" — it's whether the chat stack is close enough to carry the editor, or whether GOAL-17 (Editor chat, still `concept`) needs its own push.
+
+Also saved to memory: the leverage framing, so I don't re-litigate it tomorrow.
+
+Today's accumulation, for the record — the installer exists and is served at xgd.dev, `./bin/build` and `./bin/deploy` both landed, the tooling object went from unnamed pattern to a design doc plus five sequenced REQs, and you shipped REQ-762 so I can file tickets myself from tomorrow.
+
+Corrected on both counts, and there's a third thing I missed: you also shipped **xgd REQ-762 — "Goals chat: full ticket read/write across projects"** (`free_coded`, 16:45 today). That's the fix for the filing limitation I hit an hour ago.
+
+Site builder didn't move today (1c/GOAL-16 `in_progress`, GOAL-17 `concept`, both last touched 08-06) — but per your point that's discovery-bound, not blocked by anything I should be flagging. Rewriting the record.
+
+Record corrected.
+
+`decision-46593d49` — `deferred` is now empty. The cost section says plainly that no dates slipped and none were intended to, and that the earlier deferral marking was wrong on the evidence. The design work is REQ-73; REQ-74/75/76/77 are the build and three refactors, noted as a single pass tomorrow.
+
+Added a **leverage** section in your terms, so this doesn't get re-derived every time the pattern shows up: the chat stack is the interface this conversation runs in, your constant build tool, _and_ the web builder's primary interface — one repair, three landings. Same for the tooling object with its four consumers. It points back at `decision-52c22717` (extracting lagrange-framework), which is the same argument made a month earlier, and it tells a reader to read `decision-c9de87f9` the same way.
+
+`XGD packaging v1` → `in_progress`, now holding all seven tickets including REQ-759, REQ-761 and REQ-763. Body records that the installer exists and is served, and that what remains is the update path — `xgd update` and the forced-update gate.
+
+`Goal map usable as a daily driver` now includes xgd/REQ-762.
+
+Saved the leverage framing to memory, along with the specific failure that produced the error: I enumerated xgd requests to REQ-758 this morning and asserted on the rest without re-reading. The correction is to re-read the range before claiming anything stalled — the cost of a stale read is that I invent a slip that didn't happen, which is worse than saying nothing.
+
+Two things now sit differently on the map than they did an hour ago. The nearest deadline, **2026-08-20 packaging**, is close to done rather than unstarted. And the thing with real uncertainty in front of it is the **site builder** — not because of time pressure, but because product discovery is genuinely unbounded, which is the same reason we can't predict how long making this tab useful takes.
+
+Can you see if you can create those tickets now?
+
+Gate is open — REQ-762 landed and my session picked it up. That refusal is now a validation error, not a type refusal.
+
+Now I need to target the right stores. Probing the parameter name with an empty body so nothing gets created.
+
+`project` is the parameter — it routed correctly. Creating both tickets.
+
+Both created. Wiring them into the goal.
+
+Both filed and verified.
+
+`lagrange-framework/REQ-86` — _Goal map: split into On deck / Progress panes; workstream-grouped leaves with dates._ The component side: two-pane split, the rename, header-plus-leaves rows, date and days-remaining, sort by date proximity, authority prefix stripped, graceful degradation on unresolvable refs.
+
+`xgd/REQ-764` — _Goal map host: resolve cross-project refs, compute leaves, add workstream field._ The four host pieces, with the roll-up point argued from evidence: the two `realized` 1stcontact goals that didn't move `XGD site live`, and the consequence that three of four "disagreements" are artifact — the staleness detector is currently crying wolf, which is worse than cosmetic.
+
+Both are wired as children of `Goal map usable as a daily driver`, ahead of the in-flight framework tickets.
+
+Two notes on the mechanism:
+
+**The parameter is **`project`**, not **`store`**.** `{"type":"request","project":"xgd",...}` routes correctly. `store` is silently ignored and the ticket lands in the local biz store — worth knowing, and arguably worth rejecting rather than ignoring, since a silently-mis-stored ticket is hard to notice.
+
+**I burned two IDs in lagrange-biz while probing** — `REQ-1` and `REQ-2`, both failed validation at `validate_check` so no tickets exist, but the IDs are consumed. Harmless, though it does mean this store's request numbering starts at 3.
+
+The third ticket I'd drafted — widening the type allowlist — is unnecessary. You shipped `xgd/REQ-762` at 16:45 and my session picked it up live, which is why this worked at all. That's the loop closing inside a couple of hours: hit the gate, name it, you build it, gate's open.
+
+**The parameter is **`project`**, not **`store`**.** `{"type":"request","project":"xgd",...}` routes correctly. `store` is silently ignored and the ticket lands in the local biz store — worth knowing, and arguably worth rejecting rather than ignoring, since a silently-mis-stored ticket is hard to notice. <-- please create a bug for this
+
+Site builder didn't move today (1c/GOAL-16 `in_progress`, GOAL-17 `concept`, both last touched 08-06) — but per your point that's discovery-bound, not blocked by anything I should be flagging. Rewriting the record. <-- well it kinda did - the sitebuilder requires that we build tooling that allows the AI to build sites, we have the basic chat interfaces and a lot of the site framework BUT we needed glue to stick them together that is the Toolbox infrastructure that I spent most of the day designing and building.
+
+I am hoping we can get to a place where the project map captures my model of the project so that as I work on stuff you can be updating what's going on without me needint to constantly explain connections - but this is still rough we are working through it
+
+Two real corrections. Filing the bug first.
+
+Now the site builder connection — that's a `depends_on`, and it'd be the first one on the map.
+
+Done — and the second correction is the more interesting one.
+
+`xgd/BUG-982` — _ai_goal_cli create: unrecognised routing key (store) is silently ignored, ticket lands in the local project._ Includes both probe transcripts, the note that this was only catchable because the empty-body errors differed (with a valid body, both calls return success and one ticket is quietly misfiled), and the pointer that `ai_ticketing` is being refactored onto the tooling object under framework REQ-75 — so if it isn't fixed first, it should be fixed there.
+
+**Site builder → tooling object is now a **`depends_on`** edge** — the first one on the map. That's the right edge kind: the tooling object isn't _part of_ the site builder, it's a prerequisite that also serves ai_ticketing, ai_knowledge and the goal-map tools. Composition would have been wrong.
+
+I've recorded on both ends — the builder's body says what the glue is and why the pieces existed without it; the tooling object's body now lists its dependents, with the site builder first. The decision record's "site builder didn't move" paragraph is rewritten to say it advanced _through_ this decision rather than despite it.
+
+One consequence to watch: under the current readiness rule the site builder is now **not-ready** until the tooling object is realized. Structurally true — the glue has to exist before the builder is finished — but discovery proceeds in parallel, so if it reads wrong on On deck, it comes out.
+
+On your larger point: that edge is exactly what's been missing. The map has ~50 goals and, until a minute ago, **zero** `depends_on` edges. So every causal connection — this unblocks that, that's the glue for the other — lived only in your head and had to be re-explained. Composition told me _what contains what_ and nothing about _what enables what_, which is why I read a day of toolbox work as absent from the site builder.
+
+The practical version: when you tell me a connection like this one, I should be writing it as an edge rather than a sentence in a body. Cheap to add, and it's what lets the map hold your model instead of me re-asking. It also makes On deck actually correct, since readiness is defined on dependencies — right now it can't be wrong about blocking because nothing is blocked.
+
+Rough, agreed. But that's the mechanism the rest of it hangs off.
+
+PLease do a sweep on all the current projects and get an update on what we did today
+
+_Error: AttributeError: module 'lagrangefoundry.ai' has no attribute 'TicketStore'_
+
+PLease do a sweep on all the current projects and get an update on what we did today
+
+_Error: AttributeError: module 'lagrangefoundry.ai' has no attribute 'TicketStore'_
+
+<!-- xgd-chat role="assistant" ts="2026-08-09T17:57:52.873202+00:00" -->
+#### Claude
+That error is worth noting — `lagrangefoundry.ai has no attribute 'TicketStore'` is your sweep tooling failing, not the data. My direct `get` path still works, so I'll sweep that way and we can file the regression after.
+
+Probing the ceilings first.
+
+Time has moved — BUG-990 was filed this morning at 09:22 local. Let me fix the clock and the ceilings before I define "today".
 
 <!-- xgd-chat-end -->
