@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-09T00:03:07.913464+00:00'
+updated_at: '2026-08-09T00:03:35.732602+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -641,5 +641,25 @@ What survives the correction is narrower and still worth saying: **Site builder 
 Also saved to memory: the leverage framing, so I don't re-litigate it tomorrow.
 
 Today's accumulation, for the record — the installer exists and is served at xgd.dev, `./bin/build` and `./bin/deploy` both landed, the tooling object went from unnamed pattern to a design doc plus five sequenced REQs, and you shipped REQ-762 so I can file tickets myself from tomorrow.
+
+<!-- xgd-chat role="assistant" ts="2026-08-09T00:03:35.213012+00:00" -->
+#### Claude
+Corrected on both counts, and there's a third thing I missed: you also shipped **xgd REQ-762 — "Goals chat: full ticket read/write across projects"** (`free_coded`, 16:45 today). That's the fix for the filing limitation I hit an hour ago.
+
+Site builder didn't move today (1c/GOAL-16 `in_progress`, GOAL-17 `concept`, both last touched 08-06) — but per your point that's discovery-bound, not blocked by anything I should be flagging. Rewriting the record.
+
+Record corrected.
+
+**`decision-46593d49`** — `deferred` is now empty. The cost section says plainly that no dates slipped and none were intended to, and that the earlier deferral marking was wrong on the evidence. The design work is REQ-73; REQ-74/75/76/77 are the build and three refactors, noted as a single pass tomorrow.
+
+Added a **leverage** section in your terms, so this doesn't get re-derived every time the pattern shows up: the chat stack is the interface this conversation runs in, your constant build tool, *and* the web builder's primary interface — one repair, three landings. Same for the tooling object with its four consumers. It points back at `decision-52c22717` (extracting lagrange-framework), which is the same argument made a month earlier, and it tells a reader to read `decision-c9de87f9` the same way.
+
+**`XGD packaging v1`** → `in_progress`, now holding all seven tickets including REQ-759, REQ-761 and REQ-763. Body records that the installer exists and is served, and that what remains is the update path — `xgd update` and the forced-update gate.
+
+**`Goal map usable as a daily driver`** now includes xgd/REQ-762.
+
+Saved the leverage framing to memory, along with the specific failure that produced the error: I enumerated xgd requests to REQ-758 this morning and asserted on the rest without re-reading. The correction is to re-read the range before claiming anything stalled — the cost of a stale read is that I invent a slip that didn't happen, which is worse than saying nothing.
+
+Two things now sit differently on the map than they did an hour ago. The nearest deadline, **2026-08-20 packaging**, is close to done rather than unstarted. And the thing with real uncertainty in front of it is the **site builder** — not because of time pressure, but because product discovery is genuinely unbounded, which is the same reason we can't predict how long making this tab useful takes.
 
 <!-- xgd-chat-end -->
