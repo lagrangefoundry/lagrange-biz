@@ -5,10 +5,10 @@ type: goal
 title: XGD packaging v1 - install tool
 created_by: xgd
 created_at: '2026-08-08T22:54:00.879209+00:00'
-updated_at: '2026-08-08T22:54:00.879209+00:00'
+updated_at: '2026-08-09T00:02:18.276502+00:00'
 completed_at: null
-last_field_updated: created_at
-status: planned
+last_field_updated: status
+status: in_progress
 fields:
   provenance: planned
   target_date: '2026-08-20'
@@ -21,10 +21,24 @@ fields:
 
 An install path that a first-time user can walk through, end to end, without the author sitting next to them.
 
-**This has a hard short-term deadline and it was a gap in the planning exercise.** The n=1 external user - the operator son, on summer break - cannot be onboarded without it. Target 2026-08-20, matching goal-1789a4b5. The window expires when the summer does; it is not recoverable.
+Hard short-term deadline: the n=1 external user - the operator son, on summer break - cannot be onboarded without it. Target 2026-08-20, matching goal-1789a4b5. The window expires when the summer does.
 
-Until now this work was scattered: three drafts filed under XGD Remove friction (REQ-754 xgd update, REQ-755 ./bin/build release-packaging, REQ-756 ./bin/deploy release-publishing) plus xgd/GOAL-2 (Packaging with an update path, planned) with no owner drawing them together. Nothing was tracking that an install tool was on the critical path for a dated commitment. That is exactly the failure this map exists to catch.
+## Status 2026-08-08 evening - nearly finished
 
-The three REQs have been moved here from Remove friction; that goal is for ongoing ergonomics, not for a dated deliverable.
+Most of this landed today.
 
-Note the ordering this implies: the install walkthrough is the first thing an external user touches, so it gates the n=1 onboarding rather than running alongside it.
+- REQ-755 ./bin/build release-packaging - ready_to_reconcile, 13:49 local
+- REQ-756 ./bin/deploy release-publishing - ready_to_reconcile, 14:00 local
+- REQ-759 install/install.sh bootstrap installer + documented install command - ready_to_reconcile, 16:45 local
+- REQ-761 Serve install.sh at xgd.dev/install/install.sh via Cloudflare - free_coded, 16:49 local
+- REQ-763 min_required_version forced-update gate - draft
+- REQ-754 xgd update command - draft
+- xgd/GOAL-2 Packaging with an update path - planned
+
+The installer exists and is served. What remains is the update path: REQ-754 and REQ-763 together.
+
+## History
+
+This was a gap in the planning exercise. Until 2026-08-08 the work was scattered as three drafts under XGD Remove friction plus xgd/GOAL-2, with nothing recording that an install tool sat on the critical path for a dated commitment.
+
+Moved from planned to in_progress on 2026-08-08 on the evidence above.
