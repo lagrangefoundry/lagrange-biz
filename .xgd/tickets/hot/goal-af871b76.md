@@ -5,9 +5,9 @@ type: goal
 title: XGD closed beta
 created_by: xgd
 created_at: '2026-08-06T21:19:31.925487+00:00'
-updated_at: '2026-08-06T21:19:31.925487+00:00'
+updated_at: '2026-08-11T23:44:38.965395+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: children
 status: in_progress
 fields:
   provenance: planned
@@ -16,6 +16,7 @@ fields:
   - goal-3380b45b
   - goal-cda15c54
   - goal-51d77dcd
+  - goal-a1b63a1a
   - ticket://lagrangefoundry/xgd/GOAL-3
 ---
 
