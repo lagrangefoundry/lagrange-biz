@@ -5,9 +5,9 @@ type: goal
 title: Reusable AI tooling object
 created_by: xgd
 created_at: '2026-08-08T23:48:08.445713+00:00'
-updated_at: '2026-08-12T00:04:42.154600+00:00'
+updated_at: '2026-08-12T00:05:03.618479+00:00'
 completed_at: null
-last_field_updated: body
+last_field_updated: workstream
 status: in_progress
 fields:
   provenance: product_decision
@@ -18,6 +18,7 @@ fields:
   - ticket://lagrangefoundry/lagrange-framework/REQ-76
   - ticket://lagrangefoundry/lagrange-framework/REQ-77
   - ticket://lagrangefoundry/lagrange-framework/DOC-13
+  workstream: true
 ---
 
 One configurable, declarative component that every AI toolset is built on - rather than a hand-rolled integration per surface.
