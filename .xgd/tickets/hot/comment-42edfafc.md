@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-12T18:30:06.819304+00:00'
+updated_at: '2026-08-12T18:32:30.995484+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1694,5 +1694,50 @@ Display becomes trivially correct: show the native status verbatim — `REQ-754 
 The acceptance criterion is the same one as before and it's a good test of both fixes: **`XGD packaging v1` should collapse from six leaves to one** — REQ-763, the only `draft`. Everything else is built and queued.
 
 Worth noting the pattern: this is the third defect in three days from the same root — a component confidently asserting something it inferred rather than something it was told. BUG-982 guessed a routing key, BUG-996 guessed a patch shape, this guessed a lifecycle. Strict declaration over inference is what the Toolbox is for, and it's an argument for getting REQ-781's adoption done rather than patching each instance.
+
+<!-- xgd-chat role="user" ts="2026-08-12T18:31:42.785853+00:00" -->
+#### You
+Wait lets discuss the fix - we should agree on what represents DONE here. From the point of view of this view of the system once a ticket gets to ready_to_reconcile I am done with it. It no longer needs time from me so we should take it off the board.
+
+<!-- xgd-chat role="assistant" ts="2026-08-12T18:32:17.067658+00:00" -->
+#### Claude
+Agreed on the rule, but I want to separate two senses of "done" before we write it, because collapsing them is the exact failure this map exists to prevent.
+
+**"Done with it" — needs none of my time.** That's `ready_to_reconcile`, as you say. It drives On deck, and it's a fact about *your attention*.
+
+**"Banked" — the capability exists.** That's `free_and_reconciled`, after regression. It drives the accumulation register, and it's a fact about *the system*.
+
+They're different boundaries and both are legitimate. A ticket sitting at `ready_to_reconcile` for a week because a bundle stalled is genuinely off your board and genuinely not yet an accomplishment. If we make one predicate serve both, either your board fills with finished work or your accumulation register counts things that aren't in main.
+
+So: `needs_operator` cuts at `ready_to_reconcile`, `is_terminal` cuts at `free_and_reconciled`. Same lifecycle, two questions.
+
+## The refinement I'd want to check
+
+Your rule sets the boundary at `ready_to_reconcile`, which implies the state *before* it still needs you. Reading the lifecycle that way:
+
+| Status | Needs you? |
+|---|---|
+| `draft` | **yes** — hasn't been started |
+| `free_coding` | no — AI is working |
+| `free_coded` | **yes** — work is done, you haven't accepted it |
+| `ready_to_reconcile` → `free_and_reconciled` | no — off the board |
+
+Is `free_coded` → `ready_to_reconcile` your acceptance gate? If so, `free_coded` is precisely "waiting on you" and belongs on the board. If that transition is automatic, then the board cuts at `free_coded` instead and the answer is simpler.
+
+## One thing I'd keep visible
+
+You told me early on that waiting for the AI is unavoidable, and that the board's real job is *what do I pick up given three threads are blocked on a machine*. `free_coding` is that state — your thread, in flight, not needing you this second.
+
+I'd show it, but dimmed and secondary rather than as an action. It answers "what's cooking" without competing with "what needs me". Everything from `ready_to_reconcile` onward disappears entirely, per your rule.
+
+That gives three buckets: **needs you** (`draft`, `free_coded`) · **in flight** (`free_coding`) · **gone** (the rest).
+
+## The risk, and why I think it's already covered
+
+Making `ready_to_reconcile` invisible means a stalled bundle is invisible — and four stalled in the past week (BUG-949, 958, 986, 989). But your morning routine catches exactly this: a failed reconcile becomes a new bug, which lands as `draft`, which appears on the board needing you. The loop closes through the bug, not the original ticket.
+
+The gap is the silent case — bundled, never completes, no failure filed. A machine-side count in the Progress pane covers it cheaply.
+
+Confirm the `free_coded` question and I'll rewrite REQ-92's predicate table around this.
 
 <!-- xgd-chat-end -->
