@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-12T19:03:22.665913+00:00'
+updated_at: '2026-08-12T19:10:12.797909+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1800,5 +1800,26 @@ It also sharpens what the board is for. It's not a status display you consult to
 Which means the value concentrates where your attention isn't. The `free_coding` ticket you're watching needs nothing from the board. The one you kicked off ninety minutes ago and forgot is the whole point.
 
 So the board on the current map is: **`draft` and `free_coded` items, plus anything stuck.** With the packaging example, six leaves collapse to one — REQ-763.
+
+<!-- xgd-chat role="user" ts="2026-08-12T19:09:35.428761+00:00" -->
+#### You
+No no that's not what I meant - I want to see the free coding tickets on the board. Let me try to simplify this for you draft -> freecoded <-- show it to me. ready to reconcile onwards take it off ondeck
+
+<!-- xgd-chat role="assistant" ts="2026-08-12T19:09:42.975587+00:00" -->
+#### Claude
+Understood — one cut point, not three buckets. I over-built it.
+
+REQ-92 now says exactly that:
+
+```
+draft → free_coding → free_coded              SHOW
+ready_to_reconcile → … → free_and_reconciled  OFF
+```
+
+One cut point, at the acceptance gate. I added an explicit instruction not to subdivide, dim, or hide `free_coding` behind a staleness heuristic — since I'd already written that twice, it's worth blocking.
+
+The long-running-`free_coding` highlight survives only as optional emphasis, with a note that it must not change what appears. The row is on the board either way.
+
+Acceptance criteria are now stated as the rule itself: everything in `draft`/`free_coding`/`free_coded` appears, nothing at `ready_to_reconcile` or beyond does, and packaging collapses to REQ-763.
 
 <!-- xgd-chat-end -->
