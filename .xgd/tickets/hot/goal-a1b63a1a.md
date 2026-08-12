@@ -5,16 +5,16 @@ type: goal
 title: XGD ready for someone else hands
 created_by: xgd
 created_at: '2026-08-11T23:44:33.139501+00:00'
-updated_at: '2026-08-11T23:44:33.139501+00:00'
+updated_at: '2026-08-12T00:05:04.246862+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: workstream
 status: in_progress
 fields:
   provenance: user_feedback
   children:
   - goal-959f56f3
   - goal-adac9e3a
-  workstream: false
+  workstream: true
 ---
 
 XGD is something a person other than its author can be handed without a guided tour.
