@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-11T23:45:27.455406+00:00'
+updated_at: '2026-08-12T00:06:21.554734+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1491,5 +1491,23 @@ Two things I put in the record deliberately:
 **4. On transparency — is the driver you, or them?** Whether you need to see the permissions to trust what you're shipping, or a beta user needs to see them to trust what they're running. Both are legitimate and they'd produce different designs for REQ-780 — an operator diagnostic versus a user-facing assurance surface.
 
 **5. Is `Interface tidy-up for external use` standing or does it complete?** It'll likely keep accepting work as more of the product gets seen through newcomer eyes. Worth deciding rather than letting it drift — you have five standing goals already and no way in the model to mark them, which is still an open interface defect.
+
+<!-- xgd-chat role="user" ts="2026-08-12T00:03:06.963914+00:00" -->
+#### You
+**1. Is REQ-781 the same layer as the Toolbox, or a second one? **Both decide what an AI may do. <-- I am surprised this is ambiguous REQ-74 is infrastructure REQ781 is adopting that infrastructure (re-adopting) for XGD - a driving motivation here is to ensure that we have better visibility and control over what a Claude process can do from XGD. Rather than implement that in XGD legacy code I decided to import the new ai backend first - does that make sense? REQ-75 is somewhat unrelated because it is a bridge to the framework ticket implementation that is not used by XGD
+
+<!-- xgd-chat role="assistant" ts="2026-08-12T00:03:37.996154+00:00" -->
+#### Claude
+Yes, that makes sense — and it resolves the ambiguity in a way that changes something I filed.
+
+My model was wrong: I had REQ-75 as the path by which the Toolbox reaches XGD. If REQ-75 is a bridge to the framework *ticket* implementation that XGD doesn't use, then **REQ-781 is the adoption route** — XGD imports the new AI backend, and permissions come with it rather than being retrofitted onto legacy code.
+
+That matters because I argued in `lagrange-framework/BUG-20` that the validation fix lands via REQ-75. Let me check whether I can correct that.
+
+`update` is cross-project even though `comment` isn't. Correcting BUG-20 directly.
+
+`workstream` now exists as a field — REQ-764 landed it, and it defaults to `false`. **Nothing is marked**, which is a second, independent reason On Deck returns 0, on top of the status mapping. Marking your workstreams now.
+
+
 
 <!-- xgd-chat-end -->
