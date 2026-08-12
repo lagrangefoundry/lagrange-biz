@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-12T18:32:30.995484+00:00'
+updated_at: '2026-08-12T18:45:08.275383+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1739,5 +1739,44 @@ Making `ready_to_reconcile` invisible means a stalled bundle is invisible — an
 The gap is the silent case — bundled, never completes, no failure filed. A machine-side count in the Progress pane covers it cheaply.
 
 Confirm the `free_coded` question and I'll rewrite REQ-92's predicate table around this.
+
+<!-- xgd-chat role="user" ts="2026-08-12T18:43:12.949226+00:00" -->
+#### You
+Is `free_coded` → `ready_to_reconcile` your acceptance gate? Yes exactly it is a deliberately manual step.
+
+Tickets in fee_coding state absolutely need to be visible - this is usually a short 3-20 mins state. However, if implementation issues are encountered it can require my involvement too and those tickets are very much on deck.
+
+There are some other details to mention here. Technically when we are fully up and running a feature will not be DONE DONE DONE until it is not only reconciled but it has been through regression and landed in stable today we do not track tickets through those states. This is something to think about. Ultimately our deployment will be from the stable branch which is the output of regression.
+
+The other thing to call out is that this current mechanism doesn't really accommodate develop. Develop cycles occur in the background unsupervised cut from and returned to main. Since we are currently executing from working for fast feedback, features that are developed using the develop cycle will only get to working after resync. Whilst we track the ticket states for develop we do not track re-sync as a ticket state change. More significantly I think in the free-coding model there is an explicit gate the ready_to_reconcile gate that represents my decision about a feature being done. We have no equivalent on the automated development cycle today. I'm calling out these gaps so that you can be aware and perhaps document them somewhere I don't think these are things we need to fix today
+
+<!-- xgd-chat role="assistant" ts="2026-08-12T18:43:36.202174+00:00" -->
+#### Claude
+Confirmed gate, and the `free_coding` point changes the design usefully. Rewriting REQ-92's table, then documenting the three gaps.
+
+Settled. **REQ-92** now carries the confirmed model:
+
+| Status | Bucket |
+|---|---|
+| `draft` | **needs you** — not started |
+| `free_coding` | **in flight** — AI working, typically 3–20 min |
+| `free_coded` | **needs you** — awaiting the acceptance gate |
+| `ready_to_reconcile` onward | **off the board** |
+
+The `free_coding` point produced the most useful change. It isn't cleanly machine-side — it can escalate into needing you, and **there's no status change when it does**. So the board can't detect it directly. My suggestion: **elapsed time in state as the escalation signal.** Twenty minutes is normal; two hours is a stalled thread. Show in-flight dimmed with time-in-state, promote past the expected band. That turns an invisible failure into a visible one without any new workflow signal — and it's the same "what do I pick up while three threads are running" job you described early on.
+
+## The three gaps — recorded, not scheduled
+
+**`goal-58289539` — "Ticket lifecycle covers the whole path to stable"**, `concept`, provenance `discovered`, under XGD quality. No tickets, explicitly marked as awareness rather than work.
+
+One of them has a consequence for this map that's worth stating plainly:
+
+**Nothing is tracked past reconcile, so the accumulation register can't currently be measured correctly.** Keyed on `free_and_reconciled`, it counts work that hasn't passed regression and isn't in stable — it **overstates what's banked**. That's the monotonic "what do I have now that I didn't have in May" axis, the one that's supposed to make progress feel real. Right now it would be generous, and generous is the one thing it can't afford to be. REQ-92 implements that boundary anyway as the best available answer, flagged provisional.
+
+**Resync being invisible** means a ticket can be complete in main and absent from the branch you're running, with nothing in its state saying so — and any view built on ticket state will be confidently wrong about it.
+
+**The develop cycle having no acceptance gate** is the one I'd rank highest of the three. `free_coded → ready_to_reconcile` is the most load-bearing signal in the whole model — it's your judgement that something is done, and it's what takes work off the board. Half your work doesn't pass through anything equivalent. That's not just a tracking gap; the two workflows carry different assurance while producing tickets that look identical downstream. And it lands directly on the accountability argument both whitepapers make — an explicit human acceptance gate *is* the structural mechanism they describe.
+
+Not for today. But when the develop cycle is what a beta user is mostly running, that's a gap worth having a view on.
 
 <!-- xgd-chat-end -->
