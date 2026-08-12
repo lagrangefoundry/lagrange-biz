@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-12T00:16:28.287386+00:00'
+updated_at: '2026-08-12T00:24:52.371933+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1572,5 +1572,67 @@ Your actual calendar is:
 Two of those three weren't on the map at all. I've added **`Release ready to demo at the 8/24 dinner`** (`planned`, 08-24) — same shape as the class window: the dinner happens regardless, whether it produces feedback depends on there being something to show, and it isn't recoverable afterwards.
 
 I have **not** touched the 08-20 date. That's yours to decide, and the question is what n=1 onboarding actually means now: your son giving feedback on 08-13 is a review session, not him running XGD himself. Does onboarding still have a date, or does it become undated and get driven by 08-24 and 08-31 instead?
+
+<!-- xgd-chat role="user" ts="2026-08-12T00:21:49.247684+00:00" -->
+#### You
+ok good.
+
+On deck is still showing no tickets. 
+
+This Overview should show the calendar events on it 
+
+What do you suggest?
+
+<!-- xgd-chat role="assistant" ts="2026-08-12T00:21:55.633946+00:00" -->
+#### Claude
+Let me check whether the data is now there — last time I looked it had started populating.
+
+The data is fine — **the digest returns a populated `on_deck`**, with groups, leaves, and a working status mapping (`draft`→`planned`, `ready_to_reconcile`→`in_progress`). So the break is between the host and the render, not in the computation. Correcting BUG-21, which currently points a developer at the wrong thing.
+
+## On deck — it's not a data problem any more
+
+The digest returns this right now:
+
+```
+"on_deck": [
+  {"uid": "goal-d5e96abe", "title": "XGD packaging v1 - install tool", "leaves": [
+    {"uid": ".../REQ-754", "title": "xgd update command", "state": "in_progress"},
+    {"uid": ".../REQ-763", "title": "min_required_version forced-update gate", "state": "planned"}, ...
+```
+
+Groups, resolved leaves, real titles, and the status mapping working — `draft`→`planned`, `ready_to_reconcile`→`in_progress`. **The host side (REQ-764) is correct.** The break is between digest and render.
+
+**Check the cheapest cause first: restart and re-vendor.** REQ-86 is `free_coded`, not reconciled — the running dashboard may not have it. This project has a recurring bare-specifier vendoring failure (framework BUG-10, xgd BUG-950, REQ-747) whose signature is exactly "component fails to load, pane is empty". And a stale process has caused a misdiagnosis here before — BUG-943, and BUG-933 closed `wont_fix` as a stale install.
+
+I rewrote **BUG-21** accordingly, because it was pointing a developer at an unmapped status that's since been fixed — it now leads with the payload evidence and the restart check.
+
+One thing still genuinely wrong: **machine-side items aren't hidden.** `free_coded` and `ready_to_reconcile` leaves are being shown. With the agreed rule applied, packaging collapses from six leaves to one — REQ-763, the only `draft`. Everything else is built and queued behind reconcile. That's the difference between a list that reads as work and a list that reads as noise.
+
+## Calendar — what I suggest
+
+Filed as **`lagrange-framework/REQ-91`**. Two parts.
+
+**Interim, no schema change:** derive a strip from goals that already have `target_date`, above On deck. Dates set the horizon; On deck fills it.
+
+```
+Aug 13   2d   AI access control is transparent      2 tickets, both draft
+Aug 24  13d   Release ready to demo at the dinner   no tickets yet
+Aug 31  20d   Site builder                          2 goals, 1 not started
+```
+
+**The distinction worth building toward: an event is not a target date.**
+
+A target date is a commitment you set and can move. An event is a fact about the world that doesn't — a dinner on the 24th, a conversation already in the diary. The map can only express the first, so your real anchors are being smuggled in as goal target dates, and that loses the thing that matters most:
+
+- A target date slipping is **a decision**.
+- An event arriving unprepared is **a missed opportunity**, and it isn't recoverable.
+
+Your own map made the argument better than I could: three real events, and one date — 08-20 — that anchors to nothing, sat there for five days looking exactly like a real commitment.
+
+Proposal: a small event entity, date plus label, nothing to complete. Goals anchor via `context_refs`, which already exists — no schema change.
+
+**And the signal that makes it worth building:** an event with no goal anchored to it is a date nobody is preparing for. That's invisible today, and it's the most valuable thing this strip can show.
+
+Right now the sharpest instance is **08-13, two days out, both its tickets still `draft`.**
 
 <!-- xgd-chat-end -->
