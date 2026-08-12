@@ -5,7 +5,7 @@ type: goal
 title: XGD closed beta
 created_by: xgd
 created_at: '2026-08-06T21:19:31.925487+00:00'
-updated_at: '2026-08-11T23:44:38.965395+00:00'
+updated_at: '2026-08-12T00:16:07.161607+00:00'
 completed_at: null
 last_field_updated: children
 status: in_progress
@@ -13,6 +13,7 @@ fields:
   provenance: planned
   children:
   - goal-1789a4b5
+  - goal-49e8dec2
   - goal-3380b45b
   - goal-cda15c54
   - goal-51d77dcd
