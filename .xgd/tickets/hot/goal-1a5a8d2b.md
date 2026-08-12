@@ -5,9 +5,9 @@ type: goal
 title: Site builder
 created_by: xgd
 created_at: '2026-08-08T22:53:54.056155+00:00'
-updated_at: '2026-08-09T18:57:29.431054+00:00'
+updated_at: '2026-08-12T00:05:00.105778+00:00'
 completed_at: null
-last_field_updated: depends_on
+last_field_updated: workstream
 status: in_progress
 fields:
   provenance: planned
@@ -17,6 +17,7 @@ fields:
   - ticket://lagrangefoundry/1stcontact/GOAL-17
   depends_on:
   - goal-9cdf5f09
+  workstream: true
 ---
 
 The chat-driven website builder in 1stcontact: good enough that a class cohort can build real sites on it.
