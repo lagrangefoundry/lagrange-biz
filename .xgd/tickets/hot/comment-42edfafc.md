@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-12T00:06:21.554734+00:00'
+updated_at: '2026-08-12T00:16:28.287386+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1508,6 +1508,69 @@ That matters because I argued in `lagrange-framework/BUG-20` that the validation
 
 `workstream` now exists as a field — REQ-764 landed it, and it defaults to `false`. **Nothing is marked**, which is a second, independent reason On Deck returns 0, on top of the status mapping. Marking your workstreams now.
 
+<!-- xgd-chat role="user" ts="2026-08-12T00:13:35.500587+00:00" -->
+#### You
+**1. Is REQ-781 the same layer as the Toolbox, or a second one? **Both decide what an AI may do. <-- I am surprised this is ambiguous REQ-74 is infrastructure REQ781 is adopting that infrastructure (re-adopting) for XGD - a driving motivation here is to ensure that we have better visibility and control over what a Claude process can do from XGD. Rather than implement that in XGD legacy code I decided to import the new ai backend first - does that make sense? REQ-75 is somewhat unrelated because it is a bridge to the framework ticket implementation that is not used by XGD
 
+**2. Does access-control transparency gate the 08-20 onboarding?** It gates my follow up conversation with him on 8/13
+
+If there'll be more sessions before 08-20, that's worth modelling — a recurring feedback loop is a different thing from a single insight, and it changes how much of the backlog I'd expect to get rewritten between now and then. <-- at least one more - I'm not sure whee the 8/20 date came from. I have an 8/31 date in mind for having an early functioning version of 1st contact ready to show people.
+
+4. Its a trust issue that I will have with customers and Beta testers - I have plenty of friction points I would like to knock this one out
+
+5. Its standing there is more coming I'm afraid. I have a dinner on 8/24 with two friends that would be early testers, I could get feedback from then if I have a release that is ready. My list is the following:
+a. Consolidate the Chat and Docs tabs into a Design tab - I just started the most recent chat session on discussing the scope of this
+b. Fix the state transition rules - its a bit of a wild west right now and Claude is getting confused putting tickets into dangerous states - not a big deal for me because I know and can fix, but super confusing for users
+c. New Chat implementation
+d. Import of the new, modular framework components that fix several annoying bugs
+e. Status and configuration settings - this is more of a UI tidy up
+f. regression lifecycle - small change to how regression starts to make it like the other flows and not timed
+g. onboarding flow - there's a lot here and it is more important than being the last on the list
+
+<!-- xgd-chat role="assistant" ts="2026-08-12T00:14:14.752699+00:00" -->
+#### Claude
+Several things move here. Taking the urgent one first.
+
+All in and verified. Answers first, then the thing you should look at.
+
+**1. Yes, that makes sense** — and it fixed a real error. I'd had REQ-75 as the route by which the Toolbox reaches XGD. It isn't; it bridges to the framework ticket implementation XGD doesn't use. **REQ-781 is the adoption route.** I corrected `lagrange-framework/BUG-20`, which had named REQ-75 as the fix path — the substance holds (validation belongs in the Toolbox contract) but the sequencing pointer was wrong. Recorded as `AI access control is transparent` **depends_on** `Reusable AI tooling object`. One mechanism, adopted — not two.
+
+**2. 8/13, not 8/20.** Access control is now `planned`, target **2026-08-13 — two days**. Worth knowing: REQ-74 (build the Toolbox) is already `free_coded`, so the dependency is satisfiable; what's outstanding is REQ-781, the import. Both its tickets are still `draft`.
+
+**4. Trust with customers and beta testers** — recorded. That makes REQ-780 a user-facing assurance surface, not an operator diagnostic, which is a different design.
+
+**5. Standing, confirmed.** All seven items are now goals:
+
+| | Goal | Parent |
+|---|---|---|
+| a | Design tab: consolidate Chat and Docs | ready-for-others · `in_progress` |
+| b | Ticket state transitions are safe and legible | ready-for-others |
+| c | New chat implementation | Chat infrastructure |
+| d | Adopt modular framework components in XGD | XGD quality |
+| e | Status and configuration settings | ready-for-others |
+| f | Regression lifecycle: event-driven, not timed | XGD quality + Regression bugs |
+| g | **Onboarding flow** | ready-for-others |
+
+Three connections I recorded while filing:
+
+**(g) is flagged as out-of-order-important.** There's no priority field, so I wrote it into the body explicitly — everything else makes an existing surface clearer to someone already inside; onboarding decides whether they get in. It's also the largest unscoped item on the path.
+
+**(e) overlaps REQ-780.** If Status is being reworked, the AI-permissions tile should land inside that design rather than bolted onto the current tab.
+
+**(f) may explain the empty Regression goal.** A timed trigger means regression health depends on whether the clock fired, not whether work was ready — a plausible reason it's under-exercised without anyone noticing. That's live right now with the matrix refactor landing on it.
+
+## The calendar is wrong, and that's the real finding
+
+**2026-08-20 came from the seeding session on 08-06** — set on `First external user onboarded (n=1)` by `decision-9d416da1`. It has no external anchor. It was an estimate, and you correctly can't place it.
+
+Your actual calendar is:
+
+- **08-13** — follow-up with your son *(2 days)*
+- **08-24** — dinner with two prospective early testers, *if there's a release ready*
+- **08-31** — early functioning 1stcontact to show people
+
+Two of those three weren't on the map at all. I've added **`Release ready to demo at the 8/24 dinner`** (`planned`, 08-24) — same shape as the class window: the dinner happens regardless, whether it produces feedback depends on there being something to show, and it isn't recoverable afterwards.
+
+I have **not** touched the 08-20 date. That's yours to decide, and the question is what n=1 onboarding actually means now: your son giving feedback on 08-13 is a review session, not him running XGD himself. Does onboarding still have a date, or does it become undated and get driven by 08-24 and 08-31 instead?
 
 <!-- xgd-chat-end -->
