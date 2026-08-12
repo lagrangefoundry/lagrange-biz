@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-12T15:46:50.449244+00:00'
+updated_at: '2026-08-12T18:30:06.819304+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1635,16 +1635,64 @@ Proposal: a small event entity, date plus label, nothing to complete. Goals anch
 
 Right now the sharpest instance is **08-13, two days out, both its tickets still `draft`.**
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
-
 <!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
 #### You
 I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-assistant" -->
-
 <!-- xgd-chat role="assistant" ts="2026-08-08T16:20:32.108550+00:00" -->
 #### Claude
 Acknowledged — this turn is here for the transcript. Restart the dashboard whenever you're ready and check whether both this exchange and the prior one survived.
+
+<!-- xgd-chat role="user" ts="2026-08-12T18:28:16.630497+00:00" -->
+#### You
+Ok this is exciting, I see the on deck now, very good.
+
+Some of the cross references to tickets are wrong, for example REQ-754 says its in_progress. Firstly, its a free coded ticket which should never enter that state draft -> free_coding -> free coded -> ready_to_reconcile -> bundled | reconciling -> free_and_reconciled. In progress is a develop cycle state. Secondly it is in ready_to_reconcile. Ah - it looks like you have a goal shadowing the REQ - lets talka bout that design...it seems very open to exactly this kind of problem?
+
+<!-- xgd-chat role="assistant" ts="2026-08-12T18:28:56.809955+00:00" -->
+#### Claude
+You're right, and it's a sharper problem than "wrong label". Let me separate two things first, because one is better news than it looks.
+
+**There's no duplicate entity.** The leaf is the ticket ref itself:
+
+```
+{"uid": "ticket://lagrangefoundry/xgd/REQ-754", "title": "xgd update command", "state": "in_progress"}
+```
+
+So nothing is shadowing REQ-754 as a goal object. What's wrong is narrower and still bad: a **projected `state` field** that overwrites the ticket's own vocabulary with the goal ladder's.
+
+And your objection is the strong form of it. `in_progress` isn't a vague approximation of `ready_to_reconcile` — it's a state in the *develop* lifecycle, which REQ-754 never entered. The projection doesn't lose information, it asserts something false. That mapping table was mine, from BUG-997. Filing the fix.
+
+**`lagrange-framework/REQ-92`** filed, and I've withdrawn the mapping table from BUG-21 explicitly so nobody implements it.
+
+## Why the projection was wrong in principle
+
+Not miscalibrated — wrong in kind. Five reasons, and the fifth is the one that should have stopped me:
+
+1. **Second source of truth.** The map forms its own opinion of a ticket's state, which can disagree with the ticket, and nothing reconciles them.
+2. **Silently wrong rather than absent.** A missing state renders blank and gets noticed. A wrongly projected one renders as a confident, plausible, incorrect label — which is exactly the failure mode of BUG-982 and BUG-996 in a different costume.
+3. **It propagates.** Roll-up derives parents from children, so one bad projection contaminates every ancestor.
+4. **It doesn't scale across projects.** The map reads three stores that may define different lifecycles. A central table has to know all of them and be updated whenever any changes.
+5. **It was guesswork.** I wrote it from observed status strings, not from any lifecycle definition. It failed on first contact with a real ticket.
+
+## What replaces it
+
+The map only ever asks three questions about a leaf, and none require the goal ladder:
+
+| Predicate | Used for |
+|---|---|
+| `is_started` | roll-up rule 3 |
+| `is_terminal` | roll-up rule 2, accumulation |
+| `needs_operator` | On deck |
+
+Three booleans over each lifecycle's *native* vocabulary. For free-coding: `draft` needs you; `free_coding` through `reconciling` are machine-side; `free_and_reconciled` is terminal.
+
+**And they should live with the lifecycle, not in the goal map.** The map asks the owning project "is this done, has it started, does it need a human" and takes the answer. That way you can change a workflow without breaking a consumer, and the goal map never needs to know every lifecycle in the org. An unrecognised status should warn loudly, never default.
+
+Display becomes trivially correct: show the native status verbatim — `REQ-754 · ready_to_reconcile`. It's what you see everywhere else in the product, and it needs no translation to be right.
+
+The acceptance criterion is the same one as before and it's a good test of both fixes: **`XGD packaging v1` should collapse from six leaves to one** — REQ-763, the only `draft`. Everything else is built and queued.
+
+Worth noting the pattern: this is the third defect in three days from the same root — a component confidently asserting something it inferred rather than something it was told. BUG-982 guessed a routing key, BUG-996 guessed a patch shape, this guessed a lifecycle. Strict declaration over inference is what the Toolbox is for, and it's an argument for getting REQ-781's adoption done rather than patching each instance.
 
 <!-- xgd-chat-end -->
