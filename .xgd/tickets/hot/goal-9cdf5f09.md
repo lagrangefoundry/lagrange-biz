@@ -5,9 +5,9 @@ type: goal
 title: Reusable AI tooling object
 created_by: xgd
 created_at: '2026-08-08T23:48:08.445713+00:00'
-updated_at: '2026-08-09T18:58:22.897638+00:00'
+updated_at: '2026-08-12T00:04:42.154600+00:00'
 completed_at: null
-last_field_updated: children
+last_field_updated: body
 status: in_progress
 fields:
   provenance: product_decision
@@ -22,17 +22,19 @@ fields:
 
 One configurable, declarative component that every AI toolset is built on - rather than a hand-rolled integration per surface.
 
-The object carries projection, validation, policy gating, structural dispatch, provenance and audit. Toolsets declare an API and a config; the object enforces what a caller may address and how.
+The Toolbox carries projection, validation, capability groups, scope gating, provenance and audit. Toolsets declare an API and a config; the object enforces what a caller may address and how.
 
-**Composition:** DOC-13 (Toolbox API: host tool-registration contract, Python + JS) and DOC-20 (the tooling object design: declared API, config, call types, policy, security frame) are the design; REQ-73 completes DOC-20; REQ-74 builds the object; REQ-75 refactors ai_ticketing onto it as the first consumer, which is what proves the design; REQ-76 refactors ai_knowledge; REQ-77 refactors the built-in filesystem toolset, sequenced last with a decision still pending. REQ-74 through REQ-77 are expected to be built in a single pass on 2026-08-09.
+**Composition:** DOC-13 (Toolbox API: host tool-registration contract, Python + JS) and DOC-20 (the design: declared API, config, call types, policy, security frame). REQ-73 completed DOC-20 (legacy_done). REQ-74 built the Toolbox (free_coded). REQ-75 bridges to the framework ticket implementation, REQ-76 refactors ai_knowledge, REQ-77 refactors the built-in filesystem toolset onto FilesystemToolbox - resequenced first.
 
 ## Who depends on this
 
-**The site builder (goal-1a5a8d2b, target 2026-08-31).** This is the glue the builder needs. The basic chat interfaces exist and much of the site framework exists; what was missing is the tooling that lets an AI actually drive site construction. Work on this object *is* site builder progress, even though no 1stcontact ticket moved on 2026-08-08.
+**XGD access control (goal-959f56f3), via adoption.** xgd/REQ-781 imports this backend into XGD so Claude invocation runs through a single choke point with a declared permissions schema, rather than permission control being retrofitted onto XGD legacy code. This is the route by which the Toolbox reaches XGD - not REQ-75, which bridges to the framework ticket implementation that XGD does not use.
 
-**The goal map (goal-98f48e17).** On 2026-08-08 this assistant could not file a REQ because its type allowlist was fixed at [decision, goal]: creating type request is not enabled for this session. The plumbing already existed - xgd/REQ-750 and lagrange-framework/REQ-67, both free_coded the day before. Only the policy gate was closed and there was nowhere principled to open it. xgd/REQ-762 opened it the same day; the tooling object is what makes that kind of change configuration rather than code. Ensure request and bug are expressible in the policy frame rather than patched in afterwards.
+**The site builder (goal-1a5a8d2b, target 2026-08-31).** The glue that lets an AI drive site construction. The chat interfaces exist and much of the site framework exists; this was the missing piece. Work here is site builder progress even when no 1stcontact ticket moves.
 
-**ai_ticketing, ai_knowledge and the filesystem toolset**, each of which currently re-implements gating by hand. xgd/BUG-982 (unrecognised routing key silently ignored, ticket lands in the wrong project) is precisely the class of defect uniform projection and validation should make impossible.
+**The goal map (goal-98f48e17).** On 2026-08-08 this assistant could not file a REQ - "creating type request is not enabled for this session". The plumbing existed (xgd/REQ-750, lagrange-framework/REQ-67, both free_coded the day before); only the policy gate was closed, with nowhere principled to open it. xgd/REQ-762 opened it the same day.
+
+**Validation defects that uniform projection should make impossible** - lagrange-framework/BUG-20, and its host-side instances xgd/BUG-982 and xgd/BUG-996, where unrecognised argument keys are silently ignored and success is returned. These reach a fix through XGD adopting the Toolbox (REQ-781).
 
 **Framework work, but not for framework sake.** Framework supplies XGD and 1stcontact; it is not a destination.
 
