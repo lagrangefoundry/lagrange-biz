@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-12T19:10:12.797909+00:00'
+updated_at: '2026-08-12T19:16:04.590031+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1821,5 +1821,23 @@ One cut point, at the acceptance gate. I added an explicit instruction not to su
 The long-running-`free_coding` highlight survives only as optional emphasis, with a note that it must not change what appears. The row is on the board either way.
 
 Acceptance criteria are now stated as the rule itself: everything in `draft`/`free_coding`/`free_coded` appears, nothing at `ready_to_reconcile` or beyond does, and packaging collapses to REQ-763.
+
+<!-- xgd-chat role="user" ts="2026-08-12T19:15:16.269822+00:00" -->
+#### You
+ok good now I think I need the level 2 goals (the branches) to be collapsible and actually start collapsed. Some like the quality are huge. The branch title should show the number of tickets "XGD quality (43)" - I'm excited we are really getting to something here.
+
+<!-- xgd-chat role="assistant" ts="2026-08-12T19:15:57.900591+00:00" -->
+#### Claude
+**`lagrange-framework/REQ-93`** — collapsible group headers, collapsed by default, count in the title, state persisted per group. Also specified that if intermediate branch levels get rendered, the same rule applies at every level.
+
+One decision I made explicit in the ticket, because it changes the implementation: **the count should be what the group shows when expanded** — `draft`/`free_coding`/`free_coded` per REQ-92 — not every descendant ticket.
+
+If the header says 43 and expanding reveals 6, the number is lying, and it lies in the direction that makes the board feel heavier than the work is. That's the opposite of what this view is for. The count is a promise about what's inside.
+
+The consequence is worth having: a group whose work has all passed the acceptance gate reads `(0)`. That's true and useful — nothing there needs you — so it renders dimmed rather than disappearing. Absence of demand is information.
+
+It also gives you the two-step read: scan titles to see where the demand is, open the one you're working in.
+
+Four tickets now define this view — REQ-86 (panes), REQ-92 (status semantics), REQ-93 (collapse), REQ-91 (calendar) — all under `Goal map usable as a daily driver`.
 
 <!-- xgd-chat-end -->
