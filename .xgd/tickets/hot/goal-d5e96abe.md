@@ -5,9 +5,9 @@ type: goal
 title: XGD packaging v1 - install tool
 created_by: xgd
 created_at: '2026-08-08T22:54:00.879209+00:00'
-updated_at: '2026-08-09T18:58:01.704587+00:00'
+updated_at: '2026-08-12T00:04:59.346332+00:00'
 completed_at: null
-last_field_updated: children
+last_field_updated: workstream
 status: in_progress
 fields:
   provenance: planned
@@ -20,6 +20,7 @@ fields:
   - ticket://lagrangefoundry/xgd/REQ-759
   - ticket://lagrangefoundry/xgd/REQ-761
   - ticket://lagrangefoundry/xgd/REQ-763
+  workstream: true
 ---
 
 An install path that a first-time user can walk through, end to end, without the author sitting next to them.
