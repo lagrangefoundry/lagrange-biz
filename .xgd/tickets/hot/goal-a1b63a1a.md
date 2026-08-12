@@ -5,14 +5,18 @@ type: goal
 title: XGD ready for someone else hands
 created_by: xgd
 created_at: '2026-08-11T23:44:33.139501+00:00'
-updated_at: '2026-08-12T00:05:04.246862+00:00'
+updated_at: '2026-08-12T00:15:21.044881+00:00'
 completed_at: null
-last_field_updated: workstream
+last_field_updated: children
 status: in_progress
 fields:
   provenance: user_feedback
   children:
   - goal-959f56f3
+  - goal-05b8f1bb
+  - goal-64af391b
+  - goal-85b52724
+  - goal-c6d774ad
   - goal-adac9e3a
   workstream: true
 ---
