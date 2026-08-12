@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-12T18:45:08.275383+00:00'
+updated_at: '2026-08-12T19:03:22.665913+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1778,5 +1778,27 @@ One of them has a consequence for this map that's worth stating plainly:
 **The develop cycle having no acceptance gate** is the one I'd rank highest of the three. `free_coded → ready_to_reconcile` is the most load-bearing signal in the whole model — it's your judgement that something is done, and it's what takes work off the board. Half your work doesn't pass through anything equivalent. That's not just a tracking gap; the two workflows carry different assurance while producing tickets that look identical downstream. And it lands directly on the accountability argument both whitepapers make — an explicit human acceptance gate *is* the structural mechanism they describe.
 
 Not for today. But when the develop cycle is what a beta user is mostly running, that's a gap worth having a view on.
+
+<!-- xgd-chat role="user" ts="2026-08-12T19:02:31.441986+00:00" -->
+#### You
+You know I don't know that we need to sweat the free coding thing too much those are the tickets I am closest to and actually touching real time - I know what is going on for them. You are correct though if a ticket gets stuck in that state there is something I need to do
+
+<!-- xgd-chat role="assistant" ts="2026-08-12T19:02:46.490401+00:00" -->
+#### Claude
+That's a better principle than what I wrote, and it simplifies the design: **don't show in-flight at all — show it only when it stops being in-flight.**
+
+Updated. `free_coding` is now hidden by default and **promoted onto the board only when it exceeds its expected band** — default 60 minutes, roughly 3× the top of your typical range, configurable. Time-in-state shows only on promoted items.
+
+I wrote the reasoning into the ticket as a governing principle, because it's now come up twice and I'd rather it not get re-litigated:
+
+> **On deck is exception-based.** Anything proceeding normally is invisible. The board shows what needs a human, which includes work that has stopped proceeding normally — and nothing else.
+
+That's the same rule that covers hidden machine-side work: don't list it, carry a count in Progress so a stalled bundle is out of the way without being out of sight.
+
+It also sharpens what the board is for. It's not a status display you consult to find out what's happening — you already know that for anything you're actively touching. It's an **exception feed**: things not started, things awaiting your gate, and things that have gone quiet when they shouldn't have.
+
+Which means the value concentrates where your attention isn't. The `free_coding` ticket you're watching needs nothing from the board. The one you kicked off ninety minutes ago and forgot is the whole point.
+
+So the board on the current map is: **`draft` and `free_coded` items, plus anything stuck.** With the packaging example, six leaves collapse to one — REQ-763.
 
 <!-- xgd-chat-end -->
