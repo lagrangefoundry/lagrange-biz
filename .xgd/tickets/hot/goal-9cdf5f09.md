@@ -5,13 +5,15 @@ type: goal
 title: Reusable AI tooling object
 created_by: xgd
 created_at: '2026-08-08T23:48:08.445713+00:00'
-updated_at: '2026-08-12T00:05:03.618479+00:00'
+updated_at: '2026-08-13T19:16:35.506463+00:00'
 completed_at: null
-last_field_updated: workstream
+last_field_updated: children
 status: in_progress
 fields:
   provenance: product_decision
   children:
+  - ticket://lagrangefoundry/lagrange-framework/REQ-94
+  - ticket://lagrangefoundry/lagrange-framework/REQ-95
   - ticket://lagrangefoundry/lagrange-framework/REQ-73
   - ticket://lagrangefoundry/lagrange-framework/REQ-74
   - ticket://lagrangefoundry/lagrange-framework/REQ-75
