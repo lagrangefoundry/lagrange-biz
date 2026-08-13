@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-13T19:40:15.384445+00:00'
+updated_at: '2026-08-13T20:09:34.659379+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1981,5 +1981,11 @@ I also struck the stale-bundle suggestion explicitly, since a stale bundle can't
 One thing worth flagging that falls out of this: **"starts collapsed" is currently unobservable.** While collapse has no visual effect, a correctly-defaulted collapsed group looks identical to an expanded one — so we don't know whether that half of REQ-93 works. I've noted it as something to verify explicitly after the binding is fixed rather than assume it came along for free.
 
 This is also a clean illustration of the REQ-98 argument. "Controls do nothing" versus "glyph changes, rows don't" are different bugs with different fixes, and the difference took a round trip through you. A `view_state` showing `{"collapsed": true, "rows": [...6 rows...]}` would have named it immediately — state says collapsed, rows still present.
+
+<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
+#### You
+I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
 <!-- xgd-chat-end -->
