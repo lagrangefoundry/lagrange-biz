@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-13T18:24:49.549750+00:00'
+updated_at: '2026-08-13T18:28:46.909261+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1840,16 +1840,56 @@ It also gives you the two-step read: scan titles to see where the demand is, ope
 
 Four tickets now define this view — REQ-86 (panes), REQ-92 (status semantics), REQ-93 (collapse), REQ-91 (calendar) — all under `Goal map usable as a daily driver`.
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
-
 <!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
 #### You
 I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-assistant" -->
-
 <!-- xgd-chat role="assistant" ts="2026-08-08T16:20:32.108550+00:00" -->
 #### Claude
 Acknowledged — this turn is here for the transcript. Restart the dashboard whenever you're ready and check whether both this exchange and the prior one survived.
+
+<!-- xgd-chat role="user" ts="2026-08-13T18:27:29.323383+00:00" -->
+#### You
+Hi, tragically I think we lost some of this transcript - do the turns have datestamps on them - are the last few chronological - when are they from?
+
+<!-- xgd-chat role="assistant" ts="2026-08-13T18:27:46.995131+00:00" -->
+#### Claude
+Direct answer: **no, the turns I see carry no timestamps.** I get an ordered sequence of messages with no time metadata attached. What I *can* date precisely is tool output — the xgd banner prints local time, and every ticket carries `created_at`. Let me reconstruct the session from that.
+
+Reconstructed from tool output. Local time is UTC−7.
+
+**No timestamps on turns.** I receive an ordered message sequence with no time metadata. Everything below is inferred from ticket `created_at` values and xgd CLI banners.
+
+**This session spans six calendar days: 2026-08-07 evening → 2026-08-12 midday.**
+
+| When (local) | What |
+|---|---|
+| **08-07 18:15** | First digest. Evidence sweep — BUG-933→971, REQ-743→758. Nothing written to the map. |
+| **08-08 ~16:00–17:10** | Consolidation: XGD quality root + seven children. Banners at 16:08 and 17:13. |
+| **08-08 17:14–17:18** | framework REQ-86, xgd REQ-764, xgd BUG-982 |
+| **08-09 12:00–12:05** | xgd BUG-996/997, framework BUG-20/21 — the lost-graph-edits discovery |
+| *(gap)* | 08-10 — your lunch with your son. No session activity. |
+| **08-11 11:24–16:08** | Your eight interface REQs (777–784) |
+| **08-11 17:24** | framework REQ-91 — calendar strip |
+| *(overnight gap)* | |
+| **08-12 11:29** | framework REQ-92 — status projection |
+| **08-12 12:15** | framework REQ-93 — collapsible groups. Most recent. |
+
+**Yes, the last few are chronological** — REQ-91 → 92 → 93 ascend cleanly, and the sequence I see matches.
+
+## What I did observe, which is evidence for your storage problem
+
+Four of your messages arrived **twice**, and the pattern is specific: the second copy was the first plus appended content. Not a pure duplicate — a resend with more text.
+
+- "On debugging vs dev…" — second copy added the request to file a ticket in lagrange-foundry
+- "and it's the thing standing between you…" — second copy added the paragraph about dates not slipping
+- "Is REQ-781 the same layer as the Toolbox…" — second copy added your answers to questions 2, 4, 5
+- "Please do a sweep on all the current projects" — both copies carried `AttributeError: module 'lagrangefoundry.ai' has no attribute 'TicketStore'`
+
+Plus two turns of `[Request interrupted by user]` → `Continue from where you left off`, where I produced no visible output.
+
+That looks like edit-and-resend or retry-after-error rather than storage duplication, but the effect on your side is a transcript that doesn't match what happened. Combined with the chunk you say is missing, it points at the write path rather than the read path — which is squarely `lagrange-framework/REQ-72` (durable store review, multi-writer streaming, mid-turn prompts).
+
+Want me to put that observation on `Chat infrastructure is dependable` as concrete symptom evidence? It's more specific than "flaky", and a repro pattern is worth more to whoever picks up REQ-72 than a description is.
 
 <!-- xgd-chat-end -->
