@@ -5,7 +5,7 @@ type: goal
 title: Chat transcript storage is durable
 created_by: xgd
 created_at: '2026-08-08T17:40:56.661301+00:00'
-updated_at: '2026-08-12T00:15:23.055187+00:00'
+updated_at: '2026-08-13T19:16:38.061543+00:00'
 completed_at: null
 last_field_updated: children
 status: aspiration
@@ -13,9 +13,12 @@ fields:
   provenance: bug
   children:
   - goal-c54b83e0
+  - ticket://lagrangefoundry/lagrange-framework/BUG-24
+  - ticket://lagrangefoundry/lagrange-framework/BUG-23
   - ticket://lagrangefoundry/lagrange-framework/REQ-72
   - ticket://lagrangefoundry/lagrange-framework/BUG-5
   - ticket://lagrangefoundry/xgd/BUG-967
+  - ticket://lagrangefoundry/xgd/BUG-1020
   workstream: true
 ---
 
