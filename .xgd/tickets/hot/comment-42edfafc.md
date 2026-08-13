@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-13T19:38:34.677491+00:00'
+updated_at: '2026-08-13T19:40:15.384445+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1494,8 +1494,6 @@ That matters because I argued in `lagrange-framework/BUG-20` that the validation
 
 `workstream` now exists as a field — REQ-764 landed it, and it defaults to `false`. **Nothing is marked**, which is a second, independent reason On Deck returns 0, on top of the status mapping. Marking your workstreams now.
 
-
-
 <!-- xgd-chat role="user" ts="2026-08-12T00:13:35.500587+00:00" -->
 #### You
 **1. Is REQ-781 the same layer as the Toolbox, or a second one? **Both decide what an AI may do. <-- I am surprised this is ambiguous REQ-74 is infrastructure REQ781 is adopting that infrastructure (re-adopting) for XGD - a driving motivation here is to ensure that we have better visibility and control over what a Claude process can do from XGD. Rather than implement that in XGD legacy code I decided to import the new ai backend first - does that make sense? REQ-75 is somewhat unrelated because it is a bridge to the framework ticket implementation that is not used by XGD
@@ -1965,5 +1963,23 @@ The stack reads coherently: framework REQ-94 declares the permissions schema, RE
 The argument for it is that right now **you are the verification loop for me**, which is backwards. I proposed the On deck rules, you implemented them, and I had no way to confirm the result except by asking. On BUG-21 I'd have said in one turn "the view model has six groups, so it's a render fault" instead of spending two.
 
 Still open from your list: **which refactoring items block beta.** That's the one thing I can't derive.
+
+<!-- xgd-chat role="user" ts="2026-08-13T19:39:39.483651+00:00" -->
+#### You
+The issue is not that the control is inert - the glyph changes - but the list under the header does not
+
+<!-- xgd-chat role="assistant" ts="2026-08-13T19:39:50.048956+00:00" -->
+#### Claude
+More specific, and it rules out my stale-bundle theory: the handler is wired and the state updates. Rewriting BUG-25.
+
+BUG-25 rewritten. The title now says what actually happens: *collapse toggles the header glyph but the row list under it never hides.*
+
+That's a narrower and more useful diagnosis. The handler is wired, the state is held, and the header re-renders from it correctly — so the failure is isolated to the row list not being bound to that state. Three candidates, in order: rows rendered as a *sibling* of the header rather than inside the collapsible region; no style bound to the flag; or the list not re-rendering because the flag isn't one of its inputs.
+
+I also struck the stale-bundle suggestion explicitly, since a stale bundle can't produce a working toggle with a correct glyph. Leaving that in would have sent someone to restart things for no reason.
+
+One thing worth flagging that falls out of this: **"starts collapsed" is currently unobservable.** While collapse has no visual effect, a correctly-defaulted collapsed group looks identical to an expanded one — so we don't know whether that half of REQ-93 works. I've noted it as something to verify explicitly after the binding is fixed rather than assume it came along for free.
+
+This is also a clean illustration of the REQ-98 argument. "Controls do nothing" versus "glyph changes, rows don't" are different bugs with different fixes, and the difference took a round trip through you. A `view_state` showing `{"collapsed": true, "rows": [...6 rows...]}` would have named it immediately — state says collapsed, rows still present.
 
 <!-- xgd-chat-end -->
