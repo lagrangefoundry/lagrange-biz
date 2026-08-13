@@ -5,9 +5,9 @@ type: goal
 title: Site builder
 created_by: xgd
 created_at: '2026-08-08T22:53:54.056155+00:00'
-updated_at: '2026-08-12T00:05:00.105778+00:00'
+updated_at: '2026-08-13T19:29:17.311490+00:00'
 completed_at: null
-last_field_updated: workstream
+last_field_updated: body
 status: in_progress
 fields:
   provenance: planned
@@ -24,18 +24,24 @@ The chat-driven website builder in 1stcontact: good enough that a class cohort c
 
 The deadline is external and hard. The class will use another tool if 1stcontact is not ready by the end of August (decision-9d416da1). Target 2026-08-31.
 
-**Composition:** 1stcontact/GOAL-16 (Web editor, in_progress) and 1stcontact/GOAL-17 (Editor chat, concept).
+## State as of 2026-08-13
 
-Split out of Class cohort as its own goal so the builder work carries the date visibly rather than inheriting it implicitly from a parent that also contains course material and onboarding.
+Operator report: the **manual editor is taking shape**, as is the **website creation playbook**. The intent is to build several more websites with it over the coming weekend - which is the real test, since the playbook only proves itself by producing sites.
 
-## Depends on the tooling object
+"We are very close to having an alpha version of the website ready."
 
-The pieces largely exist: the basic chat interfaces, and a lot of the site framework. What was missing is the glue that lets an AI actually drive site construction - declared tools, projection, validation, policy gating, dispatch. That is the Reusable AI tooling object (goal-9cdf5f09), designed and begun on 2026-08-08.
+**Composition:** 1stcontact/GOAL-16 (Web editor) and 1stcontact/GOAL-17 (Editor chat).
 
-Recorded as depends_on rather than children deliberately: the tooling object is not part of the site builder, it is a prerequisite that also serves ai_ticketing, ai_knowledge and the goal-map tools. Lateral ordering, not composition.
+## What follows the alpha
 
-**This is the first depends_on edge on the map.** Consequence worth noting: under the current readiness rule the site builder is now not-ready until the tooling object is realized. That is arguably the truth - the glue has to exist before the builder can be finished - but discovery work on the builder can and does proceed in parallel, so if it reads wrong on the On deck list, say so and it can come out.
+User portal and CRM - 1stcontact/GOAL-10 and GOAL-4, both currently under 1stcontact commercial launch (goal-3d5965fb). The operator sequencing is explicit: alpha website first, then those two. Worth noting they are the first revenue-bearing modules, so the alpha is the gate on commercial work as well as on the class cohort.
+
+## Depends on the Toolbox
+
+The chat interfaces and much of the site framework already existed; what was missing was the glue letting an AI drive site construction. That is goal-9cdf5f09, designed and built 2026-08-08 onward.
+
+Recorded as depends_on rather than children: the Toolbox is a prerequisite that also serves ai_ticketing, ai_knowledge and the goal-map tools. Lateral ordering, not composition.
 
 ## The long pole
 
-Product discovery, not available time. How long it takes to work out what the builder should be is genuinely unbounded, in the same way that working out what the goal map should be is unbounded. Distinct from a date under time pressure, and it should not be read as a slip risk of the same kind.
+Product discovery, not available time. How long it takes to work out what the builder should be is genuinely unbounded - the same way that working out what this goal map should be is unbounded. Distinct from a date under time pressure, and it should not be read as a slip risk of the same kind.
