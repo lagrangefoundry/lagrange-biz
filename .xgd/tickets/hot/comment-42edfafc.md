@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-13T19:30:41.247254+00:00'
+updated_at: '2026-08-13T19:38:00.950296+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1993,5 +1993,11 @@ The stack reads coherently: framework REQ-94 declares the permissions schema, RE
 The argument for it is that right now **you are the verification loop for me**, which is backwards. I proposed the On deck rules, you implemented them, and I had no way to confirm the result except by asking. On BUG-21 I'd have said in one turn "the view model has six groups, so it's a render fault" instead of spending two.
 
 Still open from your list: **which refactoring items block beta.** That's the one thing I can't derive.
+
+<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
+#### You
+I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
 <!-- xgd-chat-end -->
