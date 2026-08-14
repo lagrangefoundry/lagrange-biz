@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-13T20:09:35.297936+00:00'
+updated_at: '2026-08-14T21:03:43.407484+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -1982,16 +1982,59 @@ One thing worth flagging that falls out of this: **"starts collapsed" is current
 
 This is also a clean illustration of the REQ-98 argument. "Controls do nothing" versus "glyph changes, rows don't" are different bugs with different fixes, and the difference took a round trip through you. A `view_state` showing `{"collapsed": true, "rows": [...6 rows...]}` would have named it immediately — state says collapsed, rows still present.
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
-
 <!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
 #### You
 I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-assistant" -->
-
 <!-- xgd-chat role="assistant" ts="2026-08-08T16:20:32.108550+00:00" -->
 #### Claude
 Acknowledged — this turn is here for the transcript. Restart the dashboard whenever you're ready and check whether both this exchange and the prior one survived.
+
+<!-- xgd-chat role="user" ts="2026-08-14T21:00:49.119957+00:00" -->
+#### You
+ok this is weird. I restarted the dashboard. This time I did not loose content but those last two messages were added. (which are ironically about storage reliability). 
+
+I can see the calendar now, which is very exciting. The 4 points above still apply.
+
+Can you create a bug for the storage issue please, and do a sweep on the tickets. I need to track down why the expand/collapse hasn't changed.
+
+<!-- xgd-chat role="assistant" ts="2026-08-14T21:01:10.230638+00:00" -->
+#### Claude
+Let me check whether REQ-93 has actually landed before you go hunting — that changes what you're looking for.
+
+Found something that changes your hunt. Filing the storage bug first.
+
+Storage bug filed, and the sweep turned up something that changes your hunt.
+
+## The expand/collapse hunt — check deployment before code
+
+**You reported "controls exist but do nothing" *before* REQ-93 was written.** So the toggle and glyph pre-date it. What REQ-93 *added* was rows actually collapsing, groups starting collapsed, counts in titles, and persistence.
+
+**The two-second check: does a group header show a count — `XGD quality (43)`?**
+
+- **No count** → REQ-93 isn't in the running build. Not a code defect. It's a deployment gap.
+- **Count present** → REQ-93 is live and the row binding is genuinely broken.
+
+The deployment case is plausible: REQ-93 is `free_coded` **in lagrange-framework**, and the Goals tab runs in the xgd dashboard as a *vendored* component. Free-coded in framework doesn't put it in front of you — it has to be vendored into xgd. That step is known-fragile: REQ-747 (auto-fix the recurring bare-specifier vendoring regression) has sat `ready_to_reconcile` since 08-06.
+
+Suggestive contrast: **REQ-91 reached `ready_to_reconcile` and the calendar appeared. REQ-93 stopped at `free_coded` and isn't behaving.** Worth checking whether a vendor sync ran between them.
+
+BUG-25 now leads with that diagnostic ladder rather than the binding theory.
+
+## Storage — `lagrange-framework/BUG-28`
+
+*"Resume re-appends the tail of the transcript — turns duplicated on dashboard restart."*
+
+I documented the full evidence: the four messages delivered twice as first-copy-then-copy-plus-appended-text, the two interrupted turns that produced nothing, and today's restart duplication. The pattern says edit/retry writes **append rather than supersede**, and resume does the same thing on rehydration. It's the mirror of BUG-24 — same resume path, opposite outcome, probably one defect.
+
+The part worth acting on: I read the transcript as my memory. A re-delivered instruction can be acted on twice, and a superseded instruction sitting next to its replacement is genuinely ambiguous — I can't tell which is current.
+
+Also spotted: framework **REQ-96 — "Chat: per-turn metadata, timestamps and day separators"**, `free_coded` this morning. That's the fix for the question you asked earlier about turn timestamps.
+
+## Two things from today you may not have clocked
+
+**framework BUG-27 — "Permissions: `cli_flags` API-shape change breaks every `xgd_source` Claude Code launch"** (draft, 15:27). That's REQ-781 fallout — the access-control refactor broke Claude Code launches. REQ-781 is still `free_coding`, last touched 18:00.
+
+**framework BUG-26 — "Goals tab fails to open in lagrange-biz (xgd 0.15.209)"** (draft, 13:10). Same tab, same day. Worth knowing before you chase the collapse issue — if the tab has a loading fault, the collapse behaviour may be downstream of it.
 
 <!-- xgd-chat-end -->
