@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-15T15:02:23.014645+00:00'
+updated_at: '2026-08-15T22:30:45.504154+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2087,5 +2087,11 @@ Filed as **`lagrange-framework/BUG-30`**. This is the one that explains the *edi
 **BUG-24 sits at `ready_to_reconcile`, but its own body says "Fix: Not yet scoped" and "Test plan: To be written with the fix."** Its assessment says findings 3–6 can still lose or corrupt operator context today, and "deduplicate the resume/carry replay" is listed as a *candidate*.
 
 Either the body is stale, or a ticket advanced past your acceptance gate without a fix. That's precisely the "wild west state transitions" problem you named — and precisely why `free_coded → ready_to_reconcile` being a manual judgement matters. Worth a look either way.
+
+<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
+#### You
+I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
 <!-- xgd-chat-end -->
