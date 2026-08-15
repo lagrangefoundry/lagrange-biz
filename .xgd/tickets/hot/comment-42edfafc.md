@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-15T14:55:11.345054+00:00'
+updated_at: '2026-08-15T15:02:23.014645+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2037,16 +2037,55 @@ Also spotted: framework **REQ-96 — "Chat: per-turn metadata, timestamps and da
 
 **framework BUG-26 — "Goals tab fails to open in lagrange-biz (xgd 0.15.209)"** (draft, 13:10). Same tab, same day. Worth knowing before you chase the collapse issue — if the tab has a loading fault, the collapse behaviour may be downstream of it.
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
-
 <!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
 #### You
 I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-assistant" -->
-
 <!-- xgd-chat role="assistant" ts="2026-08-08T16:20:32.108550+00:00" -->
 #### Claude
 Acknowledged — this turn is here for the transcript. Restart the dashboard whenever you're ready and check whether both this exchange and the prior one survived.
+
+<!-- xgd-chat role="user" ts="2026-08-15T14:59:03.645899+00:00" -->
+#### You
+ok so the last turn got appended to this transcript again. We had multiple bugs created to address this, and I thought that we fixed it. Can you take a look at the bugs in lagrange-framework and verify please. Note the expansion/collapse is working now (which is great!)
+
+<!-- xgd-chat role="assistant" ts="2026-08-15T15:00:17.967308+00:00" -->
+#### Claude
+The closure of BUG-28 was rigorous, not a dismissal — it maps my symptoms onto **BUG-19**, which carries reproduced forensics. Let me check BUG-19, because that's the one that matters.
+
+The forensics closed a loop worth noting: BUG-19's evidence is **literally this conversation** — `chat-df1aebfd`/`comment-42edfafc` in lagrange-biz, the turn pair *"I want to test the storage of this transcript…"* / *"Acknowledged…"*, found duplicated at lines 725-732 after the 00:19:48 turn. Your storage test became the repro.
+
+Here's the verification.
+
+Verified. Short answer: **one real fix was done and done well, but it's probably not in your running build — and a known gap was left behind.**
+
+## State of the chat bugs
+
+| Ticket | Status | |
+|---|---|---|
+| **BUG-19** — `resume()` replays already-archived turns from a stale junction | `ready_to_reconcile` | **The real defect.** Implementation 08-14, v0.0.147, commits `cc83a026`+`85fcc920`, five fixes, every UAT mutation-checked in both languages |
+| BUG-28 — my duplication report | `wont_fix` | Correctly closed as a duplicate of BUG-19, with symptoms mapped to reproduced findings D1/D2/D4 |
+| BUG-24 — turns lost | `ready_to_reconcile` | ⚠️ see below |
+| BUG-29 — TicketArchive rewrites whole session, full-scans per turn | `free_coded` | New, 08-14 |
+| BUG-23 — composer placeholder · REQ-96 — per-turn timestamps | `ready_to_reconcile` | |
+| REQ-72 — chat sessions rewrite | `legacy_done` | |
+
+## Why it's still happening — three candidates, ranked
+
+**1. Not deployed.** BUG-19 is `ready_to_reconcile` **in lagrange-framework**, at component version **v0.0.147**. The chat runs in the xgd dashboard as a *vendored* framework component. Framework `ready_to_reconcile` doesn't put it in front of you — it has to be vendored into xgd.
+
+This is the same gap that explained expand/collapse. Collapse works now, so a vendor sync happened — **if that sync predates 08-14 17:06, BUG-19's fix didn't come with it.** Concrete check: what version is the vendored component in xgd? Below 0.0.147 and you have your answer.
+
+**2. Supersession was never in scope — and I've filed it.** BUG-28's closure explicitly said BUG-19's fix list "stops at watermark/window discipline — which stops re-appending without giving supersession semantics", and asked for it as a **sixth** item. BUG-19's as-built record documents **five**. So it's orphaned. `apply_records` ignores `turn_id` entirely — BUG-19's own analysis confirms it, noting two concurrent turns fold to `user, user, assistant`.
+
+Filed as **`lagrange-framework/BUG-30`**. This is the one that explains the *edited-message* pattern — your four double-deliveries where the second copy was the first plus appended text. Watermark discipline stops re-appending records already archived; it does nothing about a record that legitimately arrives twice and should collapse to one.
+
+**3. The user-side path was flagged "rule it in or out" and I see no evidence anyone did.** BUG-28's second carried item. BUG-19's D1 splits *assistant* turns; the double-delivered messages are user-side and postdate the turn-lease work.
+
+## One thing to look at separately
+
+**BUG-24 sits at `ready_to_reconcile`, but its own body says "Fix: Not yet scoped" and "Test plan: To be written with the fix."** Its assessment says findings 3–6 can still lose or corrupt operator context today, and "deduplicate the resume/carry replay" is listed as a *candidate*.
+
+Either the body is stale, or a ticket advanced past your acceptance gate without a fix. That's precisely the "wild west state transitions" problem you named — and precisely why `free_coded → ready_to_reconcile` being a manual judgement matters. Worth a look either way.
 
 <!-- xgd-chat-end -->
