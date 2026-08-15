@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-14T21:03:43.407484+00:00'
+updated_at: '2026-08-15T14:55:10.679880+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2036,5 +2036,11 @@ Also spotted: framework **REQ-96 — "Chat: per-turn metadata, timestamps and da
 **framework BUG-27 — "Permissions: `cli_flags` API-shape change breaks every `xgd_source` Claude Code launch"** (draft, 15:27). That's REQ-781 fallout — the access-control refactor broke Claude Code launches. REQ-781 is still `free_coding`, last touched 18:00.
 
 **framework BUG-26 — "Goals tab fails to open in lagrange-biz (xgd 0.15.209)"** (draft, 13:10). Same tab, same day. Worth knowing before you chase the collapse issue — if the tab has a loading fault, the collapse behaviour may be downstream of it.
+
+<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
+#### You
+I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
 <!-- xgd-chat-end -->
