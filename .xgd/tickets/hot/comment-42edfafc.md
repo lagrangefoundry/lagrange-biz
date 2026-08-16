@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-16T01:13:16.862645+00:00'
+updated_at: '2026-08-16T01:23:32.707983+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2137,5 +2137,49 @@ I recorded the cost too: **BUG-1050 / framework BUG-27** — a vendor re-sync re
 Applied, and recorded on the lifecycle-gaps goal so the two are read together. The honest note: it cuts *earlier* than reconciled, so accumulation now counts work that hasn't reconciled, passed regression, or reached stable.
 
 That's a fine trade while you're the only user and can see the reconcile queue. It stops being fine the moment accumulation gets reported to anyone else — or used to answer "is the beta ready".
+
+<!-- xgd-chat role="user" ts="2026-08-16T01:19:19.367556+00:00" -->
+#### You
+Please continue
+
+<!-- xgd-chat role="assistant" ts="2026-08-16T01:19:33.769970+00:00" -->
+#### Claude
+Continuing the sweep — 1stcontact hasn't been checked, and the site builder is the next dated commitment.
+
+1stcontact is active — REQ-140 landed yesterday. Finding the current range.
+
+Significant find — a six-ticket architecture push filed in 1stcontact three minutes apart this afternoon.
+
+Sweep complete. 1stcontact was the gap, and it's where today's biggest news is.
+
+## The manual editor is real
+
+Six editor tickets, four of them **`free_and_reconciled`** — fully through, not just queued:
+
+- REQ-135 text properties · REQ-136 non-destructive image framing and colour · REQ-138 copy modal live preview · REQ-137 L1 palette (`bundled`) · REQ-139 lock controls that can't express what the element holds · REQ-140 colour from the palette
+
+All wired under Site builder. "Taking shape" is an understatement — that's a working editor.
+
+## Eight tickets in four minutes this afternoon
+
+**`1stcontact runs natively on Cloudflare workerd`** — REQ-141 through REQ-148, filed 13:30–13:34, preceded by DOC-1 (*Gendev Website Caretaker Architecture*) being updated today. Your pattern exactly: chat → design doc → REQs.
+
+This isn't deployment tidy-up. *"proxy deleted"*, *"control-app becomes the builder"*, *"the AI host and publish move into workerd"* are statements about what the system **is**. The filesystem SiteStore becomes an async port with D1 and R2 behind it; render moves to the edge; the builder becomes private behind Cloudflare Access.
+
+**One thing in there deserves calling out.** REQ-141 — a workers-runtime test project running UATs *inside workerd against real D1 and R2 bindings* — is already `ready_to_reconcile` while most of the migration is still `draft`. You built the harness that can tell you whether the migration worked **before** doing the migration. That's the same instinct as making `ai_ticketing` the first consumer of the Toolbox to prove the design. Consistent, and not common.
+
+## Decision drafted — please correct it
+
+**`decision-b805e879`**. Three signatures at once: a subtree appearing fully formed with no prior aspiration, a material change to the system's shape, and it starting **16 days before the class cohort date**.
+
+The `rationale` field is **my inference, explicitly labelled as such** — DOC-5 always specified Cloudflare-first, a production 503 traced to a `[vars]` inheritance bug exposed the deployment path, and doing this before a cohort arrives is cheaper than during. That's read off the tickets, not from you. Rewrite it.
+
+## The question I'd most like answered
+
+**REQ-145 says the control-app *becomes* the builder.** So the Cloudflare migration and the Site builder goal are either the same work seen from two angles, or a prerequisite and its dependant.
+
+That distinction decides whether **2026-08-31 is exposed to this migration** — and the site builder's long pole is already product discovery, not available time. Sixteen days out, with two dated commitments in between (the 08-24 dinner is nine days away), it's worth being explicit rather than letting the map infer.
+
+I've recorded it as an open question on both the goal and the decision rather than guessing.
 
 <!-- xgd-chat-end -->
