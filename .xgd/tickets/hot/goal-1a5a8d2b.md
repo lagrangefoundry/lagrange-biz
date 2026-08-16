@@ -5,9 +5,9 @@ type: goal
 title: Site builder
 created_by: xgd
 created_at: '2026-08-08T22:53:54.056155+00:00'
-updated_at: '2026-08-13T19:29:17.311490+00:00'
+updated_at: '2026-08-16T01:22:53.382744+00:00'
 completed_at: null
-last_field_updated: body
+last_field_updated: children
 status: in_progress
 fields:
   provenance: planned
@@ -15,6 +15,12 @@ fields:
   children:
   - ticket://lagrangefoundry/1stcontact/GOAL-16
   - ticket://lagrangefoundry/1stcontact/GOAL-17
+  - ticket://lagrangefoundry/1stcontact/REQ-135
+  - ticket://lagrangefoundry/1stcontact/REQ-136
+  - ticket://lagrangefoundry/1stcontact/REQ-137
+  - ticket://lagrangefoundry/1stcontact/REQ-138
+  - ticket://lagrangefoundry/1stcontact/REQ-139
+  - ticket://lagrangefoundry/1stcontact/REQ-140
   depends_on:
   - goal-9cdf5f09
   workstream: true
