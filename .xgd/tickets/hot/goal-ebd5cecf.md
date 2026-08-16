@@ -5,13 +5,14 @@ type: goal
 title: 1stcontact as public proof of XGD
 created_by: xgd
 created_at: '2026-08-06T21:21:20.013185+00:00'
-updated_at: '2026-08-06T21:21:20.013185+00:00'
+updated_at: '2026-08-16T01:22:58.070840+00:00'
 completed_at: null
-last_field_updated: created_at
+last_field_updated: children
 status: in_progress
 fields:
   provenance: product_decision
   children:
+  - goal-198516d1
   - ticket://lagrangefoundry/1stcontact/GOAL-1
 ---
 
