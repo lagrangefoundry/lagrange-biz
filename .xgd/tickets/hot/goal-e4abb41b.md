@@ -5,13 +5,14 @@ type: goal
 title: 'Regression lifecycle: event-driven, not timed'
 created_by: xgd
 created_at: '2026-08-12T00:15:04.654659+00:00'
-updated_at: '2026-08-12T00:15:04.654659+00:00'
+updated_at: '2026-08-16T01:12:43.773110+00:00'
 completed_at: null
-last_field_updated: created_at
-status: concept
+last_field_updated: status
+status: in_progress
 fields:
   provenance: planned
-  children: []
+  children:
+  - ticket://lagrangefoundry/xgd/REQ-797
   workstream: false
 ---
 
