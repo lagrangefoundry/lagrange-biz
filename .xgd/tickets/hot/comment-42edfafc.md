@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-16T16:49:26.036227+00:00'
+updated_at: '2026-08-16T16:49:26.374771+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2230,8 +2230,16 @@ That's the second confirmed case of me reporting a change that didn't land. Both
 | **GOAL-47** Site builder — now blocked on GOAL-65 | 08-31 | 16 |
 | **GOAL-48** XGD packaging v1 | ✅ realized 08-15, five days early | |
 
+<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
+
 <!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
 #### You
 I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
+
+<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-08T16:20:32.108550+00:00" -->
+#### Claude
+Acknowledged — this turn is here for the transcript. Restart the dashboard whenever you're ready and check whether both this exchange and the prior one survived.
 
 <!-- xgd-chat-end -->
