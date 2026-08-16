@@ -5,42 +5,45 @@ type: goal
 title: XGD packaging v1 - install tool
 created_by: xgd
 created_at: '2026-08-08T22:54:00.879209+00:00'
-updated_at: '2026-08-12T00:04:59.346332+00:00'
+updated_at: '2026-08-16T01:12:16.481550+00:00'
 completed_at: null
-last_field_updated: workstream
-status: in_progress
+last_field_updated: status
+status: realized
 fields:
   provenance: planned
   target_date: '2026-08-20'
   children:
-  - ticket://lagrangefoundry/xgd/GOAL-2
-  - ticket://lagrangefoundry/xgd/REQ-754
-  - ticket://lagrangefoundry/xgd/REQ-755
-  - ticket://lagrangefoundry/xgd/REQ-756
   - ticket://lagrangefoundry/xgd/REQ-759
   - ticket://lagrangefoundry/xgd/REQ-761
-  - ticket://lagrangefoundry/xgd/REQ-763
+  - ticket://lagrangefoundry/xgd/REQ-755
+  - ticket://lagrangefoundry/xgd/REQ-756
+  - ticket://lagrangefoundry/xgd/REQ-754
   workstream: true
+  completed_date: '2026-08-15'
 ---
 
 An install path that a first-time user can walk through, end to end, without the author sitting next to them.
 
-**Hard short-term deadline.** The n=1 external user - the operator son, on summer break - cannot be onboarded without it. Target 2026-08-20, matching goal-1789a4b5. The window expires when the summer does.
+## REALIZED 2026-08-15 - and ahead of its date
 
-## State as of 2026-08-08 evening: nearly finished
+Target was 2026-08-20, set by the n=1 onboarding. Complete on 08-15, five days early. Operator: "The v1 packaging tool is complete."
 
-- xgd/REQ-759 - install/install.sh bootstrap installer plus documented install command - ready_to_reconcile, 16:45.
-- xgd/REQ-761 - serve install.sh at xgd.dev/install/install.sh via Cloudflare - free_coded, 16:49.
-- xgd/REQ-755 - ./bin/build release-packaging script - ready_to_reconcile, 13:49.
-- xgd/REQ-756 - ./bin/deploy release-publishing script - ready_to_reconcile, 14:00.
-- xgd/REQ-763 - min_required_version forced-update gate at CLI invocation and dispatcher dispatch checkpoints - draft.
-- xgd/REQ-754 - xgd update command - draft.
-- xgd/GOAL-2 - Packaging with an update path - planned.
+All five components are at `ready_to_reconcile` or beyond, which the operator has directed be treated as done:
 
-The installer exists and is served. What remains is the update path: the xgd update command and the forced-update gate.
+- xgd/REQ-759 - install/install.sh bootstrap installer plus documented install command.
+- xgd/REQ-761 - serve install.sh at xgd.dev/install/install.sh via Cloudflare.
+- xgd/REQ-755 - ./bin/build release-packaging script.
+- xgd/REQ-756 - ./bin/deploy release-publishing script.
+- xgd/REQ-754 - xgd update command.
 
-## History
+Someone can now be pointed at a URL, run one command, and end up with a working install that can update itself.
 
-This work was scattered until 2026-08-08 - three drafts filed under XGD Remove friction with no owner drawing them together, and nothing recording that an install tool sat on the critical path for a dated commitment. Consolidated here on that basis.
+## What was deliberately excluded
 
-State moved from planned to in_progress on 2026-08-08 to match reality: four of seven children are free_coded or ready_to_reconcile.
+The min_required_version forced-update gate moved to its own goal (goal-fbb64cd0). The tool ships and updates; *enforcing* an update is a separate capability and not needed for v1.
+
+## History worth keeping
+
+This work was invisible to the map until 2026-08-08. It existed as three drafts filed under an ergonomics goal, with nothing recording that an install tool sat on the critical path for a dated commitment - the operator had to say it out loud for it to surface. Seven days later it is the second goal on this map to reach realized.
+
+It is also the first dated commitment on this map to be met early.
