@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-16T16:49:26.374771+00:00'
+updated_at: '2026-08-16T17:09:14.713035+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2230,16 +2230,79 @@ That's the second confirmed case of me reporting a change that didn't land. Both
 | **GOAL-47** Site builder — now blocked on GOAL-65 | 08-31 | 16 |
 | **GOAL-48** XGD packaging v1 | ✅ realized 08-15, five days early | |
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
-
 <!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
 #### You
 I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-assistant" -->
-
 <!-- xgd-chat role="assistant" ts="2026-08-08T16:20:32.108550+00:00" -->
 #### Claude
 Acknowledged — this turn is here for the transcript. Restart the dashboard whenever you're ready and check whether both this exchange and the prior one survived.
+
+<!-- xgd-chat role="user" ts="2026-08-16T16:59:13.028419+00:00" -->
+#### You
+wow - I just did a dashboard restart to pick up the latest and this exchange is still coming back:
+
+I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
+
+Acknowledged — this turn is here for the transcript. Restart the dashboard whenever you're ready and check whether both this exchange and the prior one survived.
+
+Can you do a little investigation - this turn should not be stored in any transient files (clearly it is) - perhaps this is a data clean up issue or some kind of backward compatibility that we need to rip out. Once you understand where this text comes from can you create a very specific bug in either project to fix it.
+
+I am confused by our representations of state. REQ-781 is reported as being in_progress...that is a state that it should NEVER have been in. It is a free coded ticket that goes draft -> free_coding -> free_coded -> ready_to_reconcile -> reconciling -> free_and_merged...it is possible that it erroneously entered in_progress but today it is in ready_to_reconcile and from the perspective of our work its DONE. There is now REQ-796 which is the last piece of this and its in free_coding state. If you read the transcript you will see we have a serious problem with that bug
+
+Regardless all the tickets in the LLM access control appear to be misrepresented - none of them are or ever should be in_progress
+
+<!-- xgd-chat role="assistant" ts="2026-08-16T16:59:21.081031+00:00" -->
+#### Claude
+I'll take these in order: first find where that stale transcript text is actually stored, then look at the state misrepresentation across the LLM access control tickets. Starting with evidence on both.
+
+REQ-781/796 aren't in this project's store. Let me locate them and dig into the session storage.
+
+This is more specific than "transient file" — let me confirm the exact mechanism.
+
+Six duplicate appends — one per restart. Let me check the blast radius and confirm the source.
+
+Confirmed. Now the state question — let me pull the map and find the LLM access control tickets.
+
+REQ-781's actual ticket status is `ready_to_reconcile` — the ticket is right. It's the map that's wrong. Let me look at the goal.
+
+Let me check an existing sibling bug so I don't file a duplicate.
+
+Let me check where sibling bugs in these two areas get filed, so these land in the right project.
+
+I have both mechanisms confirmed. Here's what I found and what I'm about to file.
+
+**The transcript replay is worse than "a transient file" — it's corrupting the durable store.**
+
+The canonical transcript is `COMMENT-6` (`comment-42edfafc`, kind `chat_transcript`) on `CHAT-8`, session `2c49ae4a`. That Aug-08 exchange appears in it **six times** — at lines 93, 720, 1980, 2035, 2086, 2230. Once per dashboard restart. And each copy lands at the *tail*: the last four turns read `2026-08-16T06:27:56` → `2026-08-08T16:20:22`. It's eight days stale and positioned as the newest thing you said, which is why it keeps coming back at you.
+
+The source is `.xgd/tmp/chat_sessions/00ddfb84-….jsonl` — 2 lines, exactly those two turns, `intent_uid: chat-df1aebfd`, mtime Aug 8, never truncated. It's a **previous-generation** store: the current one (`.xgd/tmp/ai-sessions/2c49ae4a/session.ndjson`) has a `watermark.json` cursor, and the legacy path has no watermark companion, so it re-drains from offset 0 forever. Nine other orphan files sit there, 77 turns, mapping to 6 different chat tickets — same bug, other victims. Your instinct was right: it's two generations of storage where there should be one.
+
+Worth noting: `goal-39ddc03c`'s body records that the Aug-08 turn *was itself the deliberate test* of transcript storage. The test turn became the haunting.
+
+**On state — the tickets are fine, the map is lying.** REQ-781 really is `ready_to_reconcile`. All six children of `goal-959f56f3`:
+
+| Ticket | Actual | Map shows |
+|---|---|---|
+| xgd/REQ-781 | `ready_to_reconcile` | in_progress |
+| xgd/REQ-780 | `ready_to_reconcile` | in_progress |
+| lf/REQ-94 | `ready_to_reconcile` | in_progress |
+| lf/REQ-95 | `ready_to_reconcile` | in_progress |
+| xgd/BUG-1050 | `free_coded` | in_progress |
+| xgd/REQ-796 | `free_coding` | in_progress |
+
+A mapping layer definitely exists — BUG-30 and REQ-98 are both `draft` and the digest reports both as `planned`. So it maps the ends and collapses the middle. **Five of those six are done or past your hands; only REQ-796 is live.** The map renders a workstream one ticket from complete identically to one just started.
+
+Filing now: the transcript bug in **lagrange-framework** (where BUG-19/23/24/29/30 live), the state bug in **xgd** (where the dashboard/goal-map bugs live), each linked to its parent goal.
+
+Let me file these without writing a temp file.
+
+Direct CLI invocation works; let me use that form.
+
+BUG-32 filed. Now the state-collapse bug.
+
+Both filed. Linking them to their parent goals so they aren't orphaned.
+
+Now updating `goal-959f56f3`'s body — it records REQ-780/94/95 as `free_coded` but all three have since moved to `ready_to_reconcile`, so it understates where you actually are.
 
 <!-- xgd-chat-end -->
