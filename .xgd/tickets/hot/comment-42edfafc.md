@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-16T01:23:32.707983+00:00'
+updated_at: '2026-08-16T06:29:38.630613+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2181,5 +2181,53 @@ The `rationale` field is **my inference, explicitly labelled as such** — DOC-5
 That distinction decides whether **2026-08-31 is exposed to this migration** — and the site builder's long pole is already product discovery, not available time. Sixteen days out, with two dated commitments in between (the 08-24 dinner is nine days away), it's worth being explicit rather than letting the map infer.
 
 I've recorded it as an open question on both the goal and the decision rather than guessing.
+
+<!-- xgd-chat role="user" ts="2026-08-16T06:27:41.579110+00:00" -->
+#### You
+Please use IDs not UIDs for tickets - your decision note is cryptic I don't see the actual ticket???
+
+On your question - the app needs to be on cloudflare for the goal - if its on my laptop I can't share it. We are going web with it early so I can use it in that environment and not kid myself if works because I'm using it on my laptop. Many things are different in the cloud if I force us there early I can develop the real CX and not fool myself...either way that is a priority decision - the tool cannot be shared without it so it is a hard dependency on our goal
+
+<!-- xgd-chat role="assistant" ts="2026-08-16T06:27:56.416985+00:00" -->
+#### Claude
+Noted — I'll use IDs. Let me get the mapping, since I've been quoting uids at you all session.
+
+Got the mapping. Adding the hard dependency and rewriting **DECISION-9** with your actual reasoning — my inferred rationale missed the better argument.
+
+The strict key validation from BUG-20/996 has landed — that error names the key and suggests the fix. Retrying.
+
+Fair complaint — I've been quoting uids all session. Saved to memory so it doesn't recur. The record you couldn't find is **DECISION-9**.
+
+## DECISION-9 rewritten with your reasoning
+
+My inferred rationale (production 503s, DOC-5 alignment) missed the actual argument. It now quotes you and separates the two:
+
+**Shareability** — a builder on a laptop can't be handed to a class. That makes it a prerequisite, not a preference.
+
+**Not fooling yourself** — and this is the one I'd have missed entirely. A CX developed against localhost is developed against conditions that won't hold: latency, cold starts, bindings, auth, failure modes. It produces an experience that feels good to its author and may not survive contact with the platform. Moving first means every subsequent design decision is made against the real thing.
+
+That's the same discipline as the capability matrix, and as REQ-141 — build the conditions that tell you the truth *before* the work that depends on them. It's recurred often enough now to be a working principle rather than a habit, and I said so in the record.
+
+**Dependency recorded: GOAL-47 (Site builder) `depends_on` GOAL-65 (Cloudflare workerd).** Hard, per your call. Consequence: Site builder is not-ready until GOAL-65 realizes — which is now literally true, not a modelling artifact.
+
+## Two things worth knowing
+
+**The strict key validation from BUG-20 / xgd BUG-996 has landed.** My update was rejected with:
+
+> `update patch does not recognise rationale at the top level — did you mean fields.rationale? (accepted top-level patch keys: body, completed_at, fields, links, owner, result, status, title)`
+
+That's exactly the behaviour the bug asked for — names the key, suggests the fix, lists what's valid. The silent-drop class is closed on this path.
+
+**Which surfaced one it had already eaten.** GOAL-46's title was still *"Chat transcript storage is durable"* — I reported widening it to *"Chat infrastructure is dependable"* days ago and it never took. Re-applied, and moved to `in_progress` since it holds live work (BUG-19 `ready_to_reconcile`, BUG-29 `free_coded`, REQ-96, REQ-794/795).
+
+That's the second confirmed case of me reporting a change that didn't land. Both predate the validation fix, so I don't expect more — but it's why I've started reading back after structural edits.
+
+## Your current dated picture
+
+| | Date | Days |
+|---|---|---|
+| **GOAL-60** Release ready to demo at the 8/24 dinner | 08-24 | 9 |
+| **GOAL-47** Site builder — now blocked on GOAL-65 | 08-31 | 16 |
+| **GOAL-48** XGD packaging v1 | ✅ realized 08-15, five days early | |
 
 <!-- xgd-chat-end -->
