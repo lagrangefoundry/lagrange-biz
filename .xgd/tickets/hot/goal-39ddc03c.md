@@ -5,14 +5,15 @@ type: goal
 title: Chat infrastructure is dependable
 created_by: xgd
 created_at: '2026-08-08T17:40:56.661301+00:00'
-updated_at: '2026-08-16T06:29:08.515749+00:00'
+updated_at: '2026-08-16T17:08:56.590506+00:00'
 completed_at: null
-last_field_updated: status
+last_field_updated: children
 status: in_progress
 fields:
   provenance: bug
   children:
   - goal-c54b83e0
+  - ticket://lagrangefoundry/lagrange-framework/BUG-32
   - ticket://lagrangefoundry/lagrange-framework/BUG-30
   - ticket://lagrangefoundry/lagrange-framework/BUG-19
   - ticket://lagrangefoundry/lagrange-framework/BUG-29
