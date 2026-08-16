@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-15T22:30:45.884424+00:00'
+updated_at: '2026-08-16T01:13:16.862645+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2088,16 +2088,54 @@ Filed as **`lagrange-framework/BUG-30`**. This is the one that explains the *edi
 
 Either the body is stale, or a ticket advanced past your acceptance gate without a fix. That's precisely the "wild west state transitions" problem you named — and precisely why `free_coded → ready_to_reconcile` being a manual judgement matters. Worth a look either way.
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
-
 <!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
 #### You
 I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-assistant" -->
-
 <!-- xgd-chat role="assistant" ts="2026-08-08T16:20:32.108550+00:00" -->
 #### Claude
 Acknowledged — this turn is here for the transcript. Restart the dashboard whenever you're ready and check whether both this exchange and the prior one survived.
+
+<!-- xgd-chat role="user" ts="2026-08-16T01:09:45.079808+00:00" -->
+#### You
+Can you do a sweep - we are almost done with access control - REQ-796 is under test right now and then there is a UI visibility issue to address.
+
+The v1 packaging tool is complete - you must treat ready_to_reconcile as DONE (for now) all those tickets are done - except the force version update
+
+<!-- xgd-chat role="assistant" ts="2026-08-16T01:11:58.791350+00:00" -->
+#### Claude
+Good news in the sweep. Making the map reflect it.
+
+## XGD packaging v1 is realized — and it beat its date
+
+Target was **2026-08-20**. Complete **08-15, five days early**. All five components at `ready_to_reconcile` or beyond: the bootstrap installer, Cloudflare serving at xgd.dev, `./bin/build`, `./bin/deploy`, and `xgd update`.
+
+Someone can now be pointed at a URL, run one command, and end up with a working install that updates itself.
+
+Two things worth sitting with. This is only the **second goal on the map to reach `realized`** — the first was *Positioning defined* back on 07-30. And **it's the first dated commitment this map has met early.** Seven days ago it wasn't on the map at all: three drafts filed under an ergonomics goal, with nothing recording that an install tool gated a dated commitment. You had to say it out loud for it to surface.
+
+The forced-update gate (REQ-763) is split into its own goal — `Forced update path` — since the tool ships and updates, and *enforcing* an update is a different capability. Not needed for the dinner or n=1; it becomes real when more than a handful of people run XGD independently.
+
+## Access control — REQ-781 landed
+
+`ready_to_reconcile` as of 11:32 today. Plus REQ-780 (`free_coded`), and framework REQ-94/95 underneath.
+
+**REQ-796** is `free_coding` — *"Claude Code sessions: OS-level sandbox as second enforcement layer"*. That one's worth its own note: a second, OS-level layer means the schema isn't the only thing between a session and the filesystem. That's the difference between *we tell it what it may do* and *it cannot do otherwise* — a materially stronger claim to make to a beta tester.
+
+I recorded the cost too: **BUG-1050 / framework BUG-27** — a vendor re-sync removed `PermissionConfig.cli_flags` and every Claude session failed mid-refactor. That's invisible in a ticket count and it's the real price of the adoption.
+
+**The UI visibility issue you mentioned has no ticket.** Flagged as outstanding on the goal — want me to file it once you describe it?
+
+## Also landed, unprompted
+
+- **REQ-797** — Dispatcher regression mode dropdown (off / scheduled / **auto commit-trigger**), `ready_to_reconcile`. That's your item (f), event-driven regression. Goal moved to `in_progress`.
+- **framework REQ-100** — `ai_knowledge` bridge (JS): KnowledgeToolbox + KM priming ContextSource, `free_coded`. Knowledge management has started ahead of schedule; goal moved to `in_progress`.
+- **REQ-794/795** — Goals-tab chat junction turn lifecycle, and per-turn timestamps rendering. Both `ready_to_reconcile`.
+
+## One flag on `ready_to_reconcile = done`
+
+Applied, and recorded on the lifecycle-gaps goal so the two are read together. The honest note: it cuts *earlier* than reconciled, so accumulation now counts work that hasn't reconciled, passed regression, or reached stable.
+
+That's a fine trade while you're the only user and can see the reconcile queue. It stops being fine the moment accumulation gets reported to anyone else — or used to answer "is the beta ready".
 
 <!-- xgd-chat-end -->
