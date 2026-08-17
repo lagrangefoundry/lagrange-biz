@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-17T20:42:23.952076+00:00'
+updated_at: '2026-08-17T20:42:24.382247+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2304,8 +2304,6 @@ BUG-32 filed. Now the state-collapse bug.
 Both filed. Linking them to their parent goals so they aren't orphaned.
 
 Now updating `goal-959f56f3`'s body — it records REQ-780/94/95 as `free_coded` but all three have since moved to `ready_to_reconcile`, so it understates where you actually are.
-
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
 
 <!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
 #### You
