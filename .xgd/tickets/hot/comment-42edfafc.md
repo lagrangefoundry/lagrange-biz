@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-17T20:42:24.610636+00:00'
+updated_at: '2026-08-17T21:15:04.143792+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2305,16 +2305,37 @@ Both filed. Linking them to their parent goals so they aren't orphaned.
 
 Now updating `goal-959f56f3`'s body — it records REQ-780/94/95 as `free_coded` but all three have since moved to `ready_to_reconcile`, so it understates where you actually are.
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-user" -->
-
 <!-- xgd-chat role="user" ts="2026-08-08T16:20:22.277412+00:00" -->
 #### You
 I want to test the storage of this transcript - please just acknowledge this turn so I have some content and I will restart the dashboard to see if its preserved
 
-<!-- xgd-turn id="e2afe9ad-89bc-45ff-a1ad-83ea5f1257cf-assistant" -->
-
 <!-- xgd-chat role="assistant" ts="2026-08-08T16:20:32.108550+00:00" -->
 #### Claude
 Acknowledged — this turn is here for the transcript. Restart the dashboard whenever you're ready and check whether both this exchange and the prior one survived.
+
+<!-- xgd-chat role="user" ts="2026-08-17T21:05:02.717471+00:00" -->
+#### You
+Can you do another ticket sweep.
+
+Here is how I am thinking about things:
+1) Most effort in the last 48 hours has gone into the access control stuff - yesterday was horrible - everything broke and it took the day  to reconstruct it.
+2) I have shifted from branch to feature-flag for (1) - we have one knarly outstanding issue to solve with OS sandboxes - see the Chat entitled "Permissions hell"
+3) In parallel I am working on getting 1stcontact launched online
+4) lagrange framework work at this point is mostly debugging
+
+So really down to two projects and two immediate goals to solve
+
+BTW in the Calendar it explains the difference between a target and an event but then shows a list of dates - how do I know which is which/
+
+<!-- xgd-chat role="assistant" ts="2026-08-17T21:05:05.370352+00:00" -->
+#### Claude
+I'll start by pulling a fresh digest and reading the evidence trail before touching anything.
+
+I've read the trail. Here's what I'm about to change, and why:
+
+1. **`goal-959f56f3` (LLM access control)** — body is stale at 08-15 ("under test"). Rewriting the state section from the ticket evidence for 08-16/08-17, including the branch→feature-flag turn and the outstanding sandbox issue.
+2. **New decision record** — the branch→feature-flag shift. It's a real turn in the shape of the plan and the reasoning is recoverable today, not next month.
+3. **New bug in `xgd`** — the Seatbelt issue is diagnosed inside REQ-796's body but has no ticket of its own. Your "one knarly outstanding issue" is currently invisible to every query.
+4. **`goal-198516d1` (workerd)** — marking it a workstream, since you've said you're working on it.
 
 <!-- xgd-chat-end -->
