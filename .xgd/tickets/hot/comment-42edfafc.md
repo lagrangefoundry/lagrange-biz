@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-18T16:49:28.396347+00:00'
+updated_at: '2026-08-18T20:04:48.066486+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2371,5 +2371,28 @@ I believe:
 (2) 1stcontact - I am hoping we can have it launched in skeletal form on Cloudflare today - that is an important milestone. The site builder is constructed (alpha state) I will use it to build a few websites and extend/iterate as needed
 (3) refactoring - I am getting ready to (1) Drop the new Knowledge Management solution in place for session priming and knowledge discovery - I am very optimistic, this will unblock opportunities to add important context to XGD AI sessions - right now I am constantly having to explain and reexplain things to sessions we just don't have enough context capacity to hold all of "How xgd works and how its changed". If that component works as I hope our capacity will be effectively unlimited. (2) Dashboard refactor - I am keen to (a) introduce the shell component (b) consolidate the chat and documents tab (3) refactor the Intents tab with the new components - all disruptive but managable changes because they can be run alongside the old code.
 (4) 1stcontact will need to add email capture modules, user portals/login and basic crm/user management <-- that's next
+
+<!-- xgd-turn id="9f83c78b7a494ec89f9cbd5bf30423a7-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-18T19:54:47.658359+00:00" -->
+#### You
+Fascinating - the broken transcript chunk that keeps comping back still has the old date on it....I think we are almost done fixing that issue.
+
+Can you do a sweep of new and recently closed tickets and see where we are please?
+
+I believe: (1) I am almost closed on the access issues - the implementation is in place and mostly working - I will turn off the overrides on the main project - there may still be some bugs to overcome, but I think we are in good shape here. I also may adjust the UI presentation a little. But this should be in the rear view mirror by end of day (2) 1stcontact - I am hoping we can have it launched in skeletal form on Cloudflare today - that is an important milestone. The site builder is constructed (alpha state) I will use it to build a few websites and extend/iterate as needed (3) refactoring - I am getting ready to (1) Drop the new Knowledge Management solution in place for session priming and knowledge discovery - I am very optimistic, this will unblock opportunities to add important context to XGD AI sessions - right now I am constantly having to explain and reexplain things to sessions we just don't have enough context capacity to hold all of "How xgd works and how its changed". If that component works as I hope our capacity will be effectively unlimited. (2) Dashboard refactor - I am keen to (a) introduce the shell component (b) consolidate the chat and documents tab (3) refactor the Intents tab with the new components - all disruptive but managable changes because they can be run alongside the old code. (4) 1stcontact will need to add email capture modules, user portals/login and basic crm/user management <-- that's next
+
+oh and are we clear on the xgd features required for beta launch?
+- quality <-- still not there, but at least with the permissions stuff in place we have stopped making breaking changes to the backend
+- install -> binary install? Figure out the role of gh.
+- documentation
+
+<!-- xgd-turn id="9f83c78b7a494ec89f9cbd5bf30423a7-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-18T19:54:58.610203+00:00" -->
+#### Claude
+Doing the sweep now — pulling a fresh digest and the current state of each cluster rather than trusting what I had.
+
+Evidence gathered. Making the updates now — I'll narrate each.
 
 <!-- xgd-chat-end -->
