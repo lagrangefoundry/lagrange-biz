@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-18T02:56:34.566403+00:00'
+updated_at: '2026-08-18T03:27:54.414331+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2341,5 +2341,9 @@ I've read the trail. Here's what I'm about to change, and why:
 <!-- xgd-chat role="user" ts="2026-08-18T02:56:34.146585+00:00" -->
 #### You
 Go ahead please
+
+<!-- xgd-chat role="user" ts="2026-08-18T03:27:53.976647+00:00" -->
+#### You
+Please take another sweep - I think we are almost done with access controls, we are in the final stages of testing and UI settings
 
 <!-- xgd-chat-end -->
