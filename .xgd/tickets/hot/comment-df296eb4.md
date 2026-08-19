@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-9
 created_by: xgd
 created_at: '2026-08-19T17:42:41.908071+00:00'
-updated_at: '2026-08-19T18:40:00.296909+00:00'
+updated_at: '2026-08-19T18:42:41.791590+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -397,5 +397,71 @@ I called the `0.15.42` / `0.15.86
 <!-- xgd-chat role="user" ts="2026-08-19T18:40:00.163761+00:00" -->
 #### You
 At **11:32:39** it was replaced by `regression-44dc41d1` (running 0.15.309, cut fresh from main at 0.15.71). Of the old one <-- oh that's annoying. I tried restarting it from the dashboard which is supposed to just trigger xgd regression run which should resume regression if a branch already exists  - are you sure that didn't happen?
+
+<!-- xgd-turn id="43bb241c-a476-4da5-bf4f-450d9e49a6af-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-19T18:42:41.633682+00:00" -->
+#### Claude
+Fair challenge — let me verify properly rather than trust my earlier read.
+
+Single repo, worktrees all rooted in `xgd/.git` — and the branch is genuinely absent from every ref namespace, only the 7 tags remain. So the deletion is real. But your question is *why*, and the new run's log should say. Let me read it.
+
+The log settles the mechanism. Let me check the code path to explain *why*, since your expectation was reasonable.
+
+`resolve_branch_context` only reads the branch it's already in — so the new branch was minted *upstream* of the workflow. Let me find what creates it and whether resume exists at all.
+
+Found it. Let me read the guard and then find its decision record.
+
+Yes — but you were right that it tried. Resume ran, and was overridden 74 milliseconds later. From `.xgd/logs/regression.log`:
+
+```json
+11:32:33.118  {"action": "regression_resume",  "status": "running", "branch": "regression-6e3eef98"}
+11:32:33.192  {"action": "stale_branch_recut", "status": "ok",      "branch": "regression-6e3eef98",
+               "merge_base": "d23a2b889a2", "main_tip": "77708b6f663",
+               "reason": "main has advanced past the branch's cut point"}
+11:32:39      → regression-44dc41d1
+```
+
+So the dashboard did exactly what you expected: `xgd regression run` → `_find_regression_branch` found `regression-6e3eef98` → `_resume_existing_branch`. Then a guard fired, did `worktree remove --force` + `git branch -D`, and called `_start_fresh_run()`.
+
+## The guard is BUG-1188 — one of yesterday's fixes
+
+`xgd_source/core/regression/lifecycle.py:341`:
+
+```python
+if merge_base != main_tip:
+    _log(action="stale_branch_recut", ...)
+    _git(["worktree", "remove", str(found[1]), "--force"])
+    _git(["branch", "-D", branch_name])
+    return self._start_fresh_run(stable=stable)
+```
+
+Two things about this:
+
+**The trigger is `merge_base != main_tip`** — not "far behind", but *main advanced at all since the branch was cut*. A single commit to main arms it. Given reconcile and ticket commits land on main continuously, any regression branch older than minutes is recut on the next resume. The comment justifies the guard with a case of a branch **1426 commits behind** main, but the implemented condition is a hair-trigger version of that.
+
+**It landed yesterday at 11:26 in 0.15.298** — and your dispatchers only picked it up in the 11:05 restart this morning. So your mental model ("run resumes if a branch exists") was correct until yesterday afternoon. The behaviour changed underneath you, and the first time you exercised it was the run that discarded 1753 commits.
+
+That's your throughline biting its own tail: a process bug fix → installed → dispatcher restarted → and the restart semantics silently changed.
+
+## The design premise is worth questioning
+
+The guard's stated rationale (BUG-895, quoted in the comment):
+
+> Regression branches are disposable execution sandboxes with no unique development value — they exist purely to run test_fix against main's code, **never to author tickets** — so a stale base carries nothing worth preserving. Auto-recut rather than blocking on an operator.
+
+But `regression-6e3eef98` had **1753 commits not in main**, and the ones I sampled are `xgd(ticket): create report ...` / `Workflow ... completed: ...`. So the branch *was* authoring tickets and reports. Either the premise is stale, or that bookkeeping is genuinely disposable — but the code chose `branch -D` on the strength of a premise its own workload contradicts. That's the thing to decide before the next restart, because it will do this again to `regression-44dc41d1` the moment main moves.
+
+If it's not truly disposable, the guard wants either an operator prompt (which the comment explicitly rejects) or a safety tag on the discarded tip before `branch -D`.
+
+## Recovery, still available
+
+The rescue I flagged earlier stands and is unaffected by all this — the tags survived the `branch -D`:
+
+```bash
+git branch rescue-6e3eef98 1a7d1d15833   # tag r0007@start, Aug 18 09:10, 1753 commits ahead of main
+```
+
+Still capped at Aug 18 09:10. The 09:10→21:02 tail had no tag, and `branch -D` took the only ref to it — so that window is gone regardless of how fast you act. Correcting my earlier hedge: I'd said `git fsck` might still find it as a dangling object, but the `worktree remove --force` also destroyed the worktree's reflog, so there's no ref path back to the tip. fsck could in principle surface a dangling commit before gc, but I can't confirm it without the run I couldn't finish.
 
 <!-- xgd-chat-end -->
