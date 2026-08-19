@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-19T18:19:46.542030+00:00'
+updated_at: '2026-08-19T18:37:19.890714+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2467,5 +2467,11 @@ I think the big xgd goal is the knowledge management getting that up and running
 Let me read REQ-806 and its transcript — I probed for it earlier and got nothing back, which either means it was created after that probe or my probe failed silently. Either way, worth knowing which.
 
 REQ-806 exists now — it didn't when I probed 40 minutes ago (REQ-804 was the ceiling then). That's the sweep going stale under me, not a bad read. Pulling it and the design doc properly.
+
+<!-- xgd-turn id="4bfe6f2f1f764faeb1dac3d5548d47c8-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-19T18:36:08.051920+00:00" -->
+#### You
+I am still seeing lots of tickets as "in_progress" when I know they are not - what's going on there?
 
 <!-- xgd-chat-end -->
