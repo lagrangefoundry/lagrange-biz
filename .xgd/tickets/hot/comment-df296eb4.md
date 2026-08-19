@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-9
 created_by: xgd
 created_at: '2026-08-19T17:42:41.908071+00:00'
-updated_at: '2026-08-19T18:19:53.678640+00:00'
+updated_at: '2026-08-19T18:25:09.932809+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -203,5 +203,140 @@ Crash -> logs -> bug ticket -> fix + version bump -> install in venv -> restart 
 So I want to track for any crash (1) what version was it running under when it crashed (2) what version is that crash fixed in (if any) (3) What is the current version of the dispatcher per project
 
 Note that I can restart with e.g. xgd dispatcher restart reconcile and that bypasses the dispatcher process that is running - but the top of the log always shows the version that the process was using.
+
+<!-- xgd-turn id="a5363b70-1df6-480a-9ea2-830e7d63823a-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-19T18:25:09.797390+00:00" -->
+#### Claude
+Good — that reframes it usefully. The throughline gives three version numbers per crash, and the log header means I don't have to *infer* the crash version from launch time. Let me extract them properly.
+
+`cli_command_start.xgd_version` — exactly what I need. Let me extract it for every process, including child invocations.
+
+Now that's interesting — three things fall out. Let me chase the strangest one first.
+
+Confirmed — and it's xgd-only. Now let me build the fix-version map so I can fill in column 2.
+
+Two important corrections fall out of this. Let me verify them.
+
+One more decisive check — whether the 306 collision silently dropped a fix.
+
+That contradicts the ancestry test — which means the version string may not describe the installed tree. Let me test that directly.
+
+The install changed **during this session**. Let me pin that down.
+
+Let me re-check the landmine, since all three dispatchers just came up on 0.15.309.
+
+Your throughline is right, and testing it exposed four places where it breaks. Also: **the world moved while I was looking at it**, which is itself the finding.
+
+## What changed under me, mid-session
+
+| time | event |
+|---|---|
+| 10:50 | install = **0.15.306** (mtime Aug 18 17:57); dispatchers = 291 / 300 / 306 |
+| 10:52 | install → **0.15.309** |
+| 11:05–11:06 | all three dispatchers restarted onto **0.15.309** (35s and 45s apart — done by hand, per-project) |
+| ~11:0x | `1stcontact` + `lagrange-framework` `permissions.yaml` migrated to `directory-spaces` |
+
+So two of my earlier findings are now **resolved, not wrong**: the dispatcher version skew (291/300 vs 306) and the REQ-806 landmine. Both were real at 10:50. Any tool here has to timestamp its readings or it will confidently report a world that no longer exists.
+
+One live remnant: `doctor_commands.py` in 0.15.309 still has **zero** `directory-spaces` references while `permission_schema.py:111` still raises the hard error telling you to run `xgd doctor`. Migration was manual; the misleading hint survives.
+
+## Column 1 — what version did it crash under
+
+The log header gives it, but the answer is a **range**, not a scalar. `cli_command_start` fires per *process*, and a long run spawns hundreds of child `xgd` invocations that each import whatever is installed at that instant:
+
+| project | process | parent (pinned) | child versions observed | terminal |
+|---|---|---|---|---|
+| xgd | `regression-6e3eef98` | 0.15.291 | 291, 298, 300, **306** ⚠️+`0.15.42`×653 | failure |
+| xgd | `reconcile-BUNDLE-126` | 0.15.265 | 265→287 (8 distinct) ⚠️+`86`×265, `101`×2 | failure |
+| xgd | `resync-0da24fdc` | 0.15.232 | 232, 238, 241, 255 | failure |
+| xgd | `branch-BUG-988` | 0.15.230 | 230, 232, 238, 241, 255 ⚠️+`42`×97 | failure |
+| xgd | `branch-BUNDLE-104` | 0.15.230 | 230, 232 | failure |
+| xgd | `branch-BUNDLE-105` | 0.15.230 | 230, 232 | failure |
+| xgd | `branch-BUNDLE-110` | 0.15.230 | 230 only | failure |
+| 1stcontact | `reconcile-BUNDLE-19` | 0.15.291 | 291, 298, 300, **306** | `abnormal_exit` |
+| 1stcontact | `regression-cd9d2893` | 0.15.258 | 258, 265 | failure |
+| 1stcontact | `branch-REQ-141` | 0.15.238 | 238 only | failure |
+| 1stcontact | `resync-6207eef2` | 0.15.232 | 232 only | failure |
+| lagrange-framework | `reconcile-BUNDLE-11` | 0.15.306 | 306 only | failure |
+| lagrange-framework | `regression-485330c9` | 0.15.298 | 298, 300, **306** | failure |
+| lagrange-framework | `resync-5b43aaad` | 0.15.300 | 300 only | **`paused`** |
+
+Note the last row: `resync-5b43aaad` terminated `paused`, but `xgd status` reports it as `error (process died)`. Three of your "crashes" are resyncs and at least one of them never crashed.
+
+## The four things that break `crashed_at < fixed_in`
+
+**1. A run is a version range.** xgd's regression launched on 291 and was running children on 306 by the end — it crossed your entire day's fix stream mid-flight. "What version did it crash under" has no single answer.
+
+**2. For xgd only, the worktree shadows the install.** Those `0.15.42` / `0.15.86` / `0.15.101` children are `python -c` invocations (`argv: ["-c","status","--json"]`) whose cwd is inside a worktree — so cwd lands on `sys.path` and `import xgd_source` resolves to the *branch's checked-out copy*. Proof:
+
+```
+regression-6e3eef98/xgd_source/__init__.py    = 0.15.42   ← 653 child invocations at 0.15.42
+reconcile-BUNDLE-126/xgd_source/__init__.py   = 0.15.101  ← 265 at 0.15.86, 2 at 0.15.101
+branch-BUNDLE-104/105/110/BUG-988             = 0.15.42
+```
+
+267 versions stale, inside a run whose parent was on 291. Only xgd is affected — it's the only self-hosting repo, and 1stcontact/lagrange-framework show zero anomalous versions. This is unfixed and it contaminates every xgd crash diagnosis.
+
+**3. The version number is not a unique key.** Two *divergent* commits both bump `0.15.305 → 0.15.306`:
+
+```
+64061d97e1f  16:48  bump 0.15.305 -> 0.15.306 (BUG-1199)
+e3f651338f3  17:54  bump 0.15.305 -> 0.15.306 (REQ-806)
+→ neither is an ancestor of the other
+```
+
+Plus versions get burned by "version collision retry" bumps — 290→293, 298→302, 303→305 all skip. So the arithmetic `306 > 305 ⇒ has the fix` is unsound.
+
+**4. The version string doesn't describe the installed tree.** I hit this live. Ancestry said BUG-1199's fix was *not* in the installed 306 lineage; a content diff said the installed `orphans.py` matched post-fix source exactly. Both were right — the install had swapped under me at 10:52. Content-comparing the whole tree settled it:
+
+```
+vs ref 0.15.306:  365 identical,  8 differing
+vs ref 0.15.309:  373 identical,  0 differing
+```
+
+The sound primitive is `git merge-base --is-ancestor <fix-commit> <ran-commit>`, or a tree hash. **And `cli_command_start` records only `xgd_version` — no commit SHA, no tree hash.** So for past runs, the better primitive isn't available; you can't retroactively answer this. That's a logging gap worth closing before anything else.
+
+## Column 2 — fixed in
+
+| crash signature | seen in | fix | fixed-in |
+|---|---|---|---|
+| `permissions.yaml has no directory-spaces` | lf `reconcile-BUNDLE-11` | none — migrated by hand; `doctor` still blind | **unfixed** |
+| `validate_intent exit_conditions [pass,fail] none matched` | xgd `BUNDLE-110` | none found | **unfixed** |
+| `generate_intent_plan exit_conditions [done] none matched` | 1c `REQ-141` | none found | **unfixed** |
+| worktree `xgd_source` shadows install | xgd, 4 processes | none found | **unfixed** |
+| `Batch N exhausted 3 fix attempts` | xgd `BUG-988`, `reconcile-BUNDLE-126` | BUG-1069 stuck-loop detector | 0.15.280 |
+| stuck `fix_structural_validation` ×38 | lf `regression-485330c9` | BUG-1197 anchor uid | 0.15.305 |
+| resync/reconcile transient manifest drift | all 3 resyncs | BUG-1196 | 0.15.302 |
+
+## Corrected restart verdicts
+
+Applying column 1 against column 2 — and this **reverses two calls from my first pass**, where I inferred the crash version from launch time instead of reading the log header:
+
+| process | reasoning | verdict |
+|---|---|---|
+| xgd `resync-0da24fdc` | ran ≤255, BUG-1196 in 302 | 🔄 **restart** |
+| 1c `resync-6207eef2` | ran 232, BUG-1196 in 302 | 🔄 **restart** |
+| lf `resync-5b43aaad` | ran 300, BUG-1196 in 302 — and it was `paused`, not crashed | 🔄 **restart** |
+| lf `regression-485330c9` | ran children on **306**, which *contains* BUG-1197 (305) — ancestry-verified. Looped 38× anyway | ❌ **restart won't help** — needs a new bug ⟵ *was "restart" in my first pass* |
+| xgd `regression-6e3eef98` | children on 306, contains BUG-1069 (280) + BUG-1196 (302). Real suspect is the `0.15.42` shadow, unfixed | ❌ **restart won't help** ⟵ *was "restart"* |
+| xgd `reconcile-BUNDLE-126` | ran to 287, already had BUG-1069's detector (280), still exhausted batches | ❌ no |
+| 1c `reconcile-BUNDLE-19` | ran to 306, `abnormal_exit` on `fix_code_review`; nothing targets it | ❌ no |
+| lf `reconcile-BUNDLE-11` | landmine now defused | 🔄 **restart** (newly unblocked) |
+| xgd `BUNDLE-110`, 1c `REQ-141` | unfixed FSM `@error` gaps — reproduce identically every time | ❌ **need bugs filed** |
+| xgd `BUNDLE-104`, `BUNDLE-105`, `BUG-988` | bare `exit 1` / batch exhaustion, no fix | ❌ no |
+
+**So: 4 restarts, 8 that will reproduce, 3 undiagnosed root causes needing bug tickets** (the FSM exit_condition gap ×2 as one class, the worktree-shadow bug, the `fix_structural_validation` non-convergence).
+
+## What this says about the tool's shape
+
+Your throughline holds, but the joins are weaker than they look. The version string is a *label*, not an *identity* — it's ambiguous (two 306s), non-dense (burned numbers), non-scalar per run (parent vs children), and for xgd it can be bypassed entirely by `sys.path`. Column 3 is the only one that's cheap and reliable today (`dispatcher.log` already logs `version` per start).
+
+The cheapest thing that would make the rest tractable isn't a tool at all — it's adding a commit SHA to `cli_command_start` and to the dispatcher start record. Then columns 1 and 2 become one `--is-ancestor` call instead of the archaeology above.
+
+Two open questions before we shape anything:
+
+1. **Is the `0.15.42` worktree shadow acceptable?** It means xgd's own runs partly execute branch code. That may be deliberate for self-hosting — but if not, it invalidates every xgd crash diagnosis and should outrank the tool.
+2. **Do you want the tool to cover `paused` and stale-lock states**, or only crashes? A third of what `xgd status` calls "error (process died)" turned out to be something else.
 
 <!-- xgd-chat-end -->
