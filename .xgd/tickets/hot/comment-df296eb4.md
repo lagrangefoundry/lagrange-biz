@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-9
 created_by: xgd
 created_at: '2026-08-19T17:42:41.908071+00:00'
-updated_at: '2026-08-19T18:31:02.057368+00:00'
+updated_at: '2026-08-19T18:37:18.745481+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -348,5 +348,48 @@ We had a refactoring branch for a while and I was sloppy about the versioning - 
 I didn't realize that the process children pick up the latest version. That's interesting and could be fatal with things like our breaking security changes.
 
 Given that, I propose to restart everything - I will probably do a full revert of everything except the xgd regression that has days of work on it right now.
+
+<!-- xgd-turn id="a65f998c-497f-4ff0-b6fd-67b9710d1565-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-19T18:36:31.549297+00:00" -->
+#### Claude
+That last point deserves a check before you revert — because if children picked up REQ-806 mid-flight, two of my verdicts flip again. Let me test it.
+
+Zero. That's more interesting than a hit would have been — let me find out why.
+
+Now the mechanism is exact — and it changes the risk picture and your keep/revert decision. Let me check one more thing.
+
+Let me check whether those test-looking invocations touch the real ticket store or a temp workspace — that decides whether my "shadow" reading was right.
+
+The file is gone — the world moved again. Let me re-read current state.
+
+xgd's `regression-6e3eef98` is **gone** — replaced by a new `regression-44dc41d1`. Let me check what happened and finish the shadow question using a surviving log.
+
+Important — let me check whether the full tip is recoverable, not just the tagged start points.
+
+Three things, and the first is time-sensitive.
+
+## 🔴 The xgd regression you wanted to keep is already gone
+
+At **11:32:39** it was replaced by `regression-44dc41d1` (running 0.15.309, cut fresh from main at 0.15.71). Of the old one:
+
+- branch `regression-6e3eef98` — **deleted**, local and remote
+- its reflog — gone (only `regression-44dc41d1` remains in `.git/logs/refs/heads/`)
+- worktree metadata — gone
+- session logs — deleted (the file I was mid-way through reading vanished under me)
+
+**What survives:** 7 tags. The newest is `xgd/regression/6e3eef98/matrix_refactor/r0007@start` → `1a7d1d15833` (Aug 18 09:10), which is **1753 commits ahead of main** and reachable from **no branch at all**. It exists only because that tag pins it.
+
+```bash
+git branch rescue-6e3eef98 1a7d1d15833     # do this before anything prunes tags
+```
+
+**What does not survive:** anything the regression did between Aug 18 09:10 and its 21:02 crash — nearly 12 hours, including the run that failed. No tag, no branch, no reflog. (`git fsck` timed out at 2min on this repo so I can't rule out a dangling object; say the word and I'll run it in the background.)
+
+The other two projects are untouched — all of 1stcontact's and lagrange-framework's worktrees are still present, so the revert hasn't reached them and last message's verdicts still stand for those.
+
+## Retraction: the worktree-shadow finding was wrong
+
+I called the `0.15.42` / `0.15.86
 
 <!-- xgd-chat-end -->
