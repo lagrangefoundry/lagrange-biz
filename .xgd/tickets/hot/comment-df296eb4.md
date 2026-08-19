@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-9
 created_by: xgd
 created_at: '2026-08-19T17:42:41.908071+00:00'
-updated_at: '2026-08-19T18:37:18.745481+00:00'
+updated_at: '2026-08-19T18:40:00.296909+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -391,5 +391,11 @@ The other two projects are untouched — all of 1stcontact's and lagrange-framew
 ## Retraction: the worktree-shadow finding was wrong
 
 I called the `0.15.42` / `0.15.86
+
+<!-- xgd-turn id="43bb241c-a476-4da5-bf4f-450d9e49a6af-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-19T18:40:00.163761+00:00" -->
+#### You
+At **11:32:39** it was replaced by `regression-44dc41d1` (running 0.15.309, cut fresh from main at 0.15.71). Of the old one <-- oh that's annoying. I tried restarting it from the dashboard which is supposed to just trigger xgd regression run which should resume regression if a branch already exists  - are you sure that didn't happen?
 
 <!-- xgd-chat-end -->
