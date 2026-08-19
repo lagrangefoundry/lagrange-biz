@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-19T18:38:44.469191+00:00'
+updated_at: '2026-08-19T23:07:21.040618+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2525,5 +2525,31 @@ If the answer is no, then the map needs a distinct visual treatment for *"operat
 Say which and I'll write it onto BUG-1132 so whoever picks it up isn't blocked. I can't promote it to implementation — that's your call to trigger.
 
 One honest caveat: this explains the bulk of it, not all of it. A handful of goals are declared `in_progress` by hand and have genuinely drifted — "XGD Remove friction" from the 08-07 burst, the two whitepaper goals, "XGD site live". Those aren't the bug. I haven't touched them, because a declared value disagreeing with reality is signal I shouldn't overwrite — but I can walk you through those specific ones in about a minute if you want them cleaned up.
+
+<!-- xgd-turn id="65f7f013a3d34beab58859f91fd408ab-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-19T23:03:36.495147+00:00" -->
+#### You
+**Should **`ready_to_reconcile`** project to **`realized`**? Sorry if I didn't make that clear YES! :-) 100% I tried to express this**
+
+<!-- xgd-turn id="65f7f013a3d34beab58859f91fd408ab-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-19T23:04:33.889753+00:00" -->
+#### Claude
+Good — and you did express it. It's on the map already: `goal-d5e96abe` records, on 2026-08-15, *"All five components are at `ready_to_reconcile` or beyond, which the operator has directed be treated as done."* BUG-1132 then asked the question again as if it were open. Let me land the answer where the implementer will see it.
+
+Apostrophes broke the shell quoting. Retrying.
+
+Landed. Three things done:
+
+**`BUG-1132` now carries the answer**, with the Expected table confirmed as-written and the open question closed. I added an implementation note telling whoever picks it up not to re-litigate it in review — the predictable objection is "but `ready_to_reconcile` isn't *really* finished", which is the machine's definition of done being applied to your register, i.e. the exact conflation the ticket exists to remove. Also: the failed-reconcile case is accepted, no guard, no confirmation step, no intermediate state.
+
+**`decision-cc46439b`** filed. Not ceremony — `realized` stands at 2 of 67 and will jump sharply in one step with no matching burst of work. Six months out that reads as corruption or as the map being gamed unless something says otherwise.
+
+**You were right that you'd said it.** `goal-d5e96abe` was moved to `realized` on 2026-08-15 with its body recording that all five components were at `ready_to_reconcile` or beyond, *"which the operator has directed be treated as done"*. That's one of only two realized goals on the map — the rule was already in force, and BUG-1132 asked the question anyway on 08-16. The map lost your ruling the same way it loses everything else, which is a fairly pointed argument for the decision log existing.
+
+One expectation to set, because I'd rather not oversell it: **most goals won't flip.** `goal-959f56f3` keeps REQ-806 (`free_coded`) and REQ-807/808/809 (`draft`); `goal-198516d1` keeps REQ-146 (`draft`) and REQ-148 (`free_coding`). Both correctly stay `in_progress`. The gain is at leaf level — about thirty tickets stop lying about themselves — and, more importantly, the roll-up disagreement detector unblinds. That's what finally lets me sweep the genuinely stale declared states among the 28, which I can't do today because a mis-rendered goal and a stale one look identical from here.
+
+Worth noting the shape of it: this fix credits work you've already done. It's the one change on the board that makes the map more accurate *and* moves it in your favour.
 
 <!-- xgd-chat-end -->
