@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-9
 created_by: xgd
 created_at: '2026-08-19T17:42:41.908071+00:00'
-updated_at: '2026-08-19T17:56:48.989370+00:00'
+updated_at: '2026-08-19T18:19:53.678640+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -189,5 +189,19 @@ My sandbox blocks `ps` and cross-process signals, so I **could not confirm PID l
 Ready to design the tool when you are. The mechanical core is small and now well-defined: per project, read the dispatcher's `dispatcher.log` version line, the site-packages version+mtime, each worktree's last-session start/end timestamps and terminal record, then apply the launch-time-vs-fix-time rule. The three things that would have caught today's mess are a **schema-compatibility gate** (fail fast at dispatcher start, not per-workflow), a **cross-project dispatcher version check**, and **classifying `@error` FSM gaps separately from `@fail`** so restart-won't-help is visible at a glance.
 
 Want me to spec that as a ticket?
+
+<!-- xgd-turn id="a5363b70-1df6-480a-9ea2-830e7d63823a-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-19T18:19:53.558510+00:00" -->
+#### You
+Lets keep pushing manually before we automate - I'm still not entirely sure of the shape of this tool and it is very xgd specific at the moment not a bad thing just an observation.
+
+You understand what I am trying to do but let me see if I can articulate it. There is a throughline:
+
+Crash -> logs -> bug ticket -> fix + version bump -> install in venv -> restart dispatcher -> reset process -> CRASH ->...
+
+So I want to track for any crash (1) what version was it running under when it crashed (2) what version is that crash fixed in (if any) (3) What is the current version of the dispatcher per project
+
+Note that I can restart with e.g. xgd dispatcher restart reconcile and that bypasses the dispatcher process that is running - but the top of the log always shows the version that the process was using.
 
 <!-- xgd-chat-end -->
