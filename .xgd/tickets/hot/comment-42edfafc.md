@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-19T18:37:19.890714+00:00'
+updated_at: '2026-08-19T18:38:44.469191+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2473,5 +2473,57 @@ REQ-806 exists now — it didn't when I probed 40 minutes ago (REQ-804 was the c
 <!-- xgd-chat role="user" ts="2026-08-19T18:36:08.051920+00:00" -->
 #### You
 I am still seeing lots of tickets as "in_progress" when I know they are not - what's going on there?
+
+<!-- xgd-turn id="9969680566474179a9e9465c5345279d-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-19T18:37:37.760444+00:00" -->
+#### You
+I am still seeing lots of tickets as "in_progress" when I know they are not - what's going on there?
+
+<!-- xgd-turn id="9969680566474179a9e9465c5345279d-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-19T18:37:53.597368+00:00" -->
+#### Claude
+Diagnosed. This is a known, filed bug — and it's still sitting at `draft`.
+
+Comment is local-only — I can't annotate BUG-1132 in `xgd` from here. Recording it on the map's own goal instead.
+
+You're seeing a rendering defect, not a stale map. It's **`xgd/BUG-1132`** — filed 2026-08-16 off your own report, severity high, priority high, and **still `draft` three days later**.
+
+## What's actually happening
+
+The goal map projects ticket status onto the goal ladder. Free-coded tickets have their own lifecycle:
+
+```
+draft → free_coding → free_coded → ready_to_reconcile → reconciling → free_and_merged
+```
+
+The map maps the two ends and **collapses the entire middle to `in_progress`**. So `ready_to_reconcile` — where your hands are off it and only machinery remains — renders identically to `free_coding`, which is active unfinished work.
+
+Three consequences, and they compound:
+
+1. **The distinction that matters is erased.** Counting only what I actually read in today's sweep, **at least 29 tickets are sitting at `ready_to_reconcile`** — 17 in xgd, 5 in 1stcontact, 7 in lagrange-framework. That's your reconcile backlog, and all of it renders as work-in-flight.
+
+2. **Accumulation is starved.** Nothing reaches `realized` until `free_and_merged`. So `realized` holds at **2 goals out of 65** while roughly thirty finished pieces of work are invisible to the one register that's supposed to only ever grow. That's why the map feels like it isn't moving on the days you move fastest.
+
+3. **It propagates upward.** Roll-up rule 3 says anything `in_progress` makes the parent `in_progress`. One collapsed leaf turns a whole root amber, which is how you get 28 of 65 goals in one state. When most of the map is a single state, state stops discriminating.
+
+There's a fourth, quieter one: it blinds the staleness detector. `goal-959f56f3` doesn't appear in the disagreements list *because* all its children collapse to the same wrong value, so derived agrees with declared. And it still reports `leaves: []` in on-deck — a workstream ~25 tickets deep with a target six days past, offering you nothing actionable.
+
+## The question that's blocking the fix
+
+BUG-1132 ends with an open question addressed to you that, as far as I can tell, **has never actually been asked**. It's the reason the ticket hasn't moved — it's a judgement call, not a mechanical one:
+
+> **Should `ready_to_reconcile` project to `realized`?**
+
+The argument for: the goal ladder is *your* register, and your definition of done is "no work left for me." Reconcile is machinery. Gating accumulation on machinery means wins land days after they're earned — which is exactly the failure you're describing.
+
+The cost: a failed reconcile would mean un-realizing a goal. The ladder explicitly permits that and treats it as rare and worth remarking on, so it looks affordable — but it's your call, not mine.
+
+If the answer is no, then the map needs a distinct visual treatment for *"operator-done, machine-pending"*, because rendering it as plain `in_progress` is the defect. Either way the ticket can move; right now it's stuck on an unanswered question.
+
+Say which and I'll write it onto BUG-1132 so whoever picks it up isn't blocked. I can't promote it to implementation — that's your call to trigger.
+
+One honest caveat: this explains the bulk of it, not all of it. A handful of goals are declared `in_progress` by hand and have genuinely drifted — "XGD Remove friction" from the 08-07 burst, the two whitepaper goals, "XGD site live". Those aren't the bug. I haven't touched them, because a declared value disagreeing with reality is signal I shouldn't overwrite — but I can walk you through those specific ones in about a minute if you want them cleaned up.
 
 <!-- xgd-chat-end -->
