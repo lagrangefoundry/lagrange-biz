@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-19T17:34:18.628970+00:00'
+updated_at: '2026-08-19T17:35:25.302492+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2394,5 +2394,56 @@ oh and are we clear on the xgd features required for beta launch?
 Doing the sweep now — pulling a fresh digest and the current state of each cluster rather than trusting what I had.
 
 Evidence gathered. Making the updates now — I'll narrate each.
+
+<!-- xgd-turn id="ac4bc272663b45e38c0daad14c65bfe2-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-19T17:34:36.518948+00:00" -->
+#### You
+Please continue
+
+<!-- xgd-turn id="ac4bc272663b45e38c0daad14c65bfe2-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-19T17:35:00.676174+00:00" -->
+#### Claude
+Sweep done. Here's where things actually are.
+
+## What landed since yesterday
+
+`xgd` went **0.15.267 → 0.15.298** in about 23 hours. Concretely:
+
+**Access control** — the cluster is all at `ready_to_reconcile` or `free_coded`, and five things landed *after* the merge:
+- `REQ-802` — `xgd test-workflows --report-test N`, a reliable repro for the sandbox denial. This is the harness that was missing when three fix rounds were declared done without the live check ever running.
+- `BUG-1160` — the last 5 call sites hardcoding `allowed_tools`. That closes REQ-801's "no session launches without a named role" as a *class*, not instance-by-instance.
+- `BUG-1166` (`_locks` grant missing for `project_root`), `BUG-1165` (`--report-test` ignored the overrides), `REQ-803` (tile renamed to "AI access permissions" — your UI pass has started).
+
+**Your transcript bug** — `lagrange-framework/BUG-32` is now `ready_to_reconcile`. And the old date on the reappearing chunk is the diagnostic: re-drained turns carry their original timestamps, so a chunk coming back stamped yesterday *is* the offset-0 re-read. Your read is right.
+
+**Yesterday's calendar question** → filed as `BUG-1163`, root-caused to the vendored component, routed upstream as `lagrange-framework/BUG-33`, and BUG-33 is already `ready_to_reconcile`. Filed and fixed inside a day. (The answer, for the record: `calendarStrip` already tags every row `target|event` — it just never renders it as text.)
+
+**1stcontact workerd** — three days ago: one landed, five drafts. Now **six at `ready_to_reconcile` or beyond**, including REQ-145, the structural one ("control-app becomes the builder, proxy deleted").
+
+**Knowledge management** — the framework side is *done*: REQ-99, REQ-100, REQ-101 all `ready_to_reconcile`.
+
+## Where I'd correct your read
+
+**(1) Access control — agreed, with one thing to close.** `BUG-1162` (the Seatbelt `denyWithinAllow` problem, the "knarly issue") was closed `wont_fix` at 03:14 this morning **with no resolution note**. Its sibling BUG-1163 was closed the same way but carries a full explanation and names its successor. BUG-1162 has nothing. Three readings the map can't distinguish: REQ-802 reproduced it and it wasn't real; BUG-1166 superseded it; or it got cleared off the board. One line on that ticket is what separates "solved" from "forgotten" — and it's the last thing between this goal and `realized`.
+
+**(2) 1stcontact — the gap to a skeletal launch is `REQ-146`,** still `draft` (AI host and publish move into workerd), plus REQ-148 in `free_coding`. A skeleton that *serves and renders* is reachable today. A skeleton that can *publish* is not. Also: REQ-149 and REQ-150 appeared as `discovered` — filesystem assumptions in places the original eight didn't reach.
+
+**(3) The two refactors are not the same risk.** The dashboard refactor runs alongside the old code, as you said. The KM cutover does not — `REQ-775` *replaces* the static priming assembler, per the no-legacy-modes rule, so there's no cheap rollback. Worth knowing before it starts. Also, of your three dashboard pieces, only Chat+Docs has a goal; **shell component and Intents tab have no tickets at all.**
+
+## Beta features — you're two of three, and the third was invisible
+
+- **Quality** — `goal-5c39075c` + `xgd/GOAL-1` (regression green end-to-end, `planned`). Your "we've stopped making breaking changes to the backend" is supported by the trail; the repair bill bought a stable contract.
+- **Install** — realized 08-15, five days early. Binary install is *packaging v2*, not a reopening of this — it belongs under `xgd/GOAL-2`. **The `gh` question is genuinely unresolved** and it's the sharper one: a beta user without `gh` authenticated hits it at first *reconcile*, not at install, which reads as a broken product rather than a missing dependency.
+- **Documentation** — had **no goal, no tickets, no presence on the map**. A beta requirement you're counting on was invisible to every view. Created `goal-aa268eb1` at `aspiration` with the scoping questions, including one worth deciding early: if the shipped KB becomes a first-class artifact, user docs and session-priming knowledge may be one corpus with two readers rather than two bodies of writing.
+
+Separately: the beta *scaffolding* — cohort recruited, entry bar defined, support/bug-intake loop, onboarding flow — is all still at `concept`. So the feature list is answerable; beta as a dated event isn't.
+
+## What I changed
+
+Updated `access control`, `workerd`, `knowledge management`, and promoted `Adopt modular framework components` `concept → in_progress` (roll-up already derived that; you've now named it as active work). Marked workerd and KM as workstreams. Created the documentation goal and `1stcontact: email capture, user portal and CRM Lite` (`aspiration`, `depends_on` workerd — building the first revenue-bearing modules on the laptop would spend the value of the 08-15 decision to move early). Set workerd's target to 08-18 on your "hoping today"; I have not set a date on anything you didn't date yourself.
+
+**Two things only you can answer:** the resolution note on BUG-1162, and access control's target date — it still reads 2026-08-13, five days stale. If end of day today is the real expectation, say so and it becomes a `completed_date` rather than a slip.
 
 <!-- xgd-chat-end -->
