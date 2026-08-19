@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-9
 created_by: xgd
 created_at: '2026-08-19T17:42:41.908071+00:00'
-updated_at: '2026-08-19T18:25:09.932809+00:00'
+updated_at: '2026-08-19T18:31:02.057368+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -338,5 +338,15 @@ Two open questions before we shape anything:
 
 1. **Is the `0.15.42` worktree shadow acceptable?** It means xgd's own runs partly execute branch code. That may be deliberate for self-hosting — but if not, it invalidates every xgd crash diagnosis and should outrank the tool.
 2. **Do you want the tool to cover `paused` and stale-lock states**, or only crashes? A third of what `xgd status` calls "error (process died)" turned out to be something else.
+
+<!-- xgd-turn id="a65f998c-497f-4ff0-b6fd-67b9710d1565-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-19T18:31:01.929994+00:00" -->
+#### You
+We had a refactoring branch for a while and I was sloppy about the versioning - I should have force an increment on the minor version - this doesn't happen too much and we don't run any processes on the refactor branch.
+
+I didn't realize that the process children pick up the latest version. That's interesting and could be fatal with things like our breaking security changes.
+
+Given that, I propose to restart everything - I will probably do a full revert of everything except the xgd regression that has days of work on it right now.
 
 <!-- xgd-chat-end -->
