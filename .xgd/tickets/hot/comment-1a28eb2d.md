@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-10
 created_by: xgd
 created_at: '2026-08-20T03:15:26.984472+00:00'
-updated_at: '2026-08-20T03:32:21.205153+00:00'
+updated_at: '2026-08-20T03:33:09.274864+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -310,5 +310,108 @@ Two ways to go from here — say which:
 <!-- xgd-chat role="user" ts="2026-08-20T03:32:21.121690+00:00" -->
 #### You
 Ok what have you got?>
+
+<!-- xgd-turn id="c4b1bbb4-f967-4ea0-bf88-18a37c27b779-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-20T03:33:09.200504+00:00" -->
+#### Claude
+# PRIMARY — "The Rest of the Spell" (~55s)
+
+**1. THE AMBITION**
+
+*Dark workshop. One person at a bench. Something enormous on it, half-built — obviously beyond one pair of hands. A drawing that runs off the edge of the table and keeps going.*
+
+> **"What can one person build, alone, in a garage?"**
+>
+> *(beat)*
+>
+> **"More than they can finish."**
+
+**2. THE SUMMONING**
+
+*They set something going. Constructs wake — two, then six, then twenty. Work starts everywhere at once. It's beautiful. They're grinning.*
+
+> **"So we learned to summon help."**
+>
+> **"And it worked."**
+
+**3. THE TURN**
+
+*The rhythm accelerates past pleasant. Helpers making helpers. Output stacking — but it's the wrong output, and it stacks anyway. Something spills. They stop smiling. They reach out to halt one. Two take its place.*
+
+> **"It kept working."**
+>
+> *(beat)*
+>
+> **"It didn't stop working."**
+>
+> *(beat)*
+>
+> **"They weren't wrong. They were obedient. That's worse."**
+
+**4. THE THING THAT SAYS NO**
+
+*Cut the music. Near silence. They don't shout or wave their arms. They walk to the bench and seat a governor into place. A construct presents its work; a gauge rejects it; the construct takes it back and does it again. No drama. Almost boring.*
+
+> **"An apprentice learns to summon."**
+>
+> **"An artificer builds the thing that says no."**
+
+**5. THE RETAINED SCALE**
+
+*Pull back. The workshop is enormous now and still running — fifty constructs, nothing spilling, everything landing where it should. The person picks up their coat.*
+
+> **"Control isn't the opposite of scale."**
+>
+> **"It's how you get to keep it."**
+
+*They walk out. Lights stay on. The work continues, correctly, without them.*
+
+> **CARD: XGD**
+> **CARD: The rest of the spell.**
+
+---
+
+# ALT — "Three" (~30s, cold register)
+
+For an audience that recoils from whimsy. Shot on real mechanism and real terminal, no fable at all.
+
+> **"Generation is solved."**
+>
+> **"Anyone can summon fifty of them."**
+>
+> **"Nobody can check fifty of them."**
+>
+> *(beat)*
+>
+> **"So you run three. Because three is what you can personally read."**
+>
+> *(long beat — the governor spins up)*
+>
+> **"An artificer doesn't watch the work. They build the thing that checks it."**
+>
+> **"Then they run fifty."**
+>
+> **CARD: XGD — the workshop, not the wand.**
+
+---
+
+# 10s CUT — pre-roll / social
+
+> **"They weren't wrong. They were obedient."**
+>
+> **CARD: XGD — build the thing that says no.**
+
+---
+
+### Notes
+
+**Shoot the ALT first.** It's cheap, it's defensible, and "you run three because three is what you can personally read" is the line most likely to make an engineer stop scrolling — it's specific, true, and slightly embarrassing to recognize. The primary is the better *film*, but it needs real production to survive; a half-funded fable looks like a half-funded fable, whereas the cold version gets *better* the more austere it is.
+
+**The ending is the argument.** They leave and the work continues correctly. That's the artificer thesis, and it's also the only promise that touches the audience's actual life — you can go to bed.
+
+**Card options**, in order of preference: *The rest of the spell* / *The workshop, not the wand* / *For software artificers*. Avoid ending on "don't be the apprentice" — it's a good internal north star but a sour last frame.
+
+One thing I'd flag: beat 4 lives or dies on whether the gauge rejecting bad work reads as *concrete* on screen. If it plays as a magic swoosh, the whole piece collapses into the anti-AI ad. It should look like machining, not magic — and it should be the quietest ten seconds in the trailer.
 
 <!-- xgd-chat-end -->
