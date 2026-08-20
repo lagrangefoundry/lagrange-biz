@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-20T00:59:34.821828+00:00'
+updated_at: '2026-08-20T01:09:16.353717+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2551,5 +2551,58 @@ Landed. Three things done:
 One expectation to set, because I'd rather not oversell it: **most goals won't flip.** `goal-959f56f3` keeps REQ-806 (`free_coded`) and REQ-807/808/809 (`draft`); `goal-198516d1` keeps REQ-146 (`draft`) and REQ-148 (`free_coding`). Both correctly stay `in_progress`. The gain is at leaf level — about thirty tickets stop lying about themselves — and, more importantly, the roll-up disagreement detector unblinds. That's what finally lets me sweep the genuinely stale declared states among the 28, which I can't do today because a mis-rendered goal and a stale one look identical from here.
 
 Worth noting the shape of it: this fix credits work you've already done. It's the one change on the board that makes the map more accurate *and* moves it in your favour.
+
+<!-- xgd-turn id="969a3906d4a34800b2b37268a28b72f6-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-20T01:03:51.304498+00:00" -->
+#### You
+Can you do another sweep of the projects.
+
+Most of the day today was spent on access controls, I think we have everything we need. I anticipate bugs and the UI is UGLY but we can refine over time.
+
+I managed to complete the implementation of the 1stcontact in the cloud, but I haven't tried to fire it up yet - something for tomorrow I think.
+
+<!-- xgd-turn id="969a3906d4a34800b2b37268a28b72f6-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-20T01:07:46.805761+00:00" -->
+#### Claude
+Sweep complete. Writing it up — one thing needs flagging before I do.
+
+Swept all three projects. `xgd` moved **0.15.306 → 0.15.322** today.
+
+## Access control — the core is genuinely done
+
+- **REQ-806** (the `(where, what)` redesign) — `ready_to_reconcile`
+- **REQ-807** (deny-Edit the whole installed distribution root) — `ready_to_reconcile`. It was `draft` this morning. Filed, scoped and closed inside a day.
+- **BUG-1132** — you answered at 16:04, it was implemented by evening.
+- Plus BUG-1202, 1203, 1206, 1209–1216.
+
+And **DOC-981 was rewritten**. It went from a 17-section running journey record into an actual design document: three axes (WHAT / WHERE / ESCAPE), one compiler, final schema, live configuration, explicit known-gaps section, journey preserved as an appendix. That artifact is what makes this handoverable to a beta user, and it didn't exist this morning.
+
+## One thing disagrees with itself, and it's tomorrow's thing
+
+**Your own design doc and the ticket store contradict each other, exactly on the network sandbox.**
+
+DOC-981 §8, written today:
+
+> **Network egress control (REQ-808, `draft`) — not implemented.** BUG-1202 added the `network`/`mach_lookup` toggles… but **neither has been live-verified against a real sandboxed launch**… This is the blocker for 1stcontact's network-dependent UAT suite.
+
+The ticket store says REQ-808 is **abandoned** and REQ-809 **legacy_done**, neither with a resolution note. Both were created this morning as drafts — CHAT-143 is titled "Clean up of draft bugs and reqs", which is the likeliest explanation.
+
+The mechanism exists (BUG-1202 built it). What's missing is the live verification — and REQ-796's history is the argument for caring: three rounds were declared fixed there without the live check ever running. BUG-1208 is the symptom already showing: `playwright install chromium` hangs indefinitely under `allowedHosts: []` — no error, no timeout.
+
+**My recommendation, and it's a real choice:** split network egress into its own goal and mark access control **`realized`, completed 2026-08-19**. What you set out to build is finished. Network egress is a fourth axis that got pulled in by a 1stcontact deadline, and leaving it inside makes finished work read as unfinished for weeks. The alternative — re-open REQ-808 scoped to just the verification, keep the goal open — is more conservative and keeps the blocker loud. Say which and I'll do it.
+
+## 1stcontact — all eight landed
+
+**REQ-146 closed today.** This morning it was the named gap between you and a skeletal launch, and it was still `draft`. REQ-148 went `free_coding → ready_to_reconcile`. lagrange-framework/**REQ-103** (`@lagrangefoundry/ai` runs in workerd) landed alongside — the framework half of the same move; I've added it as a child.
+
+Left the target at 08-21. "Implemented but never executed" is where estimates are worst, and you flagged the logistics as anticipated rather than discovered — no reason to move a date on good news that hasn't been run.
+
+## The one to pick up next
+
+Once BUG-1132 clears reconcile, **the roll-up disagreement detector unblinds for the first time.** I've been unable to sweep the 28 `in_progress` goals because a mis-rendered goal and a genuinely stale one were indistinguishable from here. After it reconciles, that's a single pass — ask me and I'll run it.
+
+Today's shape, for the record: a full day on access controls produced the redesign landed, the distribution-root deny closed, the design document written, and the map's own honesty bug fixed — while 1stcontact's cloud implementation completed in parallel.
 
 <!-- xgd-chat-end -->
