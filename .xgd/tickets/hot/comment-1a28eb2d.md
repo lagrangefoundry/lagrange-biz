@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-10
 created_by: xgd
 created_at: '2026-08-20T03:15:26.984472+00:00'
-updated_at: '2026-08-20T03:16:29.220626+00:00'
+updated_at: '2026-08-20T03:17:32.654293+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -47,6 +47,22 @@ Pretty much anything
 <Ironman blasting into the sky> 
 
 "XGD - tooling to take engineers to the next level"
+
+Ok so using Marvel movie footage in my trailer is probably a pipe dream - we can discuss "fair reuse" but I'm selling a product - I would need to pay...however we could generate AI video that told the same story and find other cultural references.
+
+Thoughts?
+
+<!-- xgd-turn id="daddfa87-e1f8-4aed-bcfd-088016764d8e-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-20T03:17:32.567222+00:00" -->
+#### You
+What can one person do on their own in their garage? ---footage of Tony Stark 
+
+With the right tools... ---zoom in on the robot helpers
+
+Pretty much anything  ---Ironman blasting into the sky
+
+XGD - tooling to take engineers to the next level 
 
 Ok so using Marvel movie footage in my trailer is probably a pipe dream - we can discuss "fair reuse" but I'm selling a product - I would need to pay...however we could generate AI video that told the same story and find other cultural references.
 
