@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-10
 created_by: xgd
 created_at: '2026-08-20T03:15:26.984472+00:00'
-updated_at: '2026-08-20T03:18:21.790557+00:00'
+updated_at: '2026-08-20T03:22:57.238896+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -103,5 +103,18 @@ Two more things worth flagging:
 - **Your best asset may be real capture.** For a developer tool, actual terminal footage of a fleet of agents working in parallel *is* the robot-helpers shot. It's free, it's yours, and it's more credible than any generated imagery — devs discount stock/AI visuals hard, and the thing itself is the proof.
 
 If you want, give me the product beats you most want landed and I'll write two or three full 30-second scripts with shot lists against them.
+
+<!-- xgd-turn id="b745e8f2-7fd0-4bcc-a903-462e5005748b-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-20T03:22:57.137829+00:00" -->
+#### You
+Let me reset you we are having the wrong conversation. I want to talk about marketing NOT IP
+
+This could be a wizard in a workshop
+It could be a doc Brown back to the future Rick and Morty mad scientist 
+It could be a high school kid with a chemistry set
+A witch brewing potions
+
+I'm aiming at the bigger message - FORGET THE IP questions we will do something completely original - but there will be cultural references - the tools: a mythological hammer, whatever - again we can return to the references. I want to focus on the message not the envelope
 
 <!-- xgd-chat-end -->
