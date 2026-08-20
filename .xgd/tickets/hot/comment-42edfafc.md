@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-20T03:14:49.340070+00:00'
+updated_at: '2026-08-20T17:45:40.073004+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2656,5 +2656,23 @@ I built one hazard into REQ-811: it reports and ranks, it must never bulk-close.
 **And an evening backlog pass**: BUG-1201 and BUG-1204 out of draft to `ready_to_reconcile`, BUG-1207 resolved `wont_fix`, BUG-1208 to `free_coded`, BUG-1221 landed. Plus BUG-1203, 1206, 1209–1216 across the day. The installed CLI moved **0.15.298 → 0.15.325** between midday and now.
 
 Two of the three things you named as beta requirements moved today — quality got the permissions foundation and the backlog pass; documentation got its first real artifact in DOC-981. And the map gained its second and third realized goals this week against a backdrop where it could only ever show two.
+
+<!-- xgd-turn id="13fc0fb700c2447c8ef9ebcfb2518d99-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-20T17:45:36.370003+00:00" -->
+#### You
+Ok so plan for the day:
+HOUSEKEEPING
+Reinstall everything
+Restart all the dispatchers and dashboards
+Collect bug reports for failed processes and trigger investigations
+Investigations on the new auto created bugs in xgd
+Look for any permissions fall out
+Check in on capability matrix <-- this is an important one that keeps slipping off the table. I need to continue to pay attention. We have not just display problems but there are bugs in the capability matrix system it is not working perfectly and attention is required in order to ensure that we eliminate them.
+DEVEOPMENT
+1. 1stcontact in the cloud -> email capture -> user/email management -> user login -> user portal
+2. KM system in xgd
+
+Thats a pretty full day!
 
 <!-- xgd-chat-end -->
