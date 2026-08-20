@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-20T19:08:43.746601+00:00'
+updated_at: '2026-08-20T19:17:30.994015+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2698,5 +2698,90 @@ Hello?
 <!-- xgd-chat role="user" ts="2026-08-20T18:14:48.247546+00:00" -->
 #### You
 just say hi
+
+<!-- xgd-turn id="16e244d1767446dd9be4842c2ba19846-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-20T19:11:58.137652+00:00" -->
+#### You
+Ok so plan for the day: HOUSEKEEPING Reinstall everything Restart all the dispatchers and dashboards Collect bug reports for failed processes and trigger investigations Investigations on the new auto created bugs in xgd Look for any permissions fall out Check in on capability matrix <-- this is an important one that keeps slipping off the table. I need to continue to pay attention. We have not just display problems but there are bugs in the capability matrix system it is not working perfectly and attention is required in order to ensure that we eliminate them. DEVEOPMENT
+
+1. 1stcontact in the cloud -> email capture -> user/email management -> user login -> user portal
+
+2. KM system in xgd
+
+Thats a pretty full day!
+
+<!-- xgd-turn id="16e244d1767446dd9be4842c2ba19846-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-20T19:12:18.441710+00:00" -->
+#### Claude
+Good — that's a real day. Let me ground it in what's actually on the map rather than guess, especially the capability matrix.
+
+First, one correction from before the interrupt: **I did not update `goal-959f56f3`'s body.** BUG-32 and BUG-1132 are filed and linked; that body edit never happened, so it still records REQ-780/94/95 as `free_coded` when all three are now `ready_to_reconcile`.
+
+Note the clock: it's **2026-08-20** now, and xgd has moved 0.15.256 → 0.15.329 since earlier in this session. Pulling fresh rather than trusting anything above.
+
+Significant movement since earlier. Let me check the two things your plan hinges on.
+
+Three findings that matter for today, all confirmed:
+
+Everything below is from a fresh pull, four days on from the earlier part of this session.
+
+## Both bugs from Friday are through
+
+`lagrange-framework/BUG-32` (transcript re-drain) — **`ready_to_reconcile`**
+`xgd/BUG-1132` (state collapse) — **`ready_to_reconcile`**
+
+Filed Friday, both past your hands by today. And BUG-1132's fix is visibly working: before it, nothing could roll up past `in_progress`. Now nine goals derive to `realized`.
+
+## The thing you can't feel: 101 points of accumulation sitting unclaimed
+
+Nine goals whose children are **all done**, still declared `in_progress`:
+
+| goal | derived pts |
+|---|---|
+| Goal map usable as a daily driver | 44 |
+| Dashboard and goal map bugs | 22 |
+| XGD Remove friction | 15 |
+| Ticketing store bugs | 9 |
+| Interface tidy-up for external use | 5 |
+| Reconcile bugs | 4 |
+| Development bugs | 2 |
+| Regression lifecycle: event-driven, not timed | 0 |
+| Resync bugs | 0 |
+
+That's the fix landing and the map catching up all at once. `realized` currently reads 3 of 68 — it should plausibly read 12. I'm not touching these: the declared side is the stale one, but each needs a `completed_date`, and confirming them means confirming that `ready_to_reconcile` counts as done — which is the open question I put in BUG-1132 and which appears to have shipped as proposed. Say the word and I'll walk them with dates derived from each last child's completion.
+
+The one going the other way: **`goal-959f56f3` (LLM access control) you marked `realized`** — derived says `in_progress`, 63 points, because `xgd/DOC-981` (Claude Invocation & Permissions technical design) is still `planned`. Your call which side is stale; my read is the doc is a genuine loose end, not a bookkeeping artefact.
+
+## Capability matrix — it wasn't your attention
+
+I checked all 68 goals: **the capability matrix had no goal anywhere on the map.** That's why it keeps sliding off. Nothing held it, so nothing put it in On Deck, so it competed for a slot purely from memory against eight other threads. It was always going to lose that.
+
+Created **`goal-5d987c56` — "Capability matrix is trustworthy"**, marked `workstream: true` so it lands in On Deck by construction. I split the scope the way you did — display problems vs. actual defects in the system — and made elimination of the second the goal, since a matrix that renders cleanly but derives wrongly is the more dangerous failure. It needs a `target_date` from you, and its children aren't attached yet — see below.
+
+## What gates two of your housekeeping items
+
+**`xgd/BUG-1185`** — `xgd ticket list --project` crashes with `AttributeError: list_refs`. Status `draft`, severity medium.
+
+This is why the capability goal has no children: I couldn't enumerate xgd's tickets from here. It's also the exact path a session uses to check for duplicates before filing — so "investigations on the new auto-created bugs in xgd" runs into it too. Small bug, sits upstream of two of your six housekeeping items. Worth doing first.
+
+## Your development items, grounded
+
+**1stcontact chain** — maps onto two goals, and the seam is where you'd expect:
+- `goal-198516d1` (workerd, `in_progress`) → `REQ-150` *boot a plain Vite SSR server, not Astro's* (`in_progress`), `REQ-149` *publish in the cloud without a filesystem* (`planned`). These are your "in the cloud".
+- `goal-e4c8a6ed` (email capture, portal, CRM Lite) → children `1stcontact/GOAL-10` (portal/login) and `GOAL-4` (CRM Lite). `depends_on` the workerd goal.
+
+One flag: `goal-e4c8a6ed` is still at **`aspiration`** — no commitment, no date. If you're building it today it's at least `planned`, and that needs a target date. Its body already carries your 08-18 rationale, so the reasoning is captured; it's just the rung that hasn't moved.
+
+**KM in xgd** — `goal-74b33543`, `in_progress`, **zero leaves**. Nothing under it you can sit down and do. Whatever today's KM work is, it isn't ticketed yet.
+
+## The thing missing from your plan
+
+**`goal-49e8dec2` — "Release ready to demo at the 8/24 dinner", `target_date: 2026-08-24`. That's four days out, and it has no children.**
+
+Its body makes the case that it's cheap to hit and not recoverable afterwards — the dinner happens either way, whether it produces feedback depends on there being something to show. It reads "ready" as external-readiness, not features: an install that works, controls a newcomer can read, a visible answer to what the AI is permitted to do.
+
+Your housekeeping list is largely that same work. I'd say it's not absent from your plan so much as unnamed in it — but with an empty child list and four days, it's worth ten minutes deciding what "ready" means concretely, while there's still room to act on the answer.
 
 <!-- xgd-chat-end -->
