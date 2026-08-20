@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-10
 created_by: xgd
 created_at: '2026-08-20T03:15:26.984472+00:00'
-updated_at: '2026-08-20T03:24:09.083697+00:00'
+updated_at: '2026-08-20T03:26:55.515572+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -182,5 +182,11 @@ If awareness: the kid with the chemistry set, keep it wondrous, skip the turn.
 If differentiation — and given you're selling a product, I think it is — run the wizard/witch, and **the turn is the whole trailer**.
 
 Tell me which, and I'll write the beat sheet with the VO locked.
+
+<!-- xgd-turn id="6366e2b2-be46-4447-afcf-26ee4a670dd5-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-20T03:26:55.416309+00:00" -->
+#### You
+The sourcer's apprentice springs to mind - that is close right you summon help but it gets out of control XGD is the control...
 
 <!-- xgd-chat-end -->
