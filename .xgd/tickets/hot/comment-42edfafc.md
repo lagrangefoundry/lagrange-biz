@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-20T02:27:23.760680+00:00'
+updated_at: '2026-08-20T03:14:49.340070+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2604,5 +2604,57 @@ Left the target at 08-21. "Implemented but never executed" is where estimates ar
 Once BUG-1132 clears reconcile, **the roll-up disagreement detector unblinds for the first time.** I've been unable to sweep the 28 `in_progress` goals because a mis-rendered goal and a genuinely stale one were indistinguishable from here. After it reconciles, that's a single pass — ask me and I'll run it.
 
 Today's shape, for the record: a full day on access controls produced the redesign landed, the distribution-root deny closed, the design document written, and the map's own honesty bug fixed — while 1stcontact's cloud implementation completed in parallel.
+
+<!-- xgd-turn id="a8d2c59a65324cc7abd9a25a55a38d59-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-20T03:09:40.005491+00:00" -->
+#### You
+Ok the network permissions are granted they are just network on/off right now - that is sufficient. I think Doc-981 updated itself, but if not let me know. And it is tested and working
+
+1c - I fixed the permissions issues that allowed agent testing. Tomorrow my focus will be getting this working in the cloud
+
+This evening I knocked out a few bugs and old reqs in xgd. We should have a tracker for these - I want to get draft tickets to 0 in every project - obviously we will create new tickets and so its a never ending cycle - but we have to burn down the backlog and clean up the house.
+
+IIRC 1132 is done - can we close LLM access control?
+
+Please take a sweep through this evenings work and update things.
+
+Also can you let me know what I achieved today?
+
+<!-- xgd-turn id="a8d2c59a65324cc7abd9a25a55a38d59-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-20T03:14:27.632668+00:00" -->
+#### Claude
+**Yes — closed.** `goal-959f56f3` is `realized`, completed 2026-08-19. Target was 08-13, so six days late, and the reason is on the record rather than lost: two decisions, the branch→flag turn and the stop-patching redesign.
+
+**DOC-981 did not update itself.** I checked directly. §8 still reads *"Network egress control (REQ-808, `draft`) — not implemented… neither has been live-verified against a real sandboxed launch."* That's now false, and it matters more than an ordinary doc nit because §8 is the section a newcomer reads to learn what's unfinished. I didn't patch it myself — it's a large document and rewriting the whole body through a shell string risks corrupting it. Say the word and I'll do a targeted edit.
+
+Also worth saying plainly: **REQ-808 was my ticket and I over-scoped it.** I specified domain allowlisting, MITM proxy, credential masking — pulled from REQ-796's deferred list. On/off was what the requirement needed. The abandonment was right.
+
+**One expected disagreement.** Declared `realized`, derived will read `in_progress` — four children still at `free_coded`: **BUG-1142, BUG-1143, BUG-1159, REQ-801**. They're stuck for a mechanical reason recorded on 08-17: the `move-to-free-coded` gate refused their SHAs while `free-REQ-796` was unmerged. It has since merged. Re-run the gate on those four and it resolves itself. Watch for BUG-1161 (short vs full SHA normalisation) when you do.
+
+## Draft burndown
+
+Created `goal-24b1f233` and filed **REQ-811** in xgd for the tracker. One finding you'll enjoy: **`xgd ticket list --project` crashes** — `AttributeError: list_refs`, reproduced live. That's BUG-1185, and it's been sitting at `draft`. The command that would count the backlog is broken, and the bug describing it is in the pile it would have counted. That's item one.
+
+Counts: **lagrange-biz is already at zero.** The others can't be counted until BUG-1185 is fixed; known drafts by probing are BUG-1180/1185/1218/1220 in xgd and REQ-149/150 in 1c, but those are floors, not totals.
+
+I built one hazard into REQ-811: it reports and ranks, it must never bulk-close. This morning REQ-808 and REQ-809 were both closed same-day with no resolution note — likely a draft sweep. No harm done, because you'd independently made both calls. But the mechanism can't tell a stale note from a live blocker, and REQ-808 was at that moment recorded in DOC-981 as the 1stcontact blocker.
+
+---
+
+# What you achieved today
+
+**You closed a nine-day subsystem.** Access control went from "the model is inverted and three rounds of fixes were built on it" to realized. Today specifically: REQ-806 (the `(where,what)` redesign) reached `ready_to_reconcile`; REQ-807 went `draft → ready_to_reconcile` in a single day; network on/off landed, tested, working.
+
+**You rewrote DOC-981.** It went from a 17-section running journey record into an actual design document — three axes, one compiler, final schema, live configuration, known gaps, with the journey preserved as an appendix. That's the artifact that makes this handoverable to a beta user, and this morning it did not exist.
+
+**You fixed the map's own honesty bug.** BUG-1132 — answered 16:04, implemented by evening. About thirty tickets across three projects stop misreporting themselves, and the staleness detector unblinds for the first time.
+
+**1stcontact's cloud implementation completed.** REQ-146 was `draft` this morning and was the named gap between you and a launch; it's `free_coded`. REQ-148 went `free_coding → ready_to_reconcile`. lagrange-framework/REQ-103 landed alongside. All eight of the original block plus the framework half are now done. You also fixed the permissions issue blocking agent testing — the thing that was blocking 22% of that suite.
+
+**And an evening backlog pass**: BUG-1201 and BUG-1204 out of draft to `ready_to_reconcile`, BUG-1207 resolved `wont_fix`, BUG-1208 to `free_coded`, BUG-1221 landed. Plus BUG-1203, 1206, 1209–1216 across the day. The installed CLI moved **0.15.298 → 0.15.325** between midday and now.
+
+Two of the three things you named as beta requirements moved today — quality got the permissions foundation and the backlog pass; documentation got its first real artifact in DOC-981. And the map gained its second and third realized goals this week against a backdrop where it could only ever show two.
 
 <!-- xgd-chat-end -->
