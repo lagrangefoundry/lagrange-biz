@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-21T18:59:12.577127+00:00'
+updated_at: '2026-08-21T19:21:39.840325+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2933,5 +2933,87 @@ I can't pull the xgd bug list from here — enumerating another project's ticket
 **REQ-151/152/153** (locale identity and rendered `lang`/`dir`, money and time representation, reserved locale-shaped slugs) are still attached to nothing. They're the I18n session's output, not migration work. Site builder, a new i18n goal, or leave them loose for now?
 
 **And the nine goals whose children are all done but still read `in_progress`** — 101 derived points, including "Goal map usable as a daily driver" at 44. Offer still stands; on a bug day that's the honest counterweight to a long list. Ten minutes to walk them with completion dates whenever you want it.
+
+<!-- xgd-turn id="9adcbb8fd6bf461fb3492ff8b17035c7-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-21T19:16:11.652073+00:00" -->
+#### You
+I think packaging v1 is done btw
+
+I will fix 1185
+
+Please do a ticket sweep to make sure you are up to date
+
+<!-- xgd-turn id="9adcbb8fd6bf461fb3492ff8b17035c7-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-21T19:16:29.151452+00:00" -->
+#### Claude
+On it. Let me pull everything fresh.
+
+Packaging v1 is already recorded — `realized`, `completed_date: 2026-08-15`, against a 2026-08-20 target. **Done five days early**, and the map already had it. All five children (REQ-754/755/756/759/761) at `ready_to_reconcile` or beyond.
+
+The digest is running long — checking it.
+
+DOC-981's body says *"Design implemented and running on `xgd-working`"* — but its status is `draft`. That's the ticket lagging the work, not work outstanding.
+
+Sweep done — 69 goals, plus every cross-project ticket that gates something. Here's the state of the world.
+
+## The headline: workerd is essentially finished
+
+`goal-198516d1`, full child status:
+
+| | |
+|---|---|
+| REQ-141 Workers-runtime test project | `free_and_reconciled` |
+| REQ-142 Async `SiteStore` port + fs adapter | `free_and_reconciled` |
+| REQ-144 Build/deploy/smoke + the `[vars]` bug | `free_and_reconciled` |
+| REQ-147 Cloudflare Access | `reconciling` |
+| REQ-143 D1 + R2 adapter | `ready_to_reconcile` |
+| REQ-145 control-app becomes the builder, proxy deleted | `ready_to_reconcile` |
+| REQ-146 AI host moves into workerd | `ready_to_reconcile` |
+| REQ-148 contact-form precompiled | `ready_to_reconcile` |
+| lagrange-framework/REQ-103 | `ready_to_reconcile` |
+| REQ-149 Publish in the cloud | `free_coded` |
+| **REQ-150 1c CLI: plain Vite SSR** | **`free_coding` ← the only live one** |
+
+**Ten of eleven are past your hands.** The entire eight-ticket block you filed on 08-15 in four minutes has landed, plus 149 and 103. "Remarkably close" isn't optimism — REQ-150 is the last thing between you and the deploy, and REQ-154 is queued and ready behind it.
+
+## Packaging v1 — already banked, and early
+
+You were right, and the map already had it: `realized`, `completed_date: 2026-08-15`, against a `target_date` of 2026-08-20. **Five days early.** All five children at `ready_to_reconcile` or beyond. Nothing for me to change — it's one of your three realized goals.
+
+## Two statuses lagging the work, one of them expensive
+
+**`xgd/DOC-981` is `draft`, but its own body opens: *"Design implemented and running on `xgd-working`."*** The work is done; the ticket didn't move. That single status is what keeps `goal-959f56f3` deriving `in_progress` despite you declaring it realized — which keeps `goal-74b33543` blocked — which is why **KM shows zero actionable leaves** when REQ-775 is sitting right there. Moving DOC-981 unblocks your next xgd objective in one edit.
+
+**`xgd/GOAL-1` — "Stable release: regression green end-to-end" — `target_date: 2026-08-20`. Yesterday. Still `planned`.** Given today is the bug day aimed at getting background processes humming, this is the goal that day actually serves. It has no children.
+
+## Dates, in order
+
+| | | |
+|---|---|---|
+| `goal-198516d1` workerd | **2026-08-21 — today** | will miss; REQ-150 still `free_coding` |
+| `xgd/GOAL-1` stable release | **2026-08-20 — passed** | still `planned` |
+| `goal-49e8dec2` 8/24 dinner | 3 days | no children |
+| `goal-1a5a8d2b` Site builder | 2026-08-31 | hard external — class cohort |
+
+On the site builder: **`GOAL-17` "Editor chat" is still at `concept`.** GOAL-16 "Web editor" is `in_progress` with three children. So half the builder is under way and half is an idea, ten days out from the immovable date. That's the one I'd want your eyes on today even though it isn't on your list.
+
+## Unchanged since yesterday
+
+- **BUG-32** and **BUG-1132** both still `ready_to_reconcile` — done, waiting on machinery.
+- **BUG-1185** still `draft`. You've got it.
+- **The nine goals** whose children are all done, still declared `in_progress` — 101 derived points, unchanged. `goal-98f48e17` alone is 44.
+- **`goal-5d987c56`** (capability matrix) is now in On Deck as intended but has `leaves: []` — no children until you can enumerate xgd tickets, i.e. until 1185 lands.
+- **REQ-151/152/153** (i18n) still attached to nothing.
+
+## What I'd change, on your word
+
+1. **DOC-981 → done.** One status, unblocks KM. I can do it; say go.
+2. **Move `goal-198516d1`'s date** with a recorded reason rather than letting today lapse silently — it'd be the second miss on that goal.
+3. **`goal-1a5a8d2b`'s `depends_on`** — still blocking all UI-gap work behind the migration. Narrow or drop it if the UI work runs in parallel.
+4. **The nine goals** — ten minutes with completion dates whenever you want the accumulation to show.
+
+Nothing above is written yet except the REQ-154–157 attachment from earlier.
 
 <!-- xgd-chat-end -->
