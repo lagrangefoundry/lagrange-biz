@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-20T19:17:30.994015+00:00'
+updated_at: '2026-08-21T03:13:44.141116+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2783,5 +2783,76 @@ One flag: `goal-e4c8a6ed` is still at **`aspiration`** — no commitment, no dat
 Its body makes the case that it's cheap to hit and not recoverable afterwards — the dinner happens either way, whether it produces feedback depends on there being something to show. It reads "ready" as external-readiness, not features: an install that works, controls a newcomer can read, a visible answer to what the AI is permitted to do.
 
 Your housekeeping list is largely that same work. I'd say it's not absent from your plan so much as unnamed in it — but with an empty child list and four days, it's worth ten minutes deciding what "ready" means concretely, while there's still room to act on the answer.
+
+<!-- xgd-turn id="363904dbf6964729a88053bbcaac8e62-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-21T03:09:33.607795+00:00" -->
+#### You
+So - a lot of bugs unfortunately. still some gnarly ones I need to ponder that are being worked
+
+Creative part of my day was spent mostly on 1c produc definition - see the new chat ticket transcripts for details there
+
+The local cloudflare implementation is running (locally) but is not yet live on cloudflare. I created a bunch of tickets there our implementation, critically lags the UI capabilities so there's UI work to be done in the next couple of days and the LLM playbook work to finalize.
+
+One of our personas requires site reproduction, so we will lean (somewhat) into that too.
+
+I am not optimistic I will have much for my dinner on the 24th. I will spend some time this weekend thinking about a demo exercise that I could show them.
+
+<!-- xgd-turn id="363904dbf6964729a88053bbcaac8e62-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-21T03:09:57.353440+00:00" -->
+#### Claude
+Reading the chat transcripts for the 1c product definition work now — that's the part I can't reconstruct from commits.
+
+Local chats show nothing new on 1c. The product-definition work likely lives in the 1stcontact project — probing there, since `--project` listing is broken by BUG-1185.
+
+Found them — CHAT-20 "1c coverage" and CHAT-21 "The design conversation". Reading both in full.
+
+That's a substantial day's thinking, and it's well recorded — CHAT-20 and CHAT-21 are carrying real decision ledgers. Let me check how much of it is actually held on the map.
+
+Read both. CHAT-20 and CHAT-21 are carrying genuinely good ledgers — the recall is already there, so let me give it back to you as a day rather than a pile.
+
+## What today was
+
+**The creative work — CHAT-21 → DOC-33, The Consultation Playbook.** Not a sketch. Four client-facing acts (Brief / Story / Design / Ship) over eleven AI-tracked stages with explicit gates, revised off your initial eight-stage version. Five decisions in it that will be expensive to re-derive:
+
+- **Restraint moves to the brief**, not the end — "special effects last" is the because-we-can failure DOC-31 measures. Stage 8 becomes one signature moment, and "none" is a legitimate recorded outcome.
+- **The decision ledger is the chat ticket body** — and it turned out the store was already built for exactly that: `chatSchemas()` leaves the body free, `TicketSessionArchive.apply` never touches it. Two write paths already separated. Nothing to build.
+- **Rationale is mandatory in the ledger** — your point, and the load-bearing one: a ledger of bare decisions can be honoured but not defended, so the AI either re-opens settled questions or contradicts them. With the *why* recorded, the transcript becomes droppable.
+- **Context economics** — cost is dominated by re-read, quadratic in turn count; crop at gates only, never continuously, because caching is a prefix match. Modelled ~$50–60 → ~$25–30 per session. Subagents as the only correct route to a cheaper model.
+- **Capabilities are in the site, not alongside it** — your correction, which forced a taxonomy by relationship-to-page and made capability commitments a third decision class settled at stage 1.
+
+**The tickets — REQ-151 through REQ-157 in 1stcontact, seven, all `draft`:** locale identity and rendered lang/dir; money and time representation; reserved locale-shaped slugs; the Browser Rendering driver behind the existing seam; a ReferenceStore port for capture in workerd; sharp off the fidelity path; and the fidelity surface so the assistant can look, compare and judge.
+
+That last cluster — 154, 155, 156, 157 — is your site-reproduction lean, already ticketed. You did the thing you're telling me you're going to do.
+
+## What the map can't see
+
+Same shape as the capability matrix yesterday, and worth knowing before it costs you:
+
+- **The entire 1c product-definition track has no goal.** I searched all goals for playbook / consult / rubric / persona / reproduction / gallery — one hit, "Pricing and packaging decided." DOC-31, DOC-32, DOC-33, the three-track framing, the reference corpus, the playbook: none of it is held. It lives in chat tickets and docs, which are excellent records but invisible to On Deck.
+- **REQ-151–157 are attached to nothing.** `goal-198516d1`'s children stop at REQ-150.
+
+So tomorrow, the best-developed thinking you have competes for attention purely from memory. I can build the holder and attach the seven — say the word and I'll draft it from CHAT-20's three-track framing rather than invent a structure.
+
+## Two dates about to break
+
+**`goal-198516d1` — "1stcontact runs natively on Cloudflare workerd" — `target_date: 2026-08-21`. That's tomorrow.** You've just told me it runs locally, isn't live on Cloudflare, and has UI work plus playbook work ahead of it. Its body also already records an 08-18 expectation ("skeletal launch expected today") that didn't hold. Two missed markers on one goal is the point at which the date should move deliberately rather than quietly.
+
+**`goal-49e8dec2` — the 8/24 dinner.** Still `planned`, target 08-24, no children.
+
+## On the dinner
+
+Its body already anticipated exactly this: *"the dinner happens either way. Whether it produces feedback depends on there being something to show."* So this isn't a failure against the goal — it's the conditional resolving, which the goal was written to allow.
+
+One thing worth carrying into the weekend: CHAT-20 records that **live progressive assembly is the emotional core of the value prop — "watching it happen is part of what's being sold, not just the resulting file."** If that's true, the demo exercise isn't a downgrade from a release. Running a real Act I / Act II against one of their businesses, live, *is* the product — and it's a better thing to put in front of two prospective testers than a skeletal deployment. You may already have the demo; it's DOC-33 with a real client in the chair.
+
+I'd reframe the goal from "release ready to demo" to what you'll actually show. Want me to update the body with today's position and leave the title for you?
+
+## Two things I think are worth a decision record — your call, not filing either
+
+**1. The phase resequencing.** CHAT-20 agreed: research → example-pool → close L1 gaps → playbooks. CHAT-21 pulled playbooks forward ahead of the example pool. The *that* is recorded; the *why* isn't, and in six months "why did the playbook land before the reference corpus" won't be reconstructible. This is what `resequenced` exists for.
+
+**2. Reproduction — I want to check I'm reading you right.** CHAT-20 resolved it explicitly: reproduction is **not** needed as a faithful starting draft, **is** needed as content+vision ingestion, and true reproduction-fidelity stays a track-(1) diagnostic only. When you say a persona *requires* site reproduction — is that the ingestion half (consistent with what's recorded, and REQ-154/155/157 are already that), or has the persona work moved faithful rebuild back onto the deliverable list? If it's the second, that's a real reversal of a resolved decision and worth the record while the reasoning is fresh.
 
 <!-- xgd-chat-end -->
