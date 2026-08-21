@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-21T18:52:14.805876+00:00'
+updated_at: '2026-08-21T18:59:12.577127+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -2854,5 +2854,84 @@ I'd reframe the goal from "release ready to demo" to what you'll actually show. 
 **1. The phase resequencing.** CHAT-20 agreed: research → example-pool → close L1 gaps → playbooks. CHAT-21 pulled playbooks forward ahead of the example pool. The *that* is recorded; the *why* isn't, and in six months "why did the playbook land before the reference corpus" won't be reconstructible. This is what `resequenced` exists for.
 
 **2. Reproduction — I want to check I'm reading you right.** CHAT-20 resolved it explicitly: reproduction is **not** needed as a faithful starting draft, **is** needed as content+vision ingestion, and true reproduction-fidelity stays a track-(1) diagnostic only. When you say a persona *requires* site reproduction — is that the ingestion half (consistent with what's recorded, and REQ-154/155/157 are already that), or has the persona work moved faithful rebuild back onto the deliverable list? If it's the second, that's a real reversal of a resolved decision and worth the record while the reasoning is fresh.
+
+<!-- xgd-turn id="87440bc569cf47f8a20f8360f56d768b-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-21T18:50:55.946900+00:00" -->
+#### You
+Those decisions you listed do not look like yesterday'
+
+<!-- xgd-turn id="87440bc569cf47f8a20f8360f56d768b-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-21T18:51:14.271461+00:00" -->
+#### Claude
+You're right to push — I didn't check dates. I read those bodies because you pointed me at the chat tickets, and then presented them as today's work without verifying when any of it landed. CHAT-20's own body cites research landing 2026-08-10. Let me get the actual timestamps.
+
+It's now 2026-08-21 11:51 — so "yesterday" is the 20th. Let me get real timestamps instead of inferring from body text.
+
+CHAT-25 exists and I missed it. Reading it.
+
+<!-- xgd-turn id="04e05fe15aaf4c0999766f88ff0bae52-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-21T18:55:16.243787+00:00" -->
+#### You
+Please continue.
+
+I've a feeling I will spend most of today on bugs just FYI - the list in xgd is quite long. I need to get to the point where the background processes are humming again.
+
+Next immediate goals on 1c are the (1) get the local cloud deployed (2) start filling out the UI gaps on the site builder. We are actually remarkably close to having this running.
+
+Next thing on xgd is knowledge management
+
+<!-- xgd-turn id="04e05fe15aaf4c0999766f88ff0bae52-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-21T18:55:41.094456+00:00" -->
+#### Claude
+Understood — bugs today, and the two 1c objectives plus KM next. Let me get the map lined up behind those rather than leave you to hold them.
+
+All four chain off children the workerd goal already has — REQ-157 `depends_on` 154/155/156/149, REQ-155 on 154/143, REQ-156 on 155, REQ-154 on 147. That's one dependency chain hanging off the migration, so I'm attaching REQ-154–157 to `goal-198516d1`. Yesterday's reproduction work becomes visible on the map instead of floating.
+
+Attached — REQ-154 now surfaces as a ready leaf under the migration alongside REQ-150. Here's what that exposed.
+
+## Both your next 1c objectives, and why one of them shows nothing to do
+
+**(1) Get the local cloud deployed** — that's `goal-198516d1`, and it's healthy: `REQ-150` (Vite SSR boot, `in_progress`) and `REQ-154` (Browser Rendering driver, ready) are live leaves, with 155→156→157 queued behind.
+
+**(2) UI gaps on the site builder** — `goal-1a5a8d2b`. **Zero leaves, machineSide 0.** It `depends_on` both the workerd migration and the Toolbox, neither of which is realized, so the readiness rule blocks everything under it. Its body hasn't been updated since 2026-08-13, and its target is **2026-08-31 — ten days**, against the hard external one (the class uses another tool if it's not ready).
+
+That dependency is the question worth answering today: **do the UI gaps actually need the migration finished, or can they run alongside it?** You're describing them as parallel work. If they are, the `depends_on` is too strong and should come off or narrow to a specific ticket — otherwise On Deck will keep telling you there's nothing to do on the thing with the nearest immovable deadline.
+
+## KM is one ticket, and something is hiding it
+
+`goal-74b33543` is in better shape than it looks:
+
+| | | |
+|---|---|---|
+| lagrange-framework/REQ-99 | knowledge (JS), query side + KB index | `ready_to_reconcile` |
+| lagrange-framework/REQ-100 | ai_knowledge bridge, KnowledgeToolbox + priming | `ready_to_reconcile` |
+| lagrange-framework/REQ-101 | Awareness build: cluster, describe, landscape | `ready_to_reconcile` |
+| **xgd/REQ-775** | **Priming cutover — static assembler → KB-based priming per role** | **`draft`** |
+
+The component is built. **REQ-775 is the entire remaining distance**, and it's the one carrying the risk — it replaces how every XGD session gets its context.
+
+It shows `leaves: []` because `goal-74b33543` `depends_on` `goal-959f56f3`, which you declared `realized` but which *derives* `in_progress` — because **`xgd/DOC-981` (Claude Invocation & Permissions technical design) is still open**. One unwritten design doc is masking your next xgd objective from On Deck. Close DOC-981 or drop it from the goal, and REQ-775 surfaces.
+
+I can't promote REQ-775 myself — `ready_to_implement` is the reserved transition, and that dispatch is yours to trigger.
+
+## The date that's today
+
+`goal-198516d1` has `target_date: 2026-08-21`. That's today, and you've said you're on bugs. Its body also already records an 08-18 expectation ("skeletal launch expected today") that passed.
+
+That's two markers now. I'd rather move it with a reason attached than let it lapse a second time — a date that slips silently twice is exactly what makes a six-month gap unexplainable later. Give me a realistic date and one line on what moved it and I'll record both.
+
+## On the bug day
+
+I can't pull the xgd bug list from here — enumerating another project's tickets is precisely what `BUG-1185` breaks (`ticket list --project` → `AttributeError: list_refs`). It's `draft`, medium, already a leaf under XGD quality. If it goes early, I can work the long list with you instead of you carrying it in your head; if it doesn't, I'm blind to the thing you're spending the day on.
+
+## Two small things
+
+**REQ-151/152/153** (locale identity and rendered `lang`/`dir`, money and time representation, reserved locale-shaped slugs) are still attached to nothing. They're the I18n session's output, not migration work. Site builder, a new i18n goal, or leave them loose for now?
+
+**And the nine goals whose children are all done but still read `in_progress`** — 101 derived points, including "Goal map usable as a daily driver" at 44. Offer still stands; on a bug day that's the honest counterweight to a long list. Ten minutes to walk them with completion dates whenever you want it.
 
 <!-- xgd-chat-end -->
