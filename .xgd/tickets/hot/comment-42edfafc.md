@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-22T18:59:17.125015+00:00'
+updated_at: '2026-08-22T19:09:50.065780+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3015,5 +3015,106 @@ On the site builder: **`GOAL-17` "Editor chat" is still at `concept`.** GOAL-16 
 4. **The nine goals** — ten minutes with completion dates whenever you want the accumulation to show.
 
 Nothing above is written yet except the REQ-154–157 attachment from earlier.
+
+<!-- xgd-turn id="37993b2166124a38b4cf09e77f9ed591-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-22T19:06:00.988075+00:00" -->
+#### You
+ok can you do a sweep to see where we are. Most of the work yesterday went into REQ-816 in xgd. It is not finished but it represented a MAJOR bug in our system that really meant everything was destined to break, particularly regression. Goals for today (1) complete 816 and get regression running again. (2) get my head around the outstanding workflow bugs (3) get 1c running on cloudflare (4) get clarity on the 1c immediate roadmap - what do I need to finish before I can share it with others (5) test xgd update on linux.
+
+I believe BUG-1185 should be resolved, lmk where that puts us.
+
+`xgd/DOC-981`** is **`draft ` <-- I have not been paying attention to DOC status its an interesting thing to discuss but for now DOC status should be ignored.
+
+Please do a sweep of the system and see where we are
+
+<!-- xgd-turn id="37993b2166124a38b4cf09e77f9ed591-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-22T19:06:14.170833+00:00" -->
+#### Claude
+Big one — let me check whether 1185 landed first, because that changes what I can see.
+
+BUG-1185 is `ready_to_reconcile`, but `ticket list --project` returns empty rather than crashing — let me verify what it actually does now.
+
+Cross-project listing works again. Let me pull the xgd bug list — the thing I've been blind to.
+
+Now I can see it. Let me characterize the list by status and pull the capability-matrix and workflow clusters.
+
+Attaching the capability-matrix work I can now finally see — REQ-816 (which carries the pinning fix) and BUG-945 (the display half, already landed).
+
+Sweep complete. Organised against your five.
+
+## (1) REQ-816 and regression
+
+`REQ-816` is `free_coding` — and it is **the only xgd request in `free_coding`**. Single active development thread, which matches "most of yesterday went into it."
+
+It has swallowed four bugs, all closed `wont_fix` and folded in — and reading them together is the case for why everything was breaking:
+
+| | |
+|---|---|
+| BUG-1092 | regression branch's ticket matrix advanced past the code it was cut from — the original |
+| BUG-1240 | ~26h regression run, **6 wasted fix-loop iterations** |
+| BUG-1089 | stale-vs-current mixed read → **destructive overwrite of a reconciled story body on `main`** |
+| BUG-1230 | bundle members keep `bundled` status forever → stuck a real reconcile behind a false rogue-commit gate |
+
+One mechanism, four faces. The ticket is explicit that it's one ticket by design — *"partial delivery has no value"* — but for your goal today, note that **deliverable 5 (branch-cut overlay seeding) is named as the direct BUG-1092 fix, and regression needs only the capability seed from it, not the intent seed.** That's the ticket's own words, and it's the narrowest thing that makes a regression branch honest.
+
+**And REQ-816 is the capability matrix fix.** Its acceptance reads: *"A regression/reconcile/develop branch's capability-matrix view is fixed to its cut commit for the life of the run."* The thing that kept sliding off your table for weeks is inside the ticket you spent yesterday on. I've attached REQ-816 and BUG-945 (the Capabilities-tab display half, `free_and_reconciled`) to `goal-5d987c56`, so it now has real content.
+
+## (2) The workflow bugs — 21 drafts, 0 open
+
+Grouped, because as a flat list it's just long:
+
+- **Workflow engine / check-fix loop (6)** — BUG-1186, 1183, 1182, 1180, 1176, 1173. Theme: the fix loop can't converge. Reports done without editing, oscillates on zero mutations, stuck-loop detector structurally inert.
+- **Reconcile (6)** — BUG-1184, 1181, 1145, 1078, 886, 867. BUG-1145 is nasty: `build_only=true` leaks into every later `test_fix`, **so no tests ever run**.
+- **Scope/test selection (2)** — BUG-1146, 654.
+- **Misc (5)** — BUG-1161, 1082, 873, 769, 635.
+- **Junk (1)** — BUG-1242, titled `x`. Plus non-draft cruft: BUG-1236 and BUG-1200 both "Untitled", BUG-1217 "TEST TICKET — delete me".
+
+**Two duplicate pairs worth collapsing before you read the list:**
+
+- **BUG-1182 and BUG-1183** are the same defect written twice — `previous_attempt_count` leaking across structural-validation level boundaries.
+- **BUG-1172 duplicates the bug I filed as `lagrange-framework/BUG-32`** — and BUG-1172 is the better ticket. It names the code: `sweep_unsynced_turns` at `xgd_source/dashboard/chat_session_runner.py:279`. **That's xgd, not lagrange-framework.** I filed BUG-32 in the wrong project — I couldn't read the source from my sandbox and went off where the sibling chat bugs lived. BUG-32 is `ready_to_reconcile`, BUG-1172 is `draft`; worth checking what BUG-32 actually changed before closing either.
+
+## Permissions fallout — you asked three days ago and I couldn't answer
+
+Now visible, and it's a real cluster traceable to the REQ-781 refactor:
+
+- **BUG-1181** — `reconciliation_generate_story`: session role lacks `xgd ticket create`, blocking story/report creation
+- **BUG-1201** — `fix_structural_validation` can't apply ac-add: `xgd ticket create` missing from resolved permissions
+
+Those two are one root cause: **the new permissions schema doesn't grant `xgd ticket create` to workflow roles**, which stops reconcile writing stories and structural validation adding ACs. That's a background-process breaker sitting directly under goals (1) and (2).
+
+Then BUG-1202 (sandbox blocks all socket binding — 22% of the 1stcontact suite unrunnable in-session), BUG-1215 (dashboard chat resolves `role=None`), BUG-1237 (cross-project grant omits other projects' primary checkouts), BUG-1214, BUG-1203.
+
+## Background process health
+
+All three processes have failed across all three projects this week: regression (xgd 8/20, 1stcontact 8/20, lagrange-framework 8/19 and 8/20), reconcile (lagrange-framework BUNDLE-11 ×2, 1stcontact BUNDLE-19), resync (lagrange-framework 8/16, 8/18, 8/19). The regression ones are folded into REQ-816; BUG-1218 is already `ready_to_reconcile`.
+
+## (3) 1c on Cloudflare — the build is done
+
+**`REQ-150` moved to `free_coded`.** That means **all eleven original children of `goal-198516d1` are now past your hands** — nothing left in `free_coding`. Only the four new drafts (REQ-154–157, the reproduction/fidelity chain) remain, and those are new scope, not migration.
+
+Today's goal (3) is a deploy-and-verify activity now, not a build one. The goal's `target_date` is still 2026-08-21 — yesterday.
+
+## (4) 1c roadmap clarity — this is the one the map can't help with yet
+
+Your question is "what do I need to finish before I can share it with others", and the map genuinely cannot answer it, because:
+
+- `goal-e4c8a6ed` (email capture / portal / CRM Lite) is still `aspiration` — no date, no commitment
+- `goal-1a5a8d2b` (Site builder) has `GOAL-17 "Editor chat"` still at **`concept`**, nine days from the hard 08-31 class deadline
+- the entire product-definition track from CHAT-20/21 — the three tracks, DOC-31/32/33, the playbook — **has no goal at all**
+
+That's the gap to close today if (4) matters. I can draft the holder from CHAT-20's three-track framing; it's the one piece of structure that would make "what's left before sharing" answerable rather than remembered.
+
+## (5) xgd update on linux — unticketed
+
+No xgd ticket mentions linux. `goal-d5e96abe` (packaging v1) is `realized` and REQ-754 is the `xgd update` command, but cross-platform verification isn't captured anywhere. If it's a real gate for the n=1 user, it needs a ticket; right now it exists only in your head.
+
+## On DOC status
+
+Understood — ignoring it. One consequence worth naming: with DOC-981 discounted, `goal-959f56f3` really is realized as you declared, and **KM is unblocked — REQ-775 is the live leaf**, waiting only on the promotion I can't make.
+
+But the *map* still derives from DOC-981 because it's a `children` entry. If doc status is to be ignored generally, docs shouldn't sit in `children` gating roll-up — they'd belong in `context_refs`, or the roll-up should skip doc-type children. That's the discussion you flagged; it's a small modelling decision with a real effect on every goal that references a design doc.
 
 <!-- xgd-chat-end -->
