@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-22T19:27:31.630837+00:00'
+updated_at: '2026-08-22T20:04:10.499726+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3148,5 +3148,69 @@ Correct me if that's not your bar. It's my inference from what's actually broken
 One thing I didn't do: file a decision record. This is genuinely close to the line — a deliberate deferral with a stated reason is what the `deferred` field exists for. But the reasoning here is continuous with a decision already recorded (major subsystems don't land on an unstable base), and it's now captured in the goal narrative where it'll actually be read. I'd rather hold that slot for something that changes the shape of the plan. Say the word if you'd rather have it in the log.
 
 The practical upshot for today: **KM costs you nothing to hold.** REQ-775 is `draft`, and promoting it is the one transition I can't make anyway — so the hold and the mechanism agree. Goals (1) and (2) on your list *are* the unblock work.
+
+<!-- xgd-turn id="2bd8c3f26ab440a596b97a983274f4a6-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-22T20:02:27.350087+00:00" -->
+#### You
+I propose to start using the goals tab in xgd, 1c and lagrange-framework. That will make this a truly federated goals exercise which is the intent. You will need to help me track and update those goals too
+
+<!-- xgd-turn id="2bd8c3f26ab440a596b97a983274f4a6-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-22T20:02:52.784460+00:00" -->
+#### Claude
+Good — and it's the right shape; the map was built for it (DOC-14 exists for exactly this). Let me see what's already there before proposing how to split it.
+
+Surveyed all four. The picture argues for it, with one real constraint and two things I need to own.
+
+## What's actually there
+
+| project | goals | last touched |
+|---|---|---|
+| lagrange-biz | 69 | live — this is the map |
+| xgd | 7 | 2026-08-06 → 08-12 |
+| **1stcontact** | **22** | **all 2026-08-06 — 16 days** |
+| lagrange-framework | **0** | — |
+
+**Federation is already half-wired, and the far end is stale.** Biz goals already carry `ticket://` children into 1stcontact (GOAL-4, GOAL-10, GOAL-16, GOAL-17) and xgd (GOAL-1). Those already feed biz's roll-up today. So this isn't a new mechanism — it's finishing one that's load-bearing and unmaintained.
+
+**A correction I owe you from yesterday.** I flagged `GOAL-17 "Editor chat"` sitting at `concept` as alarming with nine days to the class deadline. That field was last written 2026-08-06. It's very likely stale rather than true, and I presented a 16-day-old value as current state. Don't act on that alarm until the 1c pass is done.
+
+## Two duplications — one of them mine
+
+**`xgd/GOAL-3` "Capability matrix verified working as intended" already existed.** `aspiration`, provenance `tech_debt`, and better argued than the goal I created: it ties the matrix to both whitepapers, to beta credibility, and to DOC-19 §2.1 — the matrix as substrate for the accumulation register. It even fixes the ordering: *"a green end-to-end regression run is a precondition for trusting any matrix audit."* Same conclusion I wrote into the KM hold, arrived at independently two weeks earlier.
+
+When I told you "the capability matrix had no goal anywhere on the map," I had searched one project of four. That was overstated and it produced a duplicate.
+
+**And it's happened twice:** `xgd/GOAL-2` "Packaging with an update path" looks like the same goal as biz's `goal-d5e96abe` "XGD packaging v1 — install tool", which is `realized` as of 08-15. One realized, one stale, same objective.
+
+That's the argument for agreeing a split rule *before* switching the tabs on, not after.
+
+## The constraint you should know before committing
+
+I tested it: **`digest` is local-only.** It refuses a project name outright — `create`, `get`, `update` are the only cross-project ops.
+
+So in xgd, 1c and lagrange-framework I can read, create and update individual goals and list them — but I get **no digest**: no derived roll-up, no disagreements, no On Deck, no provenance split, no counts. For three of four projects I'd be answering "what next" and "am I making progress" from a flat list, which is precisely what the digest exists to prevent. I can recompute roll-up by hand from children, but it's slow and it's re-deriving what the tool already does.
+
+**Practical consequence: biz stays the place the two questions get answered.** Projects hold the goals their own code realizes; biz references down and remains the single roll-up root. That's not a workaround — biz is already where the cross-cutting goals live (launch, positioning, whitepapers, the dinner, the class cohort).
+
+If you want genuine per-project digests, that's a feature request against the goal CLI (`xgd_source/dashboard/ai_goal_cli.py`, so xgd). Worth filing — say the word.
+
+## Proposed split rule
+
+1. **A goal belongs to the project whose code realizes it.**
+2. **Cross-project and business goals stay in biz** — launch, positioning, whitepapers, external user, class cohort, the dinner.
+3. **Biz references down via `ticket://`; projects don't reference up.** Keeps the graph acyclic across the federation and keeps one roll-up root.
+4. **No goal exists in two projects.** Where it already does, collapse to the code's project.
+
+## What I'd do first
+
+**1stcontact, before anything else.** Most active project, 22 goals untouched for 16 days, and four of them already feed biz's roll-up — so biz's numbers are currently built on stale inputs. Fixing that makes every number I've quoted you this week more honest. I can draft the updates from REQ-141–157, CHAT-20/21/25/29 and the workerd completion, and you confirm.
+
+**Then the two collapses:** fold my `goal-5d987c56` into `xgd/GOAL-3` and retire mine; reconcile `xgd/GOAL-2` against the realized packaging goal.
+
+**Then lagrange-framework's starting set** — it has zero goals but carries REQ-94/95/99/100/101/103, the BUG-19/23/24/29/30/32 chat cluster, and DOC-13. It needs three or four roots, not twenty.
+
+Confirm the split rule and I'll start with the 1c pass.
 
 <!-- xgd-chat-end -->
