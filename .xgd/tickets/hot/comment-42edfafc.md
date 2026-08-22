@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-22T19:09:50.065780+00:00'
+updated_at: '2026-08-22T19:27:31.630837+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3116,5 +3116,37 @@ No xgd ticket mentions linux. `goal-d5e96abe` (packaging v1) is `realized` and R
 Understood — ignoring it. One consequence worth naming: with DOC-981 discounted, `goal-959f56f3` really is realized as you declared, and **KM is unblocked — REQ-775 is the live leaf**, waiting only on the promotion I can't make.
 
 But the *map* still derives from DOC-981 because it's a `children` entry. If doc status is to be ignored generally, docs shouldn't sit in `children` gating roll-up — they'd belong in `context_refs`, or the roll-up should skip doc-type children. That's the discussion you flagged; it's a small modelling decision with a real effect on every goal that references a design doc.
+
+<!-- xgd-turn id="239bff9d86254609878b12263efba1da-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-22T19:25:44.414376+00:00" -->
+#### You
+KM is the next piece of development for xgd but I am deliberately holding off on that change until we have restabalized everything.
+
+<!-- xgd-turn id="239bff9d86254609878b12263efba1da-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-22T19:26:11.958481+00:00" -->
+#### Claude
+That's exactly the kind of intent that vanishes from the trail — deliberate holds look identical to neglect three weeks later. Let me record it on the goal.
+
+Recorded on `goal-74b33543`. What I wrote and why:
+
+**The hold is now distinguishable from neglect.** Your sentence is quoted verbatim with the date. Three weeks from now, REQ-775 sitting at `draft` would look identical to something that fell off the table — and you'd have no way to tell which. That's the exact ambiguity this map exists to remove.
+
+**I gave "restabilized" a trigger rather than a feeling**, drafted from the sweep so you can check it rather than sense it:
+
+- REQ-816 complete, and a regression run green end to end
+- The permissions cluster cleared — specifically **BUG-1181 and BUG-1201**, which share one root cause: workflow roles lack `xgd ticket create`, so reconcile can't write stories and structural validation can't add ACs
+- Reconcile and resync no longer auto-filing failure bugs across the three projects
+
+Correct me if that's not your bar. It's my inference from what's actually broken, not something you said.
+
+**I left the `workstream` mark on**, and said why in the body. You called KM the next piece of xgd development — that's precisely what a workstream is. It'll sit in On Deck with an empty leaf list, which is the honest reading: this is next, and there's nothing to pick up yet. Unmarking it would hide the objective to silence a signal that's telling the truth.
+
+**I also corrected the Sequencing section.** It still claimed access control was the gate and expected "by end of day 2026-08-18". That gate is met — you declared `goal-959f56f3` realized. The hold is a *second*, broader gate: not a dependency on another goal, but on the health of the development machinery itself. Those are different in kind and the body now says so.
+
+One thing I didn't do: file a decision record. This is genuinely close to the line — a deliberate deferral with a stated reason is what the `deferred` field exists for. But the reasoning here is continuous with a decision already recorded (major subsystems don't land on an unstable base), and it's now captured in the goal narrative where it'll actually be read. I'd rather hold that slot for something that changes the shape of the plan. Say the word if you'd rather have it in the log.
+
+The practical upshot for today: **KM costs you nothing to hold.** REQ-775 is `draft`, and promoting it is the one transition I can't make anyway — so the hold and the mechanism agree. Goals (1) and (2) on your list *are* the unblock work.
 
 <!-- xgd-chat-end -->
