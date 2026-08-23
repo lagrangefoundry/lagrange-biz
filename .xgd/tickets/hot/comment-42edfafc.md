@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-23T18:23:45.175998+00:00'
+updated_at: '2026-08-23T18:37:42.523475+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3212,5 +3212,67 @@ If you want genuine per-project digests, that's a feature request against the go
 **Then lagrange-framework's starting set** — it has zero goals but carries REQ-94/95/99/100/101/103, the BUG-19/23/24/29/30/32 chat cluster, and DOC-13. It needs three or four roots, not twenty.
 
 Confirm the split rule and I'll start with the 1c pass.
+
+<!-- xgd-turn id="7611782f62ec4fefa85db574325b8b99-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-23T18:28:16.531351+00:00" -->
+#### You
+ok please do a sweep.
+
+Our latest set of changes to the ticket system are still working through we have all kinds of mostly performance issues. I think I need to keep pushing on this until the system is stable again. Secondarily I will be working on 1c in Cloudflare which is close but not quite working yet.
+
+<!-- xgd-turn id="7611782f62ec4fefa85db574325b8b99-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-23T18:30:28.389834+00:00" -->
+#### Claude
+Four days have passed — last sweep was 08-19, it's now 08-23. Version `0.15.325 → 0.15.367`. Pulling properly.
+
+Evidence gathered. Making the updates.
+
+Swept. Four days since the last one — `0.15.325 → 0.15.367`.
+
+## The ticket system — REQ-816, and why the fallout has one shape
+
+`REQ-816` (**overlay-everywhere ticket store routing**, `free_coded`, 10 commits, design in DOC-986) removed the special case that made `xgd-working` route straight to canonical, giving it an ordinary local overlay like every other worktree. It folded in four bugs as the same mechanism — including BUG-1240 (a **26-hour regression run** and six wasted fix-loop iterations) and BUG-1089 (a stale-vs-current mixed read that destructively overwrote a reconciled story body on `main`).
+
+**Every performance problem in the cluster traces to one thing: the special case you removed was load-bearing for a fast path.**
+
+The clearest is **BUG-1251** — chat transcript loads taking **47 seconds, and in one case 185**. REQ-609 added an O(1) LATEST short-circuit; BUG-931 later guarded it with `and not _overlay_sources`, which was safe *precisely because* `xgd-working` had no overlay. Now it does, so `_overlay_sources` is non-empty on every ordinary read and the fast path is permanently off. A guard written for the exotic case became the common case.
+
+That's the pattern to expect from the rest, and it's a good argument for pushing through rather than patching symptom by symptom. Current state: BUG-1251, 1249, 1247, 1213, 1185 at `ready_to_reconcile`; 1246, 1250, 1253 `free_coded`; **BUG-1248 `free_coding`** (the live one); **BUG-1252 still `draft`**.
+
+I marked `goal-0662ec2b` a workstream and rewrote it — the body still described 2026-08-07, which is why none of this was on the ready frontier.
+
+## Two things I reproduced from here
+
+1. **BUG-1252 is real and reproducible cross-project.** `xgd ticket get --project xgd --id BUG-1240` returns not-found; the same ticket by uid (`bug-0617965f`) returns fine. The human-id path is resolving against something the uid path isn't.
+2. **`list` and `get` currently disagree about status.** `list` reports BUG-1246–1250 as `draft`; `get` reports `ready_to_reconcile`, `ready_to_reconcile`, `free_coding`, `ready_to_reconcile`, `free_coded`. Several render as "Untitled" in `list` with real titles via `get`.
+
+## Backlog — the tooling landed, and immediately proved itself untrustworthy
+
+**BUG-1185 is fixed** — `xgd ticket list --project` works. **REQ-811** (the tracker) is `ready_to_reconcile`. So, first real counts:
+
+| Project | Drafts |
+|---|---|
+| xgd | 22 (10 bugs, 12 requests) |
+| 1stcontact | 4 |
+| lagrange-framework | **0** |
+| lagrange-biz | **0** |
+
+But five of those ten xgd "draft" bugs aren't drafts — that's the `list`/`get` disagreement above. **Don't start burning down from a `list`-derived worklist until the cluster settles**, or you'll re-triage work that's already done, which is the same motion BUG-1240 wasted 26 hours on. The hazard I built into REQ-811 earned its keep: a bulk-close run against today's index would have closed five in-flight tickets.
+
+The more useful signal is the age tail: REQ-468/539/540 (Surfaces, 05-19), REQ-583, REQ-661, REQ-663, REQ-675, BUG-873 — eight items older than four weeks. Those aren't work in flight, they're decisions never made. Burning them down probably means abandoning most, and `abandoned` with a reason should count as progress.
+
+## 1stcontact — the original eight are done; a second block appeared
+
+All eight plus framework REQ-103 are `free_coded` or beyond. What replaced them (filed 08-20) is more interesting: REQ-151/152/153 landed (locale identity, money/time, slug reservation), and four remain `draft` — **headless browser in the cloud, ReferenceStore port, `sharp` off the fidelity path, the fidelity surface.**
+
+Those four share a theme: native code and filesystem assumptions workerd can't host. That's not the migration failing, it's the migration reaching the parts that were invisible from a laptop — which is exactly what the 08-15 decision bought by moving early.
+
+**Target is 08-21 — two days past and I haven't moved it.** It needs a date from you rather than a silent slip. Given 1c is explicitly secondary this week and the class cohort deadline is 08-31, I'd not set it before the ticketing cluster stabilises.
+
+## Two closures worth noting
+
+The four access-control stragglers (BUG-1142, 1143, 1159, REQ-801) all reached `ready_to_reconcile` — the disagreement I predicted at closure resolved exactly as expected. And a **capability matrix goal now exists** (`goal-5d987c56`, workstream) — it had no goal anywhere on the map before 08-20, which is the mechanical reason it kept slipping. It still has no target date, and REQ-775 (the KM cutover) is still `draft` — KM hasn't started.
 
 <!-- xgd-chat-end -->
