@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-24T00:48:26.542482+00:00'
+updated_at: '2026-08-24T01:40:29.578605+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3274,5 +3274,52 @@ Those four share a theme: native code and filesystem assumptions workerd can't h
 ## Two closures worth noting
 
 The four access-control stragglers (BUG-1142, 1143, 1159, REQ-801) all reached `ready_to_reconcile` — the disagreement I predicted at closure resolved exactly as expected. And a **capability matrix goal now exists** (`goal-5d987c56`, workstream) — it had no goal anywhere on the map before 08-20, which is the mechanical reason it kept slipping. It still has no target date, and REQ-775 (the KM cutover) is still `draft` — KM hasn't started.
+
+<!-- xgd-turn id="908abf1173884ea6bc159866a9a2ef21-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-24T01:36:54.218397+00:00" -->
+#### You
+please do a ticket sweep, we are close:
+
+1) I fixed a bunch of bugs in xgd - the workflows test hasn't completed yet but we are getting there - reconcile seems to not want to dispatch on real projects but we'll get there
+2) I got REQ-149 to complete on 1st contact and saw the app running in the cloud - that was a lot of work
+
+<!-- xgd-turn id="908abf1173884ea6bc159866a9a2ef21-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-24T01:40:12.459391+00:00" -->
+#### Claude
+Swept. You're closer than the map was showing.
+
+## 1stcontact — the app ran in the cloud
+
+`REQ-149` (**publish in the cloud: revisions, history and rendered output without a filesystem**) is `ready_to_reconcile`. That was the hard one — publishing was the last thing still assuming a filesystem.
+
+**Every one of the original eight, plus REQ-149, 150, 151, 152, 153 and framework REQ-103, is now `ready_to_reconcile` or beyond.** Filed 08-15 in a four-minute burst of eight requests; running in the cloud nine days later, having grown to fourteen. On 08-15 that was a decision to rebuild the platform sixteen days before a hard deadline, on the argument that building the CX on a laptop means developing against a comfortable illusion. The illusion was real, the migration found it, and the app runs.
+
+**The "not quite" is one ticket.** `1stcontact/BUG-36`, draft, severity high — `app.1stcontact.io` returns `503 No tenant '1stcontact'`. The diagnosis is tidy: `store.ts` has two ways to open the store and they disagree about a tenant that doesn't exist yet — `storeFor` throws `UnknownTenantError`, `storeForImport` calls `createTenant` first. `bin/deploy` runs the D1 migrations but seeds no rows, so the tenant only appears as a side effect of the first `bin/publish`. A fresh deployment is dead on arrival until someone runs a CLI from a dev machine.
+
+That's worth more than its severity suggests — a deploy that needs a human afterwards isn't a deployment, and it's the first thing a class cohort would hit.
+
+**I'd split the second block and close this goal.** REQ-154–157 (headless browser, ReferenceStore port, `sharp`, fidelity surface) are all one theme — native code in the capture/fidelity pipeline — and they aren't what this goal asked. "Runs natively on workerd" has happened. Same trade that worked for network egress. I haven't done it; `realized` on a platform migration is your claim to make.
+
+## xgd — twelve fixes landed, one blocker remains
+
+The performance complaint from yesterday is substantially answered: BUG-1251 (the 47s/185s chat loads), 1252, 1256, 1257, 1258, 1259, 1261, plus 1247/1249/1250 and the three test-workflows ones — **all `ready_to_reconcile`**. BUG-1255 (a 9-minute intent lookup) closed `wont_fix` — it was a lock storm from a dashboard process still running pre-fix code, not a defect.
+
+**Your reconcile dispatch problem is BUG-1266, and it's fully diagnosed — but still `draft`.**
+
+`xgd revert reconcile` runs from xgd-working, which since REQ-816 is in overlay mode, so the status write lands in the local overlay and never reaches canonical. Verified against the two physical files: xgd-working says BUNDLE-128 is `ready_to_reconcile`; canonical says **`reconciling`**, untouched since before the crash.
+
+It isn't local to that bundle. The dispatcher applies a **cycle-wide gate** — while *any* intent ticket is `reconciling`, nothing is dispatched. So **every reconcile in every project is blocked** by one stale row. The gate is working exactly as designed, on a false fact.
+
+That's the third instance of one pattern: a mechanism that was correct while xgd-working wrote to canonical, silently wrong now it writes to an overlay. Worth auditing the other one-shot administrative commands rather than waiting for each to surface.
+
+I can't promote it — `ready_to_implement` is yours. But it's the single highest-value thing on the board: root cause confirmed, fix not started, and it's what's standing between you and a completed workflows test.
+
+Also still open: **BUG-1248** and **BUG-1245** (`free_coding`), **BUG-1263/1264/1267** (`draft`).
+
+## One residue
+
+`list` and `get` still disagree — `list` reports BUG-1247/1249/1250 as `draft` and "Untitled"; `get` returns all three at `ready_to_reconcile` with real titles. BUG-1252 is fixed, so this is stale index entries rather than the lookup path. It still means **any count from `list` is wrong**, which continues to block the draft burn-down measurement. I don't see a ticket for it.
 
 <!-- xgd-chat-end -->
