@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-24T22:26:08.890187+00:00'
+updated_at: '2026-08-24T23:11:37.277427+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3423,5 +3423,53 @@ It survives as a wrapper for exactly one reason: your 08-19 statement — *"emai
 The **draft-backlog burndown** stays on the biz map. It's the only one whose subject is genuinely cross-project — "zero drafts in *every* project", measured across all four stores, two of which are already at zero. Filing it in xgd would be the same category error in the other direction: xgd owns the *tooling* (BUG-1185, REQ-811), not the outcome. If you'd rather it moved, it should carry a note saying its scope isn't xgd-only, or the next reader will narrow it.
 
 The pattern across all three of my misplacements was identical: I searched locally, found nothing, and concluded nothing existed. The rule closes that off.
+
+<!-- xgd-turn id="9702ca17e4c04a18bdc9e7d19c2ab308-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-24T23:09:35.557191+00:00" -->
+#### You
+Just added some goals to the 1c project too
+
+<!-- xgd-turn id="9702ca17e4c04a18bdc9e7d19c2ab308-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-24T23:09:51.770615+00:00" -->
+#### Claude
+Eleven new goals in 1c today. Reading them.
+
+Read them. Eleven goals, three subtrees, all properly parented under `1c/GOAL-1`:
+
+- **Knowledge management** (GOAL-33) → KM core, System KB, Project KB
+- **Asset and background upload** (GOAL-37) → drag-and-drop, KB access and awareness
+- **Open design questions** (GOAL-40) → reference-site storage, project-KB contents, backend data model
+
+## The thing worth noticing
+
+**KM now has three consumers, and none of them is building it.**
+
+| | | |
+|---|---|---|
+| lagrange-framework | *builds* it — REQ-99, REQ-100, REQ-101 | all `ready_to_reconcile` |
+| xgd | session priming (GOAL-8) | REQ-775 `draft` |
+| 1stcontact | app chat + reference substrate (GOAL-33) | `concept`; REQ-123 already `free_and_reconciled` |
+
+`1c/GOAL-34` says it outright: *"supplied by components rather than built bespoke… the work here is adoption and wiring, not reimplementation."*
+
+That's `decision-46593d49` paying off. On 08-08 the argument for building AI tooling as a reusable object cost most of a day against two dated deliverables. Sixteen days later one build serves three consumers, and the third wrote "adoption, not reimplementation" into its own goal unprompted.
+
+Being precise, though: it's validated by three independent choices to adopt rather than rebuild — **not yet by three working integrations.** REQ-775 is still draft and GOAL-33 is concept.
+
+## One edge I added
+
+`GOAL-34` said it was *"blocked in practice on the backend data model question"* — in prose, with no edge. I added `depends_on: GOAL-43`. That turns a note into something the readiness rule can see, which is the difference between the question being tracked and being in the way.
+
+Everything else was already right. `GOAL-39` even reasons the distinction out explicitly — *"it cannot function before the KM core system exists, so it is a genuine ordering dependency rather than mere composition"* — and carries the edge to match. That's the `children`/`depends_on` line drawn correctly on purpose.
+
+## The next action you already identified
+
+`GOAL-40` records that its three questions overlap DOC-5's existing Open Architecture Questions — exact D1 schema, snapshots in D1 vs R2, build/deploy mechanics, magic-link lifetime, Stripe design — and that they *"should be reconciled against it rather than answered twice."*
+
+No owner, no ticket. It's small now and expensive once both copies are half-answered.
+
+One pattern worth keeping: filing open questions **as goals** is the same fix as the capability matrix. Nothing held that, so it kept slipping off the table for weeks. An unanswered question with a done state is real work; off the map it's an invisible blocker.
 
 <!-- xgd-chat-end -->
