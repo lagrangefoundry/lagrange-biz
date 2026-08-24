@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-24T19:06:07.983210+00:00'
+updated_at: '2026-08-24T22:26:08.890187+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3376,5 +3376,52 @@ Proposed fix, not applied: for the first four, xgd owns them and the local goal 
 It's a five-goal restructure and you have a short day, so I've left it. One pass whenever you want it.
 
 Enjoy the dinner — you have more to show than the map was giving you credit for.
+
+<!-- xgd-turn id="86aa2610b3c04662bd10de781ce8ab83-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-24T22:23:21.712996+00:00" -->
+#### You
+Agred with your ticket fix, go ahead
+
+<!-- xgd-turn id="86aa2610b3c04662bd10de781ce8ab83-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-24T22:23:52.387473+00:00" -->
+#### Claude
+Executing the restructure now.
+
+1stcontact already had `GOAL-18` (Email capture backend), `GOAL-10`/`GOAL-14` (User portal), `GOAL-4` (CRM) — so that's a third duplicate my rule would have caught. Rewiring rather than creating.
+
+Done. Six goals rewired, one created, one deliberately left.
+
+## Deduplicated — xgd now owns them, the biz map composes
+
+| Local goal | Now a wrapper over |
+|---|---|
+| Knowledge management in XGD sessions | `xgd/GOAL-8` |
+| Design tab: consolidate Chat and Docs | `xgd/GOAL-9` |
+| New chat implementation | `xgd/GOAL-10` |
+| Capability matrix is trustworthy | `xgd/GOAL-3` |
+
+Each local goal keeps only what *isn't* in the xgd ticket — your quotes, the business argument, the sequencing — and carries a `children` reference to the owner, so roll-up derives from the authoritative record instead of shadowing it. Your xgd goals were better sourced in every case; GOAL-10 already knew REQ-741 was `free_and_reconciled` while the local copy didn't.
+
+## Kept split on purpose
+
+`xgd/GOAL-11` (**Beta ready**) is now a child of `XGD closed beta` rather than merged with it. They're two things that can fail independently: GOAL-11 is the engineering gate (regression green + packaging), the biz goal is the business milestone (cohort recruited, entry bar, onboarding, support loop). A green regression and a working installer don't produce a beta if nobody's been recruited. Collapsing them would hide whichever is behind — and right now that's clearly the business half, which is entirely at `concept` with no date anywhere.
+
+## A third duplicate, found while doing this
+
+The 1c modules goal I filed on 08-19 turned out to shadow **three** goals 1stcontact had held since 08-06 — `GOAL-18` (Email capture backend), `GOAL-10` (User portal), `GOAL-4` (CRM). So I didn't create anything; I rewired it to compose from those three.
+
+It survives as a wrapper for exactly one reason: your 08-19 statement — *"email capture, user portals/login and basic crm/user management — that's next"* — is a **sequencing** fact that none of the three underlying goals record and none of them imply. That's worth keeping; a fourth copy of the modules themselves is not.
+
+## Created
+
+**`xgd/GOAL-12` — Documentation a beta user can learn from.** The one case where nothing existed anywhere, which is why it was invisible when you asked about beta requirements on 08-19. I checked xgd's goal list first this time. It notes DOC-981 as the shape to aim for — and flags that §8 is itself stale on network egress, which is a pointed illustration of the failure mode the goal has to design against.
+
+## Left where it is
+
+The **draft-backlog burndown** stays on the biz map. It's the only one whose subject is genuinely cross-project — "zero drafts in *every* project", measured across all four stores, two of which are already at zero. Filing it in xgd would be the same category error in the other direction: xgd owns the *tooling* (BUG-1185, REQ-811), not the outcome. If you'd rather it moved, it should carry a note saying its scope isn't xgd-only, or the next reader will narrow it.
+
+The pattern across all three of my misplacements was identical: I searched locally, found nothing, and concluded nothing existed. The rule closes that off.
 
 <!-- xgd-chat-end -->
