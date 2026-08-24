@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-24T01:40:29.578605+00:00'
+updated_at: '2026-08-24T19:06:07.983210+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3321,5 +3321,60 @@ Also still open: **BUG-1248** and **BUG-1245** (`free_coding`), **BUG-1263/1264/
 ## One residue
 
 `list` and `get` still disagree — `list` reports BUG-1247/1249/1250 as `draft` and "Untitled"; `get` returns all three at `ready_to_reconcile` with real titles. BUG-1252 is fixed, so this is stale index entries rather than the lookup path. It still means **any count from `list` is wrong**, which continues to block the draft burn-down measurement. I don't see a ticket for it.
+
+<!-- xgd-turn id="9d4e6b0d1ab84b6eb152ca0d356c9e97-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-24T19:03:39.340133+00:00" -->
+#### You
+Short day today, I have my dinner.
+
+1c is working in the cloud but there is a bug - my goal: get past the bug, get the next few features implemented and show that you can deploy
+
+xgd is hitting some bugs based on the permissions and ticket changes - I need to work through these as best I can. I started adding goals in xgd for the next feature development.
+
+BTW, when you add goals you should add them to the project that they are associated with unless they are truely business level goals that live here
+
+<!-- xgd-turn id="9d4e6b0d1ab84b6eb152ca0d356c9e97-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-24T19:03:53.799691+00:00" -->
+#### Claude
+Noted on goal placement — that's a correction I should have inferred and didn't. Let me sweep, then say what I'll fix.
+
+Fair correction — I'd been creating everything locally regardless of owner. Saved as standing practice, and it's already cost something (below).
+
+## Tonight
+
+**`goal-49e8dec2` — "Release ready to demo at the 8/24 dinner" — target date is today.** It's been sitting at `planned` with no children since 08-11, unconnected to any of the last two weeks' work. Against its own bar:
+
+- **Install that works** — realized 08-15, five days early
+- **Visible answer to what the AI is permitted to do** — realized 08-19, plus DOC-981 now readable by a newcomer
+- **Controls a newcomer can read** — partial; your own read was "works, unlovely"
+
+And one thing that bar didn't anticipate: **1c is running in the cloud.** For two prospective testers, a live product built with xgd beats tidy UI — it answers "what is this for" before "how does it work".
+
+Caveat worth knowing rather than discovering: if the demo involves driving a workflow live, xgd is mid-repair. Showing what's been built is safe; driving it is the risk.
+
+## The two bugs you named are already fixed
+
+- **`BUG-1266`** (reconcile not dispatching — the stale `reconciling` row on canonical blocking every project) → **`free_coded`**. That was the cycle-wide blocker.
+- **`1stcontact/BUG-36`** (fresh deployment 503s, `No tenant '1stcontact'`) → **`free_coded`**.
+
+Still active in xgd: **BUG-1245** and **BUG-1248**, both `free_coding`. That's the whole open front — down from thirteen yesterday.
+
+Note the stale index is still lying: `list` reports BUG-36 as `draft` while `get` says `free_coded`. Same residue as yesterday, still unticketed.
+
+## The placement rule has already cost something
+
+Four goals I put in the wrong store: documentation and capability matrix (→ xgd), the 1c email/portal/CRM block (→ 1stcontact), and the draft burndown (genuinely cross-project — your call).
+
+The capability matrix one is the sharp example: I created it on 08-20 recording that the matrix had *"no goal anywhere on the map"*. True of the biz map, false of xgd — **GOAL-3 had existed since 08-06.** The rule would have caught that.
+
+**Five duplicate pairs now exist.** Your four new xgd goals (GOAL-8 KM, GOAL-9 Design tab, GOAL-10 Chat, GOAL-11 Beta ready) each shadow one here — and yours are better sourced; GOAL-10 already knows REQ-741 is `free_and_reconciled` and REQ-794/795 are `ready_to_reconcile`, which the local copy doesn't.
+
+Proposed fix, not applied: for the first four, xgd owns them and the local goal becomes a `ticket://` child reference. The fifth stays split deliberately — xgd/GOAL-11 "Beta ready" is the engineering gate; `goal-af871b76` "XGD closed beta" is the business milestone. Two real things that just need to say so.
+
+It's a five-goal restructure and you have a short day, so I've left it. One pass whenever you want it.
+
+Enjoy the dinner — you have more to show than the map was giving you credit for.
 
 <!-- xgd-chat-end -->
