@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-25T05:29:58.426523+00:00'
+updated_at: '2026-08-25T05:40:36.907694+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3485,5 +3485,56 @@ Next priorities are all about KMS
 (2) Get upload working on 1c to add to the project KB
 (3) Get the KMS running in xgd
 (4) Create some new docs on how xgd is used today
+
+<!-- xgd-turn id="ed2a6406591d4c41b06e00c73124d58a-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-25T05:37:29.111549+00:00" -->
+#### You
+Please continue
+
+<!-- xgd-turn id="ed2a6406591d4c41b06e00c73124d58a-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-25T05:40:16.710236+00:00" -->
+#### Claude
+Version `0.15.367 → 0.15.390` since this morning. Both your claims hold — with one caveat worth naming.
+
+## 1c running in the cloud — confirmed
+
+`BUG-36` (fresh deployment 503s, `No tenant '1stcontact'`) is **`free_coded`**. That was the "close but not quite": a deployment that only worked if a human ran `bin/publish` from a dev machine. `REQ-149` has moved past `ready_to_reconcile` to **`bundled`**.
+
+1c's whole open queue is now one draft bug — `BUG-39`, Node chat-host UATs still speaking the pre-streaming contract. Nothing in `free_coding`.
+
+## xgd workflow blockers — confirmed, with one I'd not leave
+
+`BUG-1266` — the cycle-wide reconcile dispatch blocker, where one stale `reconciling` row on canonical stopped dispatch across *every* project — is **`free_coded`**. Four more went `ready_to_reconcile` today: BUG-1269, 1270 (BUNDLE-128's own failure), 1271, and 1273 (progress bar stuck at 0% through cherry-pick).
+
+Remaining: `BUG-1245` and `BUG-1248` in `free_coding`; three drafts.
+
+**The one to look at: `BUG-1264`, severity high, still `draft`.** REQ-816's branch seeding is wired into all three branch-cut paths — regression, reconcile, develop — and every call site treats a seeding failure as best-effort, logging a warning and continuing. That's the silent-partial-snapshot failure mode REQ-816 exists to eliminate, reintroduced at the seam that implements it. A branch cut with incomplete tickets looks identical to a healthy one until something downstream reads the gap. It's exactly the shape that cost 26 hours in BUG-1240.
+
+## Today
+
+Beyond the fixes, this was the heaviest planning day on record: **fifteen goals filed** — four in xgd (KM, Design tab, Chat update, Beta ready), eleven in 1stcontact (the KM block, asset upload, open design questions). All properly parented, provenance set, `children` vs `depends_on` applied deliberately — GOAL-39 reasons the distinction out in its own body.
+
+Plus the goal-map restructure: six goals rewired to their real owners, three duplicate clusters resolved, `xgd/GOAL-12` created for documentation.
+
+## Your four priorities — all four now have goals
+
+That's new. A week ago two of them had none.
+
+| | Owner | State |
+|---|---|---|
+| 1 — KMS on 1c | 1c/GOAL-33 → GOAL-34 | `concept` |
+| 2 — upload into project KB | 1c/GOAL-37 → GOAL-38, 39 | `concept` |
+| 3 — KMS in xgd | xgd/GOAL-8, REQ-775 | REQ-775 `draft` |
+| 4 — docs on how xgd is used | xgd/GOAL-12 | now a workstream |
+
+**Two things I flagged rather than resolved:**
+
+**"With ticket backing" contradicts what's written.** `1c/GOAL-34` commits to *"D1 for structured records, R2 for larger payloads"* per DOC-5. Ticket-backing could mean the record model (compatible) or the ticketing store as substrate (a different architecture, inheriting this week's overlay-routing characteristics). Those imply different data models — and `GOAL-43`, the open question GOAL-34 already depends on, explicitly lists the two knowledge bases as entities with no home in DOC-5's entity list. Worth deciding before code; the last three permissions rounds each cost a day by encoding the model wrong first.
+
+**The ordering is a reversal.** 1c gets KM before xgd does. Since 08-13 this map has framed KM as the completion of xgd's backend refactor with 1c not in the picture. It's probably right — 1c is additive adoption, xgd/REQ-775 *deletes* the static priming assembler with no rollback, so proving the components in a real app first is the cheaper sequence. But the reason should come from you, not be inferred by me.
+
+One loose end: `goal-49e8dec2` — the 8/24 dinner — still sits at `planned` with today's date. It wants a `completed_date` or an honest `abandoned`, and only you know which.
 
 <!-- xgd-chat-end -->
