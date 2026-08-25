@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-25T05:25:55.280375+00:00'
+updated_at: '2026-08-25T05:29:58.426523+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3471,5 +3471,19 @@ Everything else was already right. `GOAL-39` even reasons the distinction out ex
 No owner, no ticket. It's small now and expensive once both copies are half-answered.
 
 One pattern worth keeping: filing open questions **as goals** is the same fix as the capability matrix. Nothing held that, so it kept slipping off the table for weeks. An unanswered question with a done state is real work; off the map it's an invisible blocker.
+
+<!-- xgd-turn id="6d5065e1552245fe9a0af3853346c24d-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-25T05:29:57.481352+00:00" -->
+#### You
+Please do the evening sweep and tell me how we did today.
+
+I think - we got a basic 1c running in the cloud and fixed all the known blocking bugs on the xgd workflows
+
+Next priorities are all about KMS
+(1) Get the KMS system with ticket backing running on 1c
+(2) Get upload working on 1c to add to the project KB
+(3) Get the KMS running in xgd
+(4) Create some new docs on how xgd is used today
 
 <!-- xgd-chat-end -->
