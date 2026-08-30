@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-08-30T02:54:37.743253+00:00'
+updated_at: '2026-08-30T03:01:16.281033+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3536,5 +3536,64 @@ That's new. A week ago two of them had none.
 **The ordering is a reversal.** 1c gets KM before xgd does. Since 08-13 this map has framed KM as the completion of xgd's backend refactor with 1c not in the picture. It's probably right — 1c is additive adoption, xgd/REQ-775 *deletes* the static priming assembler with no rollback, so proving the components in a real app first is the cheaper sequence. But the reason should come from you, not be inferred by me.
 
 One loose end: `goal-49e8dec2` — the 8/24 dinner — still sits at `planned` with today's date. It wants a `completed_date` or an honest `abandoned`, and only you know which.
+
+<!-- xgd-turn id="2997494e5ee844758ae93851dc030604-user" -->
+
+<!-- xgd-chat role="user" ts="2026-08-30T02:55:33.841943+00:00" -->
+#### You
+I've been busy on other things this week, please do a pass of all the projects - mostly work has been bug fixes
+
+<!-- xgd-turn id="2997494e5ee844758ae93851dc030604-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-08-30T02:55:42.733589+00:00" -->
+#### Claude
+Let me find out how much time has passed and survey all four stores.
+
+Five days have passed — it's 2026-08-29. Version `0.15.390 → 0.15.404`. Surveying all four.
+
+Five days passed (08-24 → 08-29), `0.15.390 → 0.15.404`. It was a bug-fix week, and it was a good one.
+
+## xgd — the reconcile blockage cleared, and the week found where the time was going
+
+**`BUNDLE-128` is `free_and_reconciled` — 27 tickets.** That's the bundle whose stale `reconciling` row was blocking every reconcile in every project. It didn't just get unstuck, it completed. **`BUNDLE-129` is `reconciling` now** — 19 tickets in flight. First time the pipeline has been moving rather than jammed since REQ-816 landed.
+
+Four bugs, and together they're one story:
+
+- **`BUG-1285`** — *~63 minutes of completely silent time inside every `cherry_pick_next_v2` iteration.* All four attempts on BUNDLE-128 took **87–91 minutes regardless of conflict size** — one was a single-file version-bump collision whose actual resolution took 69.5 seconds.
+- **`BUG-1276`** — the cherry-pick loop recomputes the window and rogue-commit gate **per commit** instead of once per bundle. Almost certainly what lives in that silent window.
+- **`BUG-1291`** — `is_applied()` never recognises a skipped merge-commit pick → infinite re-pick livelock.
+- **`BUG-1287`** — invoker now retries on `Connection lost mid-response`.
+
+The diagnostic worth keeping: **the fixed floor was the tell.** A cost that doesn't vary with the work isn't the work — it's overhead, invisible because nothing logged inside the window. Same shape as BUG-1251's 47-second chat loads. And it reframes the backlog that built up over the fortnight: 27 tickets through a loop with a 1.5-hour floor per attempt wasn't idleness.
+
+## 1stcontact — the whole workerd block is in the machinery
+
+**`BUNDLE-20` is `reconciling`** — REQ-143/145/146/147/148 plus five more, the original eight going through together. **`BUNDLE-21`** (BUG-36/37/38) is queued behind it. REQ-149 and REQ-150 are `bundled`. **Zero draft bugs.**
+
+And **REQ-154** (headless browser in the cloud) went `draft → free_coded` — one of the four native-code gaps closed.
+
+## KMS priority 1 is scoped — and it turned up something
+
+**`1c/REQ-158`**, filed 08-28: the system KB in the Worker. Honest about being small — *"a wiring ticket, not a design one"* — the seam already accepts a `knowledgeSurface`, only `control-app/src/ai.ts` passes nothing.
+
+But the finding inside is bigger than the ticket:
+
+> *"The corpus has never actually been built. `kb/system/` contains 33 exported markdown documents and nothing else — no `index/`, no `chunks/`, no awareness map. Only `1c kb export` has ever run."*
+
+The framework components have been `ready_to_reconcile` since 08-19, and I'd said the bottleneck was adoption not construction. It's more specific: **the embed, describe and awareness passes have never run end-to-end on a real corpus.** So the first genuine test isn't the Worker wiring — it's `1c kb build` completing against 33 documents. The 8 points measure the wiring, not the risk.
+
+That also strengthens the ordering you chose: xgd/REQ-775 deletes the static assembler with no rollback, and going second means whatever `1c kb build` reveals is evidence xgd gets for free.
+
+## Draft backlog — 26 → 17
+
+xgd bugs **3 → 1**, xgd requests **13 → 11**, 1c and framework holding at zero bugs. BUG-1264 — the branch-seeding warn-and-continue I flagged as not-to-leave — cleared. And the `list`/`get` disagreement that made the 08-23 counts unreliable is **gone**; these numbers came straight out of the fixed command.
+
+**The remaining tail hasn't moved and won't on its own.** Six of the eleven xgd draft requests predate August — REQ-468/539/540 (Surfaces, May 19-20), REQ-583, REQ-661, REQ-663. Three to four months old. Nobody picks up a May request opportunistically; they need a deliberate pass whose likely output is `abandoned` with a reason. Twenty minutes, and it'd take xgd from 12 to about 6.
+
+## Two things needing you
+
+**`goal-198516d1`'s target is 2026-08-21 — eight days past, unmoved,** and reading as overdue on the frontier the whole time. I've deliberately not moved it again; it moved once already and moving a date twice without a decision behind it is how a slip goes invisible. My recommendation is unchanged from 08-24: split the fidelity block (REQ-155/156/157) and mark this `realized`.
+
+**And with the class-cohort deadline two days out (08-31), the site builder goal shows no live leaves.** Either everything beneath it has moved past ready, or its children need attaching. Worth checking rather than assuming.
 
 <!-- xgd-chat-end -->
