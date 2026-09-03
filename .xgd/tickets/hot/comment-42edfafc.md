@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-09-03T02:57:19.630655+00:00'
+updated_at: '2026-09-03T03:26:01.289225+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3866,5 +3866,51 @@ Three things I wrote in deliberately:
 **The vendoring seam, with the precedent named.** REQ-119 lands first and must be vendored before REQ-832 is promoted — the moment the digest emits `underway` to a widget that doesn't know it, the display breaks. I cited the REQ-93 collapse-controls hunt on 08-16, where `ready_to_reconcile` in framework didn't put the code in front of you and we spent a session treating a deployment gap as a code defect.
 
 One thing worth noting on the way out: after this lands, the CLI's type-blind guard stops being a bug. Today it's wrong because it blocks a legitimate goal write; once goals never use the token, refusing it for everything is simply correct. So the rename fixes the guard for free rather than needing a second change — I flagged it as "confirm, don't assume" rather than leaving it silent.
+
+<!-- xgd-turn id="754c1edd99904040ae4d3ed7b3b3a1dc-user" -->
+
+<!-- xgd-chat role="user" ts="2026-09-03T03:23:00.239164+00:00" -->
+#### You
+So capturing this here so I can find it tomorrow: the first thing to do is the complete the structured priming changes for the KMS system in LF REQ-115-118 then these need to be applied to 1stcontact.
+
+In the meantime I can work on the account and tenant related changes on 1c
+
+...and the workflow bugs in xgd :-/
+
+<!-- xgd-turn id="754c1edd99904040ae4d3ed7b3b3a1dc-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-09-03T03:23:15.794502+00:00" -->
+#### Claude
+Let me get the actual state of that priming chain before recording it — the capture is only useful tomorrow if it's accurate.
+
+REQ-119 is showing as `free_coding`, not `draft` — let me verify both before anything else.
+
+Correction before the capture: **REQ-832 is `draft` as I said, but REQ-119 is `free_coding`** — it has a `chat_comment` attached, so a session picked it up. I filed it as a draft; something moved it. Worth knowing since it's in your free-coding lifecycle now rather than sitting on the shelf.
+
+Recording tomorrow's plan. The priming chain first, onto the goal that owns it:
+
+Now the three threads, on the workstream that carries Saturday — it's the first thing On Deck shows:
+
+Captured in two places you'll actually hit tomorrow.
+
+**`goal-428b7163`** (the cohort workstream, top of On Deck, Saturday's date) now opens with all three threads and their ticket lists, so it's the first thing you see rather than something you have to reconstruct.
+
+**`1c/GOAL-33`** carries the priming chain in detail — the four LF tickets with what each does, DOC-22 as the design record, and the sequencing note that adoption comes after.
+
+Three things fell out of writing it down:
+
+**The adoption step into 1c has no ticket.** REQ-160 — session seeding and turn reminders, two-KB priming — is `ready_to_reconcile` and was built against the *current* priming shape. When three-tier lands upstream, something has to move 1c onto it, and right now that step exists only in the sentence you just said. Worth filing before REQ-115–118 close, otherwise it's remembered rather than tracked, which is the exact shape of the vendoring gap that cost the REQ-93 session.
+
+**REQ-116 is the one that matters for 1c, not REQ-115.** The builder runs in workerd, so the Python tier lands nowhere in that project. The JS peer carries the conformance corpus — which is what makes the two tiers verifiably the same configuration rather than two implementations that drift apart.
+
+**REQ-171 collides with REQ-117.** Your 1c draft to review the session prompts and turn reminders overlaps what "KM sheds role purpose; priming splits into `landscape_text` + `mechanism_text`" changes upstream. I've sequenced it after thread 1 in both goals rather than leaving it looking parallel.
+
+Your instinct on (1) and (2) is well-founded, and I recorded why: the account/tenant work isn't a distraction from the priming work, it's the correct thing to do *because* (1) is blocked in another repo. They're genuinely parallel.
+
+Two things that aren't in any of the three threads, flagged rather than added:
+
+**Demo sites** — milestone 1(c), still with no ticket, no goal, four days running. It's the only requirement judged by eye rather than by tests, and it's the part the cohort sees.
+
+**BUNDLE-130 at `error`** — eleven bundles queued, nothing reconciling. That's the concrete head of thread 3, and BUG-1318 explains why it doesn't look urgent: `error` status is invisible in the dashboard, so a jammed queue reads as a quiet one.
 
 <!-- xgd-chat-end -->
