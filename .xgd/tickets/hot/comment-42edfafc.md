@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-09-03T02:46:19.877996+00:00'
+updated_at: '2026-09-03T02:51:27.457110+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3806,5 +3806,33 @@ One factual thing to leave with you, not a request: the Goal Map Operator Guide 
 Right now **28 goals in lagrange-biz and 6 in 1stcontact sit at `in_progress`**, some of them because I put them there. I'm not touching any of them — that's declared state, and overwriting it is the one thing the map exists to prevent. But if the token is genuinely reserved, that population is either contamination worth a cleanup pass or evidence the goal ladder needs a different word. Your call which, and it's a small ticket either way.
 
 Nothing else from the sweep changes: the KMS and upload blocks landed, DECISION-13 records the account/business split, and on the xgd side BUG-1317 is past your hands while `BUNDLE-130` sits at `error` with eleven bundles queued behind it.
+
+<!-- xgd-turn id="2863a538d4754e3f8d0a0f4991347d46-user" -->
+
+<!-- xgd-chat role="user" ts="2026-09-03T02:50:09.858793+00:00" -->
+#### You
+Well we need a state for goals, we could use that I guess but it would be better if we could find something else. Its intent tickets I don't want you to move to in_progress
+
+<!-- xgd-turn id="2863a538d4754e3f8d0a0f4991347d46-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-09-03T02:50:28.766763+00:00" -->
+#### Claude
+That's a much narrower rule than I'd written — intent tickets, not goals. Let me check whether the guard is even correct before proposing a rename, because the cheaper fix might be on the other side.
+
+Sandbox keeps me to lagrange-biz, so I can't read the guard itself — but the behaviour is observable and it points somewhere useful. Correcting the memory first, since I'd overshot it:
+
+Corrected — intent tickets, not goals. I'd overshot in both directions in two turns; it's right now.
+
+**On the state itself.** Worth knowing before you pick: the CLI and the dashboard already disagree about this. The dashboard sets `in_progress` on goals without complaint — that's how 6 in 1c and ~28 here got there — while the CLI refuses the same write with a dispatcher warning. So the guard is type-blind: it's protecting intent tickets and catching goals in the blast radius. Two fixes, and they're not equivalent:
+
+**Make the guard type-aware.** Refuse `in_progress` on intent types, allow it on goals. Zero migration, and it only makes the CLI agree with what the dashboard already does. Cheap, and it unblocks the write.
+
+**Give goals their own token** — what you're actually asking for. More work: schema, roll-up rule 3 (*"anything `realized` or `in_progress` → `in_progress`"*), display order, the digest, the goal-map rendering, plus migrating ~34 existing goals. It spans two projects — schema and `ai_goal_cli` in xgd, rendering in the vendored framework component.
+
+I'd do the second, and the reason is this conversation. The token being overloaded is what made me get it wrong: on a goal it looked like ordinary map maintenance, and the ladder in the operator guide told me it was. A rule that requires remembering "this word means two things depending on ticket type" will keep costing that, and it'll cost it worse once someone else is reading the map. The first option makes the mistake *impossible for the CLI* but still available to every human and AI reading the model.
+
+**Suggested token: `underway`.** Unambiguous, no collision with any workflow status, and it reads cleanly in the display order — `realized, underway, planned, aspiration, concept, abandoned`. `active` is the obvious alternative but it's a vaguer word and tends to get reused. Your call on the word; I'd rather you name it than have me file a ticket that quietly decides it.
+
+Say the token and I'll write the request — xgd, covering the schema, the CLI guard, roll-up, and the migration of the existing goals, with the framework rendering half called out as the seam.
 
 <!-- xgd-chat-end -->
