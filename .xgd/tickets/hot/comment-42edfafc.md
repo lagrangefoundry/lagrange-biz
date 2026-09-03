@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-09-02T18:21:36.658345+00:00'
+updated_at: '2026-09-03T02:29:50.881429+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3664,5 +3664,96 @@ The part worth celebrating inside that: it confirms last week's work landed. `ch
 Recorded the "stabilize the backend processes" priority on XGD quality rather than creating a sixth goal on top of the five stage-goals that already exist.
 
 One thing still sitting: **BUG-1245 and BUG-1248 have been `free_coding` since 08-23** — eight days unchanged. Worth either finishing or explicitly parking.
+
+<!-- xgd-turn id="33f2e2e62eb141328a16b37dd48aa75c-user" -->
+
+<!-- xgd-chat role="user" ts="2026-09-03T02:20:24.084442+00:00" -->
+#### You
+ok please do a sweep of tickets. 
+
+Let me tell you where I think I am:
+ - Early testing of 1c showed important holes in kms, priming and tooling - these have been identified, designed and are under implementation
+ - Important new product framing site<->tenant, account -> multiple sites/tenants - at some future point we may open up multiple sites per tenant but not today. Tenant == a business/org/brand identity
+ - on XGD we identified a major issue with merge-commits that will block reconciliation - fix was implemented and is now under test.
+
+The goal for tomorrow is to get all of these pieces in-place. KMS system up and fully running, correctly priming sessions from configuration, all the tooling upgrades in place so the AI has control of its space and can see what is going on. Reconcile working again.
+
+<!-- xgd-turn id="33f2e2e62eb141328a16b37dd48aa75c-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-09-03T02:20:27.568496+00:00" -->
+#### Claude
+I'll pull fresh state across all four stores before touching anything — five days of drift since the last sweep, and three of your four points are things I'd have no trail for unless I look.
+
+Version `0.15.404 → 0.15.429`. Digest is running long in the background — let me get the ticket evidence in parallel.
+
+That's a large body of new 1c work — REQ-158→181 and BUG-40→50. Let me read the digest and get statuses.
+
+Two significant incidents in there. Let me get exact statuses via the JSON path — the CLI's human output isn't showing them.
+
+The picture has changed a lot in two days. Let me confirm the 1c bug states and read the identity framing.
+
+Everything I need. Two goals in 1c have bodies that are now factually false, and the cohort goal's milestone table is two days stale. Let me read the framing doc, then make the changes.
+
+Making the changes now. Four edits:
+
+1. **`1c/GOAL-33`** and **`1c/GOAL-37`** — both still `concept` with bodies asserting *"no knowledge-management code in this repo yet"* and *"no upload path in the repo today"*. Both are now false; the work is built and bundled.
+2. **`goal-428b7163`** (class cohort) — its milestone table says everything is `draft`/`concept`. Two days out of date.
+3. **A decision record** for the account/business reframing — that's a change to the shape of the product, and the reasoning is recoverable today.
+
+A real blocker just surfaced — worth noting: **`in_progress` cannot be set on a goal in another project's store.** The cross-project path shells out to `xgd ticket update`, which refuses it as an operator-only dispatcher trigger. That's the goal ladder's rung colliding with a workflow status. Applying the body update without the status.
+
+One reference to fix — I wrote `DECISION-16` in the cohort body before the id was assigned; it's `DECISION-13`.
+
+Swept all four stores. `xgd 0.15.404 → 0.15.429`. Your three readings all hold — and one of them substantially understates what happened.
+
+## 1c: the KMS block didn't just start, it landed
+
+Two days ago the cohort goal recorded *"everything under it is `draft` or `concept` — nothing is in flight."* That is now wrong in the good direction:
+
+| | 08-31 | 09-02 |
+|---|---|---|
+| **KMS** (REQ-158/159/160 + 162/164/165/166) | all `draft` | four **`bundled`**, two `ready_to_reconcile`, one `free_and_reconciled` |
+| **Asset upload** (GOAL-37) | `concept`, *"no upload path in the repo today"* | REQ-161/163 **`bundled`**, 172/176 `ready_to_reconcile` |
+
+Twenty-four requests (REQ-158→181) and eleven bugs (BUG-40→50) filed and mostly closed in two days. **Both goals still read `concept` with bodies asserting the code doesn't exist** — I've rewritten both.
+
+The holes you found in early testing are visible as a bug cluster, and it's the right kind: BUG-41 (uploaded `.md` stored undescribed because the browser sends no content type), BUG-45 (a file dropped on "Put it on the site" is unusable to the assistant), BUG-47 (the "On this site" pill marks where a file was *uploaded*, not where it's *used*), BUG-44 (opaque L1 refusals burn a turn's budget). Those are only findable by dropping real files into a real Library and watching what the assistant then fails to do. All `ready_to_reconcile`.
+
+**The one I'd not let slide is `BUG-48` — *"a document in the corpus that is not in the index is a shipped lie"*, still `draft`.** REQ-158 predicted this on 08-28 when it recorded that `1c kb build` had never run end-to-end against the real corpus. It's now a real defect rather than a hypothetical. It fails silently by construction — the assistant doesn't know what it can't see — so a demo would look like it worked. That's the sharpest risk against Saturday.
+
+## The product framing — recorded as DECISION-13
+
+Filed, because it hits two signatures at once: a subtree appeared fully formed with no prior aspiration, and the shape of the product changed.
+
+The argument that makes it a cheap decision rather than a lucky one: REQ-178 found the one-business-per-account assumption baked into **exactly one place** in shipped code — `accountFor()` returning a single id. Everything else already had the right shape; `memberships (user_id, account_id)` was always a join. The design had been drifting toward this for weeks and only one sentence hadn't caught up. After real accounts exist it's a live-data migration.
+
+I recorded the asymmetry too, since it'll look inconsistent later: account→business was split *early because it's cheap now*; business→site was deferred on the same reasoning inverted — not needed yet, shape not settled. Both are defensible; only together do they look like a position rather than a coin flip.
+
+Also worth knowing: **milestone 2 is further along than it reads.** REQ-167 (invite provisions the account, login binds it) is `bundled`, REQ-178 `ready_to_reconcile`, DOC-40 is the design record. Login isn't a cold start next week.
+
+## xgd: the fix is past your hands, but reconcile is not running
+
+`BUG-1317` — *replace strict merge-commit rejection with topology-driven window handling* — is **`ready_to_reconcile`**. Correct diagnosis in the ticket: since branch-per-ticket free-coding started 08-07, `git merge free-<TICKET>` is how work normally lands, so hitting a merge commit isn't an edge case, it's the norm.
+
+But the queue state says the machinery hasn't restarted:
+
+**11 bundles `ready_to_reconcile`, 0 `reconciling`, and `BUNDLE-130` sitting at `error`.**
+
+That's the bundle whose merge commits triggered the rejection. And `BUG-1318` (`ready_to_reconcile`) names the consequence exactly: **`error` status is invisible in the dashboard and silently blocks the reconcile queue.** So the fix is built, and the specific bundle that motivated it is still parked in a state nothing displays. Clearing BUNDLE-130 is likely what stands between you and eleven bundles moving.
+
+Two more from this week that deserve a mention rather than burial:
+
+- **`BUG-1310`** — the last successful push to `origin/xgd-working` was **2026-08-03**. A month of silent `Push failed (may be offline)` built up **8,229 unpushed commits**, and the only thing that noticed was the dispatcher's branch-sync gate eventually refusing to proceed. Recovery took a patch-id audit across 1,431 origin-only commits. The ticket is honest about why that was survivable here and wouldn't be elsewhere: *"an ordinary project would have had a much harder time gaining confidence before overwriting a month of divergent history."*
+- **`BUG-1312`** — governance excludes were inert (`${main}` doubled the `.xgd` segment), so a session could edit the file defining its own sandbox. `ready_to_reconcile`.
+
+xgd draft bugs are down to **two**, one of which is `BUG-1323`, untitled.
+
+## For tomorrow
+
+Against your four: KMS is built but not verified (BUG-48, REQ-171); priming from configuration is REQ-160, `ready_to_reconcile`; tooling is largely through. **Reconcile is the one where the gap is real** — the fix exists, the queue doesn't move, and BUNDLE-130's `error` is the thing to clear first.
+
+And the item that's had no representation anywhere for four days running: **(c) demo sites.** Three days to Saturday. It's the only requirement judged by eye rather than by tests, and it's the part the cohort actually sees. Everything else on milestone 1 is defended by a ticket; that isn't.
+
+One thing I couldn't do: **`in_progress` can't be set on a goal in another project's store.** The cross-project path shells out to `xgd ticket update`, which refuses it as an operator-only dispatcher trigger — the goal ladder's rung colliding with a workflow status. GOAL-33 and GOAL-37 have the correct bodies but still read `concept`; they need setting from the 1c dashboard, or that collision needs a ticket.
 
 <!-- xgd-chat-end -->
