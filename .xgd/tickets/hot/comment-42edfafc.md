@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-09-03T02:51:27.457110+00:00'
+updated_at: '2026-09-03T02:57:19.630655+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3834,5 +3834,37 @@ I'd do the second, and the reason is this conversation. The token being overload
 **Suggested token: `underway`.** Unambiguous, no collision with any workflow status, and it reads cleanly in the display order — `realized, underway, planned, aspiration, concept, abandoned`. `active` is the obvious alternative but it's a vaguer word and tends to get reused. Your call on the word; I'd rather you name it than have me file a ticket that quietly decides it.
 
 Say the token and I'll write the request — xgd, covering the schema, the CLI guard, roll-up, and the migration of the existing goals, with the framework rendering half called out as the seam.
+
+<!-- xgd-turn id="213fef2066654e6aaf1275f0c960986a-user" -->
+
+<!-- xgd-chat role="user" ts="2026-09-03T02:54:24.831560+00:00" -->
+#### You
+cool - underway it is - can you create a ticket for that please? Is that xgd or lf?
+
+<!-- xgd-turn id="213fef2066654e6aaf1275f0c960986a-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-09-03T02:54:54.565589+00:00" -->
+#### Claude
+`underway` it is. Answer: **both**, and it has to be two tickets — a ticket can't span projects here, and these are different repos with different release paths. Let me confirm where the ladder is documented before I write them.
+
+DOC-19 (Goal Map) and DOC-17 live in **lagrange-framework** — so the model is owned there, while the schema, roll-up computation and the data all live in xgd. Filing both, framework first since it owns the spec.
+
+One reference to fix — REQ-119 says `xgd/REQ-TBD`; it's REQ-832.
+
+Both filed, `draft`, cross-referenced.
+
+**`lagrange-framework/REQ-119` — the model.** DOC-19 and DOC-17 both live in framework, so that's where the ladder is defined: the state table, roll-up rules 3 and 4, display order (`realized, underway, planned, aspiration, concept, abandoned`), the readiness rule, the widget's badges and state filter, and the Operator Guide — which matters more than it looks, since that guide is what an AI actually works from, and it's what told me `in_progress` was a legitimate goal rung.
+
+**`xgd/REQ-832` — the schema, the derivation, and the data.** Goal type's allowed states, roll-up computation, digest emission, and the migration.
+
+Three things I wrote in deliberately:
+
+**The migration isn't an xgd migration.** ~34 goals carry `in_progress` and most of them are *not* in xgd — about 28 in lagrange-biz and 6 in 1stcontact. It has to run across every project in `~/.xgd/projects.yaml`, or the goal map itself ends up holding a token its own schema rejects.
+
+**A guard against the migration doing damage.** It's a pure token rename on `status`. Roll-up disagreements must be byte-identical before and after — a goal declared `underway` whose children all derive `realized` is the staleness detector working, and a migration that "helpfully" reconciles declared to derived would delete exactly the signal the map exists for. That's now an acceptance criterion.
+
+**The vendoring seam, with the precedent named.** REQ-119 lands first and must be vendored before REQ-832 is promoted — the moment the digest emits `underway` to a widget that doesn't know it, the display breaks. I cited the REQ-93 collapse-controls hunt on 08-16, where `ready_to_reconcile` in framework didn't put the code in front of you and we spent a session treating a deployment gap as a code defect.
+
+One thing worth noting on the way out: after this lands, the CLI's type-blind guard stops being a bug. Today it's wrong because it blocks a legitimate goal write; once goals never use the token, refusing it for everything is simply correct. So the rename fixes the guard for free rather than needing a second change — I flagged it as "confirm, don't assume" rather than leaving it silent.
 
 <!-- xgd-chat-end -->
