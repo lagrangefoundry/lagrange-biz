@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-09-03T02:33:50.455315+00:00'
+updated_at: '2026-09-03T02:46:19.877996+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3784,5 +3784,27 @@ Adopted as a standing rule and saved: I don't write `in_progress` on anything, i
 Which is the better shape anyway — the body says what's true, and the rung stays your call.
 
 **One thing worth deciding, since it changes how I work the map.** I've been setting `in_progress` on lagrange-biz goals routinely — the local store accepts it, and 28 goals here are in that state, several because I put them there. If the rule is absolute, it applies locally too, and my half of goal maintenance becomes bodies and evidence only, with every ladder move yours. That's workable and arguably more honest. But it's a real change to the loop, so I'd rather you set it deliberately than have me infer it: **absolute everywhere, or just don't reach into other projects' stores?**
+
+<!-- xgd-turn id="e4b82b6ee8594384a1e2933e812e5e90-user" -->
+
+<!-- xgd-chat role="user" ts="2026-09-03T02:45:40.995461+00:00" -->
+#### You
+in_progress has a very specific meaning in the automated workflow - it is not available for general use
+
+<!-- xgd-turn id="e4b82b6ee8594384a1e2933e812e5e90-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-09-03T02:46:01.375099+00:00" -->
+#### Claude
+Understood — it's the automated workflow's status, not a general-purpose "started" marker. That's absolute, everywhere, and it settles the question I asked: I don't write it locally either.
+
+Memory updated to say that rather than my narrower version.
+
+Rule recorded as absolute. From here I put the evidence in goal bodies and leave the status field alone — a body that states what's true lets you move the rung in one click, and every ladder move stays yours.
+
+One factual thing to leave with you, not a request: the Goal Map Operator Guide I work from lists `in_progress` as a rung of the goal ladder (`concept → aspiration → planned → in_progress → realized`), and the roll-up rules are written on it — *"anything `realized` or `in_progress` → `in_progress`"*. So the goal model and the automated workflow are sharing one token with two meanings. That's why it read as ordinary map maintenance to me, and it's the kind of thing that will read that way to the next session too.
+
+Right now **28 goals in lagrange-biz and 6 in 1stcontact sit at `in_progress`**, some of them because I put them there. I'm not touching any of them — that's declared state, and overwriting it is the one thing the map exists to prevent. But if the token is genuinely reserved, that population is either contamination worth a cleanup pass or evidence the goal ladder needs a different word. Your call which, and it's a small ticket either way.
+
+Nothing else from the sweep changes: the KMS and upload blocks landed, DECISION-13 records the account/business split, and on the xgd side BUG-1317 is past your hands while `BUNDLE-130` sits at `error` with eleven bundles queued behind it.
 
 <!-- xgd-chat-end -->
