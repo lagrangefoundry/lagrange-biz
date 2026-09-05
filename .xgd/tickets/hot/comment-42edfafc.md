@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-09-05T02:44:48.602725+00:00'
+updated_at: '2026-09-05T18:42:34.413946+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -4012,5 +4012,62 @@ That's the pattern, and it's the same one as BUG-1303 and BUG-1266: **a fix that
 **BUNDLE-130 is still at `error`. Eleven bundles `ready_to_reconcile`, nothing reconciling — identical to Tuesday.** BUG-1317's merge-commit fix is `ready_to_reconcile`; BUG-1333 (filed today) adds a second blocker: reconcile teardown resurrects the removed `reconcile-*` worktree, *permanently blocking dispatch*.
 
 You named "getting xgd long-running processes back up" as co-primary with 1st contact. That queue is the measurement of it, and it hasn't moved in two days. Given enthusiastic early adopters waiting on 1c, it's worth being deliberate about which of the two gets tomorrow — because right now the reconcile queue is where two weeks of finished xgd work is parked.
+
+<!-- xgd-turn id="83a025217f76469cacde5fe5bef6aa94-user" -->
+
+<!-- xgd-chat role="user" ts="2026-09-05T18:40:39.262217+00:00" -->
+#### You
+The chat is "Distributed XGD"
+
+Today is about (1) developing and running tests on the KMS and the session management (2) developing and running tests on the login and user management.
+
+Still facing unexpected workflow bugs which I need to get past
+
+The next priority is to bring the full KMS and session management to 1c.
+
+<!-- xgd-turn id="83a025217f76469cacde5fe5bef6aa94-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-09-05T18:40:45.470488+00:00" -->
+#### Claude
+Let me find "Distributed XGD" and attach it to the goal.
+
+Found it — **`xgd/CHAT-119`, 2026-07-31**. Five weeks old, which is why my scan of recent chats missed it. Reading it now.
+
+Substantial design content. Let me get the rest before rewriting the goal.
+
+`REQ-830` is `free_coded` — part of this already shipped. Rewriting the goal with the actual design.
+
+**`xgd/CHAT-119`, 2026-07-31 → 2026-08-31.** My "recent" filter was wrong — I scanned the top 20 chats and it sits at #46. GOAL-13 now carries the real design instead of my paraphrase of your one-liner.
+
+## What was in it
+
+The model: **main shared across all machines, every other branch owned by exactly one machine**, a manifest declaring ownership and which read-only copies each machine needs, the dispatcher gaining a pull-and-merge pre-flight, and `xgd status` becoming manifest-aware with per-machine files under `.xgd/status/`. Ownership keys reuse `machine_id`/`machines.yaml` from REQ-589 rather than a second identity scheme.
+
+I recorded the two points where you overruled the review, because the reasoning is what makes the design defensible in six months and both corrections came from knowing the codebase rather than the theory:
+
+- **Status on main.** The objection was that telemetry pollutes the tested-truth branch. You pointed out main already holds tickets and config and status federates trivially per machine — and the code agrees: post-REQ-630 tickets already write straight to main, reconciled by the `xgd-ticket-recent` driver. Status is the *easier* case, because per-machine files can't collide at all.
+- **Read-only copies.** The objection was they're only for investigation, so fetch on demand. You corrected: a read-only copy of `xgd-working` is functionally required for a backend reconcile, read immediately before dispatch.
+
+**The part that still needs design is the distributed reconcile lock**, and it's flagged as the only expensive-to-get-wrong piece. The sequential-bundle rule — K fully reconciled before K+1 — is today enforced *only* by there being one reconciler holding one lock file. Branch ownership doesn't preserve it. Two machines racing the same bundle window is corruption, not a retryable failure.
+
+**And a piece already shipped.** `REQ-830` — dispatcher fetch-syncs main/xgd-working/xgd-stable every poll cycle, fail-closed on divergence — is `free_coded` at v0.15.423, built out of this chat on 08-31. Behind origin fast-forwards, ahead is left alone, genuine divergence blocks *all* dispatch and self-clears. That's the first real distributed foundation: a dispatcher that never decides off branch state it hasn't just verified. I did **not** attach it as a child — it was built for single-machine robustness, and claiming it would make an aspiration look underway when nothing distributed is scheduled.
+
+## Today's two tracks
+
+Both are testing days on work that's already built, which is a different shape from the last two weeks:
+
+**(1) KMS and session management.** Framework is nearly all through — REQ-115/116/118/120/121 `ready_to_reconcile`, REQ-117/122 `free_coded`, and **REQ-124** (session summary store: standing frame + append-only log) is the single `free_coding` item. The six drafts behind it — REQ-123, 125, 126, 127, 128, 129 — are the rest of the session-management design and haven't started.
+
+**(2) Login and user management.** REQ-178/179/180/181/184/185 `ready_to_reconcile`, REQ-170 (User tab) `free_coded`, REQ-183 (customer portal) `free_coding`. **Zero draft bugs in 1c.** So the surface you're about to test is broad and nothing known is outstanding under it.
+
+**Your stated next priority — full KMS and session management into 1c — is one ticket: `1c/REQ-182`**, *Adopt DOC-22 session priming*, still `draft`. That's the whole named distance. Worth knowing it's that small, and worth knowing it will grow once REQ-123→129 land upstream, since REQ-182 was written against DOC-22 as it stood before today's ten tickets.
+
+## The workflow bugs — a pattern, and I think it's finite
+
+Two of yesterday's say it outright: **BUG-1327** (BUG-1312's doubled-`.xgd` fix never migrated already-seeded projects → fleet-wide `PermissionSchemaError`) and **BUG-1330** (`xgd doctor` doesn't detect inert governance excludes; **4 projects still on pre-BUG-1312 paths**).
+
+That's the same shape as BUG-1303 and BUG-1266: **a fix correct in the code and never applied to existing state.** You're not generating new bugs so much as discovering an installed base of four projects that didn't receive the last several fixes. That converges — but only by migrating state, not by fixing code, which is exactly why it feels like it regenerates. BUG-1330 is the one that would make it visible rather than discovered one outage at a time.
+
+Unchanged for a third day: **BUNDLE-130 at `error`, eleven bundles `ready_to_reconcile`, nothing reconciling.** BUG-1333 added a second blocker yesterday — reconcile teardown resurrecting the removed `reconcile-*` worktree, permanently blocking dispatch.
 
 <!-- xgd-chat-end -->
