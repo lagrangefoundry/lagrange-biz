@@ -5,7 +5,7 @@ type: comment
 title: Comment on chat CHAT-8
 created_by: xgd
 created_at: '2026-08-06T21:32:44.196548+00:00'
-updated_at: '2026-09-05T02:26:45.958068+00:00'
+updated_at: '2026-09-05T02:44:48.602725+00:00'
 completed_at: null
 last_field_updated: body
 status: null
@@ -3912,5 +3912,105 @@ Two things that aren't in any of the three threads, flagged rather than added:
 **Demo sites** — milestone 1(c), still with no ticket, no goal, four days running. It's the only requirement judged by eye rather than by tests, and it's the part the cohort sees.
 
 **BUNDLE-130 at `error`** — eleven bundles queued, nothing reconciling. That's the concrete head of thread 3, and BUG-1318 explains why it doesn't look urgent: `error` status is invisible in the dashboard, so a jammed queue reads as a quiet one.
+
+<!-- xgd-turn id="58bec1187ca041f08a01161490a11365-user" -->
+
+<!-- xgd-chat role="user" ts="2026-09-05T02:39:11.469160+00:00" -->
+#### You
+ok please do a ticket sweep
+
+Something I thing would be helpful would be a way for me to move goals to "Done" or "Abandoned" Perhaps two small buttons a D and an A (or tell me what the correct states are) on each line in the overview and the ticket list. Can we discuss and have you create a ticket for this.
+
+Today was mostly about chat session management - there was a ton of work went in to a chat session in the lagrange framework refining a design for managing sessions with the new KMS. I think we got to a good result it is now in implementation. Should be done with that tomorrow and we can move to testing. We will bring this into 1c first and then to xgd - I think the new session management and KMS will make it possible for us to make xgd sessions much smarter.
+
+on 1c we have implemented the first stage of user management and site provisioning. That will be something to test tomorrow.
+
+still working through workflow bugs on the xgd side - that is a little frustrating - I am not sure why we keep finding them. Right now we are working through the impact of changing the ticketing and permissions systems. Hopefully we can get through that.
+
+An important new goal for xgd is standalone backend. Right now my laptop is firmly fixed and plugged into a wall. If I could run the backend on a separate machine I could take my laptop places and not loose the reconciliation and regression time - this is very desirable. Can you create a goal for this - no timeline yet - there are details in a recent xgd chat.
+
+The primary goal right now (next to getting xgd long running processes back up) is 1st contact. I have enthustiastic early adopters wanting access. I need to get to something I can show them soon.
+
+<!-- xgd-turn id="58bec1187ca041f08a01161490a11365-assistant" -->
+
+<!-- xgd-chat role="assistant" ts="2026-09-05T02:39:23.592863+00:00" -->
+#### Claude
+Sweep running. Let me gather across all four stores in parallel and find the standalone-backend chat.
+
+Ten new framework tickets today — REQ-120→129. Let me get their states, find the standalone-backend chat, and check 1c and xgd.
+
+No obvious match by title — let me search the chat bodies.
+
+Chat bodies are empty — content lives in comments. Let me read the most recent ones.
+
+CHAT-165 is a stuck-directory question, not it. Let me look wider.
+
+Enough to work with. Creating the standalone-backend goal in xgd — `aspiration`, no date, since you said no timeline:
+
+Now the D/A ticket. Filing in framework — that's where the goal map widget and DOC-19 live:
+
+Sweep done, both tickets filed. Today is **2026-09-04** — Saturday's milestone is tomorrow.
+
+## The D/A buttons — `lagrange-framework/REQ-130`
+
+**The states you want are `realized` (D) and `abandoned` (A).** One asymmetry worth knowing: `abandoned` is *off* the ladder, not at the bottom of it — it's excluded from roll-up rather than ranked low, so abandoning a child can never drag a parent backwards. D banks something; A removes it from the reckoning.
+
+Four design points I had to settle to write it:
+
+**`realized` requires a `completed_date`** — so D can't be one click *and* silent about the date. I specified: default to today, apply immediately, no picker, no blocking — but **show the applied date on the row afterwards**. Goals usually get marked days after the last child landed, and that drift is exactly what corrupts the accumulation timeline later. Fast by default, visibly wrong when it's wrong.
+
+**No confirmation dialog.** DOC-19 says `realized` and `abandoned` aren't frozen — un-realizing is permitted. A mis-click is recoverable, so a modal on every completion would reintroduce the friction the buttons exist to remove. Undo instead of confirmation.
+
+**Three hard "must nots"**, because each destroys something unrecoverable: it must not cascade to children; it must not resolve, suppress or block on the roll-up disagreement that marking a parent over live children produces (that disagreement *is* the staleness detector); and it must not auto-file a decision record. Abandoning often deserves one — *often* isn't *always*, and a log gaining an entry per click stops being a decision log.
+
+**One thing to confirm:** by "the ticket list" do you mean the goal map's own list, or the dashboard's intent list? I scoped to the goal map. Intents don't use the goal ladder, so if you meant the dashboard that's a different surface in xgd and needs its own ticket.
+
+The argument for this being worth doing is in the ticket, and it's the strongest one on the board: **5 goals `realized` out of 68**, while nine goals with every child complete sit unmarked carrying 101 derived points. That's not a data-entry backlog — it's the register that's supposed to make progress feel real, running days behind the work. The friction is the cause.
+
+Sequencing note: REQ-119 (the `underway` rename) touches the same widget. Land it first.
+
+## Standalone backend — `xgd/GOAL-13`
+
+*"The backend runs on its own machine, so the laptop can leave."* `aspiration`, no date, as you said.
+
+I made the case in terms of the cost you're actually paying: BUNDLE-128 took four cherry-pick attempts at 87–91 minutes each; BUNDLE-129 ran 43 hours. Those hold the machine, and closing the lid forfeits the time. **That tax is invisible in every ticket count** — nothing fails, the work simply doesn't happen while you're away from the desk. Same class of cost as session re-explanation before KM: paid in your life, recorded nowhere.
+
+I also recorded the argument that makes it more than convenience: **a beta user has the identical problem**, and the answer can't be "leave it plugged in overnight". Whatever splits host from client here is also what makes XGD usable by someone not sitting next to their build machine.
+
+**I could not find the chat.** I searched xgd chat titles through CHAT-165 and read the two plausible candidates — CHAT-165 is a stuck-directory question, CHAT-164 (*Web app to application*) is adjacent but about packaging the dashboard natively. The goal body is written from your description alone and says so. Name the chat and I'll attach the detail.
+
+## What today actually was
+
+**Framework — the session-management design landed as ten tickets.** REQ-120→129, filed today, plus DOC-23 (*Two invocation modes for the Claude Code backend: per-invocation and persistent*) and updates to DOC-6, DOC-21, DOC-22. The shape of it:
+
+- REQ-124 session summary store: standing frame + append-only log — **`free_coding`**, the live one
+- REQ-126 turn-bounded history window, summary/pointer/window providers
+- REQ-127 declare the agent surface: a session's view of its own context
+- REQ-128 priming moves to the system channel; one command assembler
+- REQ-129 compaction integration: observe `compact_boundary`, steer with `/compact`
+- REQ-123 explicit priming cache-boundary marker
+- REQ-125 transcript turn addressing, range read, top/bottom anchors
+- REQ-120/121/122 already `ready_to_reconcile` or `free_coded`
+
+And the priming chain you named on 09-02 is through: **REQ-115, 116, 118 `ready_to_reconcile`, REQ-117 `free_coded`.** All four were `draft` two days ago.
+
+The adoption tickets you said would follow now exist and I didn't have to guess at them: **1c/REQ-182** and **xgd/REQ-833**, both *"Adopt DOC-22 session priming"*, plus **xgd/REQ-834** (`xgd agent` — CLI over the framework's agent surface). Your 1c-then-xgd ordering is on the map as tickets rather than intent.
+
+**1c — user management and provisioning landed.** REQ-178 (account operates several businesses), 179, 180, 181, 184 (entitlement's subject is the account), 185 (`platform_admin` is two capabilities wearing one flag) all `ready_to_reconcile`; REQ-170 (User tab) `free_coded`; REQ-183 (customer portal) `free_coding`. **Zero draft bugs in 1c** — the whole Library/upload cluster from Tuesday is closed.
+
+**xgd — and I think I can answer why you keep finding them.** Two of today's bugs say it directly:
+
+- **BUG-1327** — BUG-1312's doubled-`.xgd` fix *never migrated already-seeded projects*, causing a fleet-wide `PermissionSchemaError` outage
+- **BUG-1330** — `xgd doctor` doesn't detect inert governance excludes; **4 projects still on pre-BUG-1312 paths**
+
+That's the pattern, and it's the same one as BUG-1303 and BUG-1266: **a fix that's correct in the code and never applied to existing state.** You're not finding new bugs so much as discovering the installed base of four projects that didn't receive the last three fixes. That's finite and it converges — but it won't converge by fixing code, only by migrating state, which is why it feels like it keeps regenerating.
+
+`draft` bugs are down to **two** (BUG-1331, BUG-1332). Three still `free_coding`, two of them — BUG-1245 and BUG-1248 — unchanged since 08-23, twelve days.
+
+## The one thing that hasn't moved
+
+**BUNDLE-130 is still at `error`. Eleven bundles `ready_to_reconcile`, nothing reconciling — identical to Tuesday.** BUG-1317's merge-commit fix is `ready_to_reconcile`; BUG-1333 (filed today) adds a second blocker: reconcile teardown resurrects the removed `reconcile-*` worktree, *permanently blocking dispatch*.
+
+You named "getting xgd long-running processes back up" as co-primary with 1st contact. That queue is the measurement of it, and it hasn't moved in two days. Given enthusiastic early adopters waiting on 1c, it's worth being deliberate about which of the two gets tomorrow — because right now the reconcile queue is where two weeks of finished xgd work is parked.
 
 <!-- xgd-chat-end -->
